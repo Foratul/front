@@ -1,0 +1,25 @@
+<p>menu works!</p>
+<div class="btn-group">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        Action
+    </button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Separated link</a>
+    </div>
+</div>
+
+<!-- preguntar si este codigo es mantenible -->
+<div id="listado">
+    <ul>
+        <li *ngFor="let item of arrayItems" (click)="item.function">{{item}}
+
+
+
+        </li>
+    </ul>
+</div>

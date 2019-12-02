@@ -1,0 +1,19 @@
+<div class="botonera">
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+
+        <label for="">FILTRAR POR BARRIO</label>
+        <select name="selector" ngModel>
+            <option *ngFor="let distrito of distritos" value={{distrito}}>{{distrito}}</option>
+            <!-- <option value="SALAMANCA">SALAMANCA</option> -->
+        </select>
+        <input type="submit">
+    </form>
+    <button (click)="limpiarMapa()">LIMPIAR MAPA</button>
+    <button (click)="limpiarRutas()">LIMPIAR RUTAS</button>
+    <button (click)="limpiarMarkers()">LIMPIAR MARKERS</button>
+
+
+    <button (click)="modoRutas()" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
+        title="Muestra u oculta rutas">MODO RUTA</button>
+    <button (click)="toggleBarrios()">{{textobarrios}}</button>
+</div>

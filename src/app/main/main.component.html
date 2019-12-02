@@ -1,0 +1,13 @@
+<div class="container envoltorio">
+    <div class="row">
+        <a [routerLink]="['/pruebas']">Pruebas</a>
+        <div class="menu col-12" (click)="menuclicado()" [ngClass]="{'desplegado' : desplegado}">
+            <app-menu></app-menu>
+        </div>
+        <div class="mapa col-12">
+            <app-map [cargando]="true"></app-map>
+        </div>
+    </div>
+</div>
+
+<router-outlet></router-outlet>

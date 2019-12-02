@@ -1,0 +1,19 @@
+<app-botonera [map]=map></app-botonera>
+<div class="mapcontainer">
+    <div class="busy cargando" *ngIf="cargando">
+        <div class="spinner-border" role="status">
+        </div>
+    </div>
+    <div class="map-container" [ngClass]="{'cargando': cargando}">
+        <div class="map-frame">
+            <div id="map"></div>
+            <div id="distance">
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>

@@ -1,0 +1,15 @@
+*{padding:10px;}
+
+ul{margin:0 , auto}
+
+li {
+    font-size:20px;
+color:white;
+
+
+}
+
+#listado{
+  /* max-width:300px; */
+  height:80%;
+  overflow:auto;}
