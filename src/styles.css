@@ -1,1 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+.RAJOY{color:red !important;
+background-color:yellow;}
+
+.leaflet-popup-content{color:red !important;}

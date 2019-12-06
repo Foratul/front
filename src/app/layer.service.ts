@@ -26,6 +26,8 @@ export class LayerService {
         color: '#008f68',
         fillOpacity: 0.4,
         fillColor: '#6DB65B'
+        , dashArray: '20, 20', dashOffset: '20'
+
       }),
       //leaftet iterador
       onEachFeature: (feature, layer) => {
@@ -33,6 +35,7 @@ export class LayerService {
           .on({
             mouseover: ($event) => {
 
+              // $event.target.bringToFront()
               let zoom = $event.target._map.zoomControl._map._zoom
 
               if (zoom < 1000) { this.highlightFeature($event) }
@@ -60,11 +63,12 @@ export class LayerService {
     if (!this.map.enrutando) {
       const layer = event.target;
       layer.setStyle({
-        weight: event.target._map.zoomControl._map._zoom,
-        opacity: 1.0,
+        weight: event.target._map.zoomControl._map._zoom / 10,
+        opacity: 0.8,
         color: '#DFA612',
         fillOpacity: 0.5,
         fillColor: '#FAE042',
+        dashArray: '20, 20', dashOffset: '20'
       })
         .bringToFront();
     }
@@ -79,13 +83,12 @@ export class LayerService {
       fillColor: '#6DB65B'
     });
   }
-  toggleBarrios(map) {
 
-    console.log("toggle")
-    this.barriosactivos = !this.barriosactivos
-    if (!this.barriosactivos) map.removeLayer(this.arrayLayers[0])
-    else map.addLayer(this.arrayLayers[0])
-
-  }
+  removeBarrios(map) { map.removeLayer(this.arrayLayers[0]) }
+  restoreBarrios(map) { map.addLayer(this.arrayLayers[0]) }
 
 }
+
+
+
+

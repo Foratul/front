@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { AppStateService } from '../appstate.service';
 
 @Component({
   selector: 'app-menu',
@@ -6,15 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-
-  arrayItems = ["elemento 1", "elemento cualquiera", "elemento otro", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array", "elemento otro por array"]
-
-  constructor() { }
+  @Input() arrayItems: any
+  app: any;
+  constructor(private appStateService: AppStateService) { }
 
   ngOnInit() {
+
+    this.app = this.appStateService.getAppState()
+
   }
 
   modal() {
+
+
     console.log("click en modal")
     let elemento = document.getElementById("modalid");
     elemento.classList.toggle("activa");

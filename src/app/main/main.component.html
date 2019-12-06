@@ -1,13 +1,22 @@
-<div class="container envoltorio">
-    <div class="row">
-        <a [routerLink]="['/pruebas']">Pruebas</a>
-        <div class="menu col-12" (click)="menuclicado()" [ngClass]="{'desplegado' : desplegado}">
-            <app-menu></app-menu>
-        </div>
-        <div class="mapa col-12">
-            <app-map [cargando]="true"></app-map>
+<div id="main">
+
+    <div class="col-12 no-gutters nopadding header fixed-top">
+        <app-header></app-header>
+    </div>
+
+    <div class="container envoltorio">
+
+
+        <div class="row no-gutters nopadding bottom">
+            <div class="menu col-12 no-gutters nopadding" (click)="menuclicado()" (mouseenter)="menuclicado()"
+                [ngClass]="{'desplegado' : app.menu_desplegado}">
+                <app-menu [arrayItems]=arrayItems></app-menu>
+            </div>
+            <!-- //MAPA -->
+            <div class="mapa col-12 no-gutters nopadding">
+                <app-map></app-map>
+            </div>
         </div>
     </div>
+    <router-outlet></router-outlet>
 </div>
-
-<router-outlet></router-outlet>

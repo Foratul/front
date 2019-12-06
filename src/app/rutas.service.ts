@@ -18,11 +18,11 @@ export class RutasService {
     return { lat: position.coords.latitude, lng: position.coords.longitude }
   }
 
-  generarRuta(map, origen = map.position, destino) {
+  generarRuta(map, origen = map.myPosition, destino) {
 
     // se necesitan obejtos del tipo lat lng
 
-    if (origen == map.position) origen = this.toLatLng(origen)
+    if (origen == map.myPosition) origen = this.toLatLng(origen)
 
     console.log("generandoRuta con origen" + JSON.stringify(origen))
     console.log(destino)

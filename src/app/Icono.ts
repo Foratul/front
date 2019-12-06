@@ -7,8 +7,6 @@ const programmer = "./assets/programmer-icon-16.png"
 const shadowUrl = './assets/marker-shadow.png';
 
 
-
-
 export class Icono {
     blueIcon; redIcon; greenIcon; orangeIcon; yellowIcon; violetIcon; greyIcon; blackIcon
     defaultIcon: L.Icon;

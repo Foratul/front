@@ -1,0 +1,11 @@
+<div class="form-group col-5">
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario.value)">
+
+
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" ngModel>
+        <label>Password</label>
+        <input type="text" class="form-control" name="password" ngModel>
+        <input type="submit" value="enviar" class="btn btn-block btn-primary">
+    </form>
+</div>

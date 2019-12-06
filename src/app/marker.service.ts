@@ -3,65 +3,147 @@ import * as L from 'leaflet';
 import { PopUpService } from './pop-up.service';
 import { Marker } from 'leaflet';
 import { Icono } from './Icono';
+import { resolve } from 'url';
+import { AppStateService } from './appstate.service';
 
 @Injectable({
   providedIn: 'root'
+
 })
 export class MarkerService {
 
-  arrayMarkersActivos: Array<Object> = []
-  arrayMarkersMyPosition: Array<Object> = []
+  arrayMarkersActivos: Array<Marker> = []
+  arrayMarkersMyPosition: Array<Marker> = []
+  currentArrayDatos: Array<Marker>
+  arrayVisibles: Array<any>
   icono = new Icono()
+  circle
+
 
   constructor(
+    private appStateService: AppStateService,
     private popUpService: PopUpService) {
     Marker.prototype.options.icon = this.icono.defaultIcon
-
-
 
   }
 
   addMarkerOnPosition(map, position) {
     const marker = L.marker(position)
-    console.log(marker)
+    // console.log(marker)
     marker.addTo(map);
 
   }
-  addMarkerOnMyLocation(map, position = map.position) {
-    const marker = L.marker([position.coords.latitude, position.coords.longitude], { title: "VIVA EL VINO", draggable: true, icon: this.icono.positionIcon })
-    marker.addTo(map);
-    marker.bindPopup(this.popUpService.addPopUp("THIS IS MY POS"))
-      .on('mouseover', function (e) { marker.openPopup() })
-      .on('mouseout', function (e) { marker.closePopup() })
 
-    this.arrayMarkersMyPosition.pop()
+  addCircle(map, position = map.myPosition, radius = map.radius) {
+    this.circle = L.circle([position.coords.latitude, position.coords.longitude], { radius: radius, dashArray: '20, 20', dashOffset: '20', weight: 6, fillOpacity: 0.4, opacity: 0.6 })
+    console.log("creadno cirlca")
+    this.circle.addTo(map).bringToBack();
+    map.radio = true
+  }
+
+  removeCircle(map) {
+    console.log("destrueydno cirlca")
+
+    map.removeLayer(this.circle)
+    map.radio = false
+
+
+  }
+  addMarkerOnMyLocation(map, position = map.myPosition) {
+
+    const marker = L.marker([position.coords.latitude, position.coords.longitude], { title: "POSICION ACTUAL", draggable: true, icon: this.icono.positionIcon, zIndexOffset: 666666, riseOnHover: true })
+    marker.addTo(map);
+    this.addCircle(map, map.position, map.radius)
+    marker.bindPopup(this.popUpService.addPopUp({ className: "PopUp" }))
+      .on('mouseover', function (event) { marker.openPopup() })
+      .on('mouseout', function (event) { marker.closePopup() })
+      .on('dragstart', () => {
+      })
+      .on('dragend', (event) => {
+        console.log("DRAGEND")
+        // map.removeLayer(this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 1])
+        map.myPosition.coords.latitude = event.target['_latlng'].lat
+        map.myPosition.coords.longitude = event.target['_latlng'].lng
+        this.removeCircle(map)
+        this.addCircle(map)
+        if (map.markers) {
+          this.removeMarkers(map)
+          this.addMarkers(map, null, map.radius)
+        }
+        this.appStateService.setCargando(false)
+      })
+
+    // this.arrayMarkersMyPosition.pop()
     this.arrayMarkersMyPosition.push(marker)
 
+
   }
-  addMarkers(map, arrayDatos, opciones = null) {
+  addMarkers(map, arrayDatos, radius = 1000) {
+    this.appStateService.setCargando(true)
 
-    var randomProperty = function (obj) {
-      var claves = Object.keys(obj)
-      return obj[claves[Math.round(claves.length * Math.random())]];
-    };
+    console.log("voy a dibujar los markers en un radio de : ", radius)
+    if (arrayDatos == null) arrayDatos = this.currentArrayDatos  //mete el ultimo array recibido en el servicio
+    this.currentArrayDatos = arrayDatos
+    this.arrayVisibles = [] //vacia lo visible porque se recrea
 
-    console.log(randomProperty(this.icono))
+    map.radius = radius
 
+    console.log("voy a pintar los markers")
+    for (const [index, elemento] of arrayDatos.entries()) {
+      if (elemento.latitude && elemento.longitude) { //comprueba que traen lat y lng antes de añadir
+        const marker = L.marker([elemento.latitude + Math.random() / 5000, elemento.longitude + Math.random() / 5000], { icon: this.icono.blueIcon, riseOnHover: true })
+        if (map.distance(marker.getLatLng(), this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 1].getLatLng()) < radius) {
 
-    for (const elemento of arrayDatos) {
+          let pepe = L.popup({ className: "RAJOY" }).setContent("VIVA EL VINO")
+          elemento.arrayIndex = index //para pasarselo al popup binder luego
+          marker.bindPopup(this.popUpService.addPopUp(elemento));
+          // marker.bindPopup(pepe)
+          //  let buton = document.getElementById("infoPopUp")
+          // marker['barrio'] = Math.random();
+          // console.log(map.distance(marker.getLatLng(), marker.getLatLng()))
+          marker.addTo(map);
+          marker.on("click", ($event) => {
+            let boton = document.getElementById("infoPopUp")
+            boton.addEventListener("click", this.ampliarInformacion)
+            // console.log(marker['barrio'])
+          })
+          this.arrayVisibles.push(elemento)
+          this.arrayMarkersActivos.push(marker)
+        }
+      }
 
-      const marker = L.marker([elemento.location.latitude, elemento.location.longitude], { icon: this.icono.blackIcon })
-      // console.log("contenido del dato" + JSON.stringify(elemento))
-      marker.bindPopup(this.popUpService.addPopUp("marker"));
-      marker['barrio'] = Math.random();
-      marker.addTo(map);
-      marker.on("click", function (e) { console.log(marker['barrio']) })
-      this.arrayMarkersActivos.push(marker)
     }
+
+
+
+    console.log("he pintado los markers")
+
+    this.appStateService.setCargando(false)
+
+  }
+
+  prueba(app) {
+
+    app.cargando = !app.cargando
+
+  }
+
+
+  ampliarInformacion(evento) {
+    //el maldito dataset te lo pasa en minusculas
+    console.log(evento.target.dataset)
+    let popup = document.querySelector(".leaflet-popup") as HTMLElement
+    popup.style.top = "-100px"
+    console.log("se ha clicado en el arrayMarker numero:", evento.target.dataset.arrayindex)
+    console.log("se ha clicado en el dbID numero:", evento.target.dataset.id)
+    let popupElement = document.querySelector("#popUpText")
+    popupElement.innerHTML += "L-OREM-"
+
+
   }
 
   removeMarkers(map, arrayMarkers = this.arrayMarkersActivos, barrio = null) {
-    console.log("hola", arrayMarkers)
+    console.log("removeMarkers")
     for (const marker of arrayMarkers) {
       map.removeLayer(marker)
     }
@@ -73,6 +155,10 @@ export class MarkerService {
     }
   }
 
+  returnVisibles() {
+    console.log(this.arrayVisibles)
+    return this.arrayVisibles
+  }
 
   createMarkerEspecial(map) {
     console.log("INDIA")
@@ -92,5 +178,9 @@ export class MarkerService {
     container.innerHTML = ("New Delhi to Mumbai - " + (from.distanceTo(to)).toFixed(0) / 1000) + ' km';
   }
 
+  redibujarMarkers(map, radius) {
 
+    this.removeMarkers(map)
+    this.addMarkers(map, null, radius)
+  }
 }

@@ -6,7 +6,8 @@ import { PeticionesDatosService } from '../peticiones-datos.service';
 import { FiltrarService } from '../filtrar.service';
 import { LayerService } from '../layer.service';
 import { RutasService } from '../rutas.service';
-import 'leaflet-control-geocoder'
+// import 'leaflet-control-geocoder'
+import { AppStateService } from '../appstate.service';
 
 declare let L
 declare let Routing
@@ -21,7 +22,9 @@ declare let Routing
 })
 export class MapComponent implements OnInit, AfterViewInit {
   map
-  datosGlobales = []
+  app
+  geoCapable: boolean = false
+  datosGlobales: any
   distritos = []
 
   constructor(
@@ -29,28 +32,47 @@ export class MapComponent implements OnInit, AfterViewInit {
     private layerService: LayerService,
     private peticionesDatosService: PeticionesDatosService,
     private filtrarService: FiltrarService,
-    private rutasService: RutasService) { }
-  @Input() cargando: boolean;
-  ngOnInit() { }
+    private rutasService: RutasService
+    , private appStateService: AppStateService) { }
+  ngOnInit() {
+
+    this.appStateService.setCargando(true)
+    this.app = this.appStateService.getAppState()
+
+
+  }
   ngAfterViewInit() {
 
 
 
     this.getPosition()
       .then((position) => {
+        this.geoCapable = true
         // position = { coords: { latitude: 40.458121, longitude: -3.700676 } }
         //para empezar en TETUAN
+        setInterval(() => {
+          this.getPosition().then((position) => {
+            this.map.myPosition = {
+              coords: { latitude: position.coords.latitude, longitude: position.coords.longitude }
+            }
+            console.log("updating POSITION")
+            this.markerService.addMarkerOnMyLocation(this.map)
+          })
+        }, 60 * 60 * 1000) //tiempo de update
         this.initMap(position)
       })
       .catch((error) => {
-        alert(error)
+        this.geoCapable = false
+
+        alert(error.mensaje)
+        console.log(error.debug)
         this.initMap(
           { coords: { latitude: 40.458121, longitude: -3.700676 } }
         )
       })
 
   }
-  getPosition() {
+  getPosition(): Promise<any> {
 
     let prom = new Promise((resolve, reject) => {
       if (!navigator.geolocation) reject("GEOLOCALIZACION NO FUNCIONA")
@@ -58,11 +80,13 @@ export class MapComponent implements OnInit, AfterViewInit {
         resolve(position)
         reject("ERROR, no se puede GEOLOCALIZAR")
       }, (error) => {
-        reject("ERROR, este dispositivo no permite GEOLOCALIZAR; SE USARÁ UNA POSICION POR DEFECTO")
+        reject({ mensaje: "ERROR, este dispositivo no permite GEOLOCALIZAR; SE USARÁ UNA POSICION POR DEFECTO", debug: error })
       })
     })
     return prom;
   }
+
+
   initMap(position): void {
 
     // mapboxgl.accessToken = 'pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazI5YnFtNWIyaHcxM2lucnd5ZTJuZWd3In0._XB0qU2AeBff9ThO003CFw';
@@ -75,7 +99,18 @@ export class MapComponent implements OnInit, AfterViewInit {
       center: [position.coords.latitude, position.coords.longitude],
       zoom: 15,
       // minZoom: 10
+
     })
+    this.map.myPosition = {
+      coords: { latitude: position.coords.latitude, longitude: position.coords.longitude }
+    }
+    this.map.radius = 1000
+    this.map.barrios = true
+    this.map.layers = true
+    this.map.markers = true
+
+    console.log("MY POSICION ES", this.map.myPosition)
+
 
     this.map.enrutando = false;
 
@@ -100,7 +135,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     this.addContentToMap()
 
-    this.map.position = position;
 
     // this.map.on("click", calcularDistancia)
 
@@ -113,31 +147,31 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.map.getSize();
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
+      // maxZoom: 18,
       id: 'mapbox.streets',
       accessToken: 'your.mapbox.access.token'
     })
     L.Control.geocoder().addTo(this.map)
     tiles.addTo(this.map);
+
     // var roads = L.gridLayer.googleMutant({
     //   type: 'satellite'	// valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
     // })
     // roads.addTo(this.map);
 
 
-
-
-
     //leo datos y los paso al servicio de markers para dibujarlos
-    this.peticionesDatosService.getJson()
+    this.peticionesDatosService.getEventos()
       .then((datos) => {
-        this.datosGlobales = datos['@graph'];
-        this.markerService.addMarkers(this.map, this.datosGlobales);
-        console.log("markers añadidos")
+        console.log("hemos cargado los datos de tamaño : ", datos['length'])
+        this.datosGlobales = datos;
+        this.markerService.addMarkers(this.map, this.datosGlobales, this.map.radius);
+        console.log("markers iniciales añadidos")
       })
       .catch((error) => { console.log(error) })
       .finally(() => {
-        this.cargando = false;
+        this.appStateService.setCargando(false)
+
       })
 
     L.control.scale().addTo(this.map);
@@ -151,7 +185,14 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   botonderecho($event) {
 
-    // ME SACAS UN MENU{
+
+    this.generarMenu($event)
+
+    this.generarRuta($event.latlng)
+    // document.body.removeChild(generatedMenu)
+  }
+
+  generarMenu($event) { // ME SACAS UN MENU{
     console.dir("CLICK DERECHO FUNCION " + $event.containerPoint)
     // estoy usando una mezcla de jQuery y JS, por eso originalEvent
     let x = $event.originalEvent.clientX
@@ -176,13 +217,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     generatedMenu.style.zIndex = "9999"
     document.body.appendChild(generatedMenu);
     document.querySelector("#dropdownMenuButton").setAttribute("aria-expanded", "true")
-
-    this.generarRuta($event.latlng)
-    // document.body.removeChild(generatedMenu)
-
-
   }
-
 
 
 

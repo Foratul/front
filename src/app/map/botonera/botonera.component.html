@@ -1,19 +1,29 @@
 <div class="botonera">
-    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
-
-        <label for="">FILTRAR POR BARRIO</label>
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)" class="range-field">
+        <label for="selector">FILTRAR POR BARRIO</label>
         <select name="selector" ngModel>
             <option *ngFor="let distrito of distritos" value={{distrito}}>{{distrito}}</option>
             <!-- <option value="SALAMANCA">SALAMANCA</option> -->
         </select>
+        <span *ngIf=markers>
+            <!-- la vista se inicia antes que el input, so we have a problem -->
+            <input type="range" name="radius" value="1000" min="1000" max="10000" step="1000" ngModel
+                (mouseup)="onRadiusChange(formulario.value.radius)" class="custom-range col-2"> DISTANCIA
+            {{formulario.value.radius}}
+            <output for="radius" onforminput="value = foo.valueAsNumber;"></output>
+
+        </span>
         <input type="submit">
+
     </form>
-    <button (click)="limpiarMapa()">LIMPIAR MAPA</button>
-    <button (click)="limpiarRutas()">LIMPIAR RUTAS</button>
-    <button (click)="limpiarMarkers()">LIMPIAR MARKERS</button>
+    <button title="Toggle cargando" class="btn btn-secondary" (click)="toggleCargando()">Toggle Cargando</button>
 
 
-    <button (click)="modoRutas()" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
-        title="Muestra u oculta rutas">MODO RUTA</button>
-    <button (click)="toggleBarrios()">{{textobarrios}}</button>
+    <button title="Limpiar mapa" class="btn btn-secondary" (click)="limpiarMapa()">LIMPIAR MAPA</button>
+    <button class="btn btn-secondary" (click)="limpiarRutas()">LIMPIAR RUTAS</button>
+    <button class="btn btn-secondary" (click)="toggleMarkers()">{{textomarkers}}</button>
+    <button class="btn btn-secondary" (click)="toggleRadio()">ALTERNAR RADIO</button>
+    <button class="btn btn-secondary" (click)="modoRutas()" class="btn btn-secondary" data-toggle="tooltip"
+        data-placement="top" title="Muestra u oculta rutas">MODO RUTA</button>
+    <button class="btn btn-secondary" (click)="toggleBarrios()">{{textobarrios}}</button>
 </div>
