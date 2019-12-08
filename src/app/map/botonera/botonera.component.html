@@ -11,13 +11,13 @@
                 (mouseup)="onRadiusChange(formulario.value.radius)" class="custom-range col-2"> DISTANCIA
             {{formulario.value.radius}}
             <output for="radius" onforminput="value = foo.valueAsNumber;"></output>
-
+            <input type="submit">
         </span>
-        <input type="submit">
+
 
     </form>
 
-    <span cdkDropList (cdkDropListDropped)="drop($event)">
+    <span cdkDropListOrientation="horizontal" cdkDropList (cdkDropListDropped)="drop($event)">
         <button cdkDrag *ngFor=" let boton of arrayBotones, let i=index" class={{boton.class}} data-toggle="tooltip"
             data-placement="top" title={{boton.tooltip}} (click)="botonPresionado(boton)">{{boton.texto}}
         </button>

@@ -172,7 +172,9 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
 
   botonPresionado(boton) {
     boton.class = "btn btn-primary"
-    eval("this." + boton.funcion)
+    // eval("this." + boton.funcion)
+    console.log(window)
+    BotoneraComponent[boton.funcion]
 
   }
 
