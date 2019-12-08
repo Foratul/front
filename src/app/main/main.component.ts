@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MarkerService } from '../marker.service';
+import { MarkerService } from '../services/marker.service';
 import 'jquery'
-import { AppStateService } from '../appstate.service';
+import { AppStateService } from '../services/appstate.service';
 declare let $ //esto no lo quites, que lo necesitan luego
 
 

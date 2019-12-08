@@ -1,13 +1,14 @@
 
 
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
-import { MarkerService } from '../marker.service';
-import { PeticionesDatosService } from '../peticiones-datos.service';
-import { FiltrarService } from '../filtrar.service';
-import { LayerService } from '../layer.service';
-import { RutasService } from '../rutas.service';
+import { FiltrarService } from '../services/filtrar.service';
+import { LayerService } from '../services/layer.service';
+import { RutasService } from '../services/rutas.service';
 // import 'leaflet-control-geocoder'
-import { AppStateService } from '../appstate.service';
+import { AppStateService } from '../services/appstate.service';
+import { MarkerService } from '../services/marker.service';
+import { datosBackService } from '../services/datosBack.service';
+import { EventosService } from '../services/eventos.service';
 
 declare let L
 declare let Routing
@@ -30,8 +31,9 @@ export class MapComponent implements OnInit, AfterViewInit {
   constructor(
     private markerService: MarkerService,
     private layerService: LayerService,
-    private peticionesDatosService: PeticionesDatosService,
+    private datosBack: datosBackService,
     private filtrarService: FiltrarService,
+    private eventosService: EventosService,
     private rutasService: RutasService
     , private appStateService: AppStateService) { }
   ngOnInit() {
@@ -161,7 +163,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
 
     //leo datos y los paso al servicio de markers para dibujarlos
-    this.peticionesDatosService.getEventos()
+    this.eventosService.getEventos()
       .then((datos) => {
         console.log("hemos cargado los datos de tamaño : ", datos['length'])
         this.datosGlobales = datos;
@@ -178,7 +180,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     //añade escala
     this.markerService.createMarkerEspecial(this.map)
     // llamo al archivo de distritos y se lo paso al creador de layers
-    this.peticionesDatosService.getDistritosLayer()
+    this.datosBack.getDistritosLayer()
       .then((barriosgeoJson) => { this.layerService.initBarriosLayer(this.map, barriosgeoJson) })
       .catch((error) => { console.log(error) })
   }

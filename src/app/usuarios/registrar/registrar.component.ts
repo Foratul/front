@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PeticionesDatosService } from 'src/app/peticiones-datos.service';
+import { datosBackService } from 'src/app/services/datosBack.service';
 
 @Component({
   selector: 'app-registrar',
@@ -8,7 +8,7 @@ import { PeticionesDatosService } from 'src/app/peticiones-datos.service';
 })
 export class RegistrarComponent implements OnInit {
 
-  constructor(private dataService: PeticionesDatosService) { }
+  constructor(private dataService: datosBackService) { }
 
   ngOnInit() {
   }

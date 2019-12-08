@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import 'jquery'
 import 'popper.js'
 import 'bootstrap'
-import { AppStateService } from '../appstate.service';
+import { AppStateService } from '../services/appstate.service';
 declare let $
 
 

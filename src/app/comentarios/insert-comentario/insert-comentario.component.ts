@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'
-import { PeticionesDatosService } from 'src/app/peticiones-datos.service';
+import { datosBackService } from 'src/app/services/datosBack.service';
 
 @Component({
   selector: 'app-insert-comentario',
@@ -9,7 +9,7 @@ import { PeticionesDatosService } from 'src/app/peticiones-datos.service';
 })
 export class InsertComentarioComponent implements OnInit {
 
-  constructor(private dataService: PeticionesDatosService) { }
+  constructor(private dataService: datosBackService) { }
 
   ngOnInit() {
   }

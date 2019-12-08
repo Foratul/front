@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PeticionesDatosService } from 'src/app/peticiones-datos.service';
-import { AppStateService } from 'src/app/appstate.service';
+import { AppStateService } from 'src/app/services/appstate.service';
+import { datosBackService } from 'src/app/services/datosBack.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +9,8 @@ import { AppStateService } from 'src/app/appstate.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private dataService: PeticionesDatosService,
+  constructor(
+    private dataService: datosBackService,
     private appStateService: AppStateService) {
   }
 

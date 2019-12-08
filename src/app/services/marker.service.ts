@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
 import { PopUpService } from './pop-up.service';
 import { Marker } from 'leaflet';
-import { Icono } from './Icono';
-import { resolve } from 'url';
+import { Icono } from '../Icono';
 import { AppStateService } from './appstate.service';
 
 @Injectable({

@@ -16,8 +16,14 @@
         <input type="submit">
 
     </form>
-    <button title="Toggle cargando" class="btn btn-secondary" (click)="toggleCargando()">Toggle Cargando</button>
 
+    <span cdkDropList (cdkDropListDropped)="drop($event)">
+        <button cdkDrag *ngFor=" let boton of arrayBotones, let i=index" class={{boton.class}} data-toggle="tooltip"
+            data-placement="top" title={{boton.tooltip}} (click)="botonPresionado(boton)">{{boton.texto}}
+        </button>
+    </span>
+
+    <!-- <button title="Togasdasdgle cargando" class="btn btn-secondary" (click)="toggleCargando()">Toggle Cargando</button>
 
     <button title="Limpiar mapa" class="btn btn-secondary" (click)="limpiarMapa()">LIMPIAR MAPA</button>
     <button class="btn btn-secondary" (click)="limpiarRutas()">LIMPIAR RUTAS</button>
@@ -25,5 +31,8 @@
     <button class="btn btn-secondary" (click)="toggleRadio()">ALTERNAR RADIO</button>
     <button class="btn btn-secondary" (click)="modoRutas()" class="btn btn-secondary" data-toggle="tooltip"
         data-placement="top" title="Muestra u oculta rutas">MODO RUTA</button>
-    <button class="btn btn-secondary" (click)="toggleBarrios()">{{textobarrios}}</button>
+    <button class="btn btn-secondary" (click)="toggleBarrios()">{{textobarrios}}</button> -->
+
+
+
 </div>

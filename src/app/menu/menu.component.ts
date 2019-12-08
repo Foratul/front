@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AppStateService } from '../appstate.service';
+import { AppStateService } from '../services/appstate.service';
 
 @Component({
   selector: 'app-menu',
