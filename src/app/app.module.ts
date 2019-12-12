@@ -27,6 +27,12 @@ import { HeaderComponent } from './header/header.component';
 import { RegistrarComponent } from './usuarios/registrar/registrar.component';
 import { LoginComponent } from './usuarios/login/login.component';
 import { ListarEventosComponent } from './eventos/listar-eventos/listar-eventos.component';
+import { LogoutComponent } from './usuarios/logout/logout.component';
+import { HomeComponent } from './home/home.component';
+import { VacioComponent } from './vacio/vacio.component';
+import { GuardiaGuard } from './guardia.guard';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ModalComponent } from './modal/modal.component'
 
 
 
@@ -43,18 +49,22 @@ import { ListarEventosComponent } from './eventos/listar-eventos/listar-eventos.
     RegistrarComponent,
     LoginComponent,
     ListarEventosComponent,
+    LogoutComponent,
+    HomeComponent,
+    VacioComponent,
+    ModalComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule, DragDropModule
-
+    NgbModule, DragDropModule,
+    FontAwesomeModule
 
 
   ],
-  providers: [MarkerService, PopUpService],
+  providers: [MarkerService, PopUpService, GuardiaGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

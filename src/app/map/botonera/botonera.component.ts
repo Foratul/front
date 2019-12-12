@@ -20,8 +20,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 export class BotoneraComponent implements OnInit, AfterViewInit {
 
   @Input() map
-  textobarrios = "OCULTAR BARRIOS"
-  textomarkers = "OCULTAR MARKERS"
+
   datosGlobales = []
   distritos = []
   markers = true
@@ -29,7 +28,12 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
   radius = 1000
   radio = true
   arrayItems
+  clases
   arrayBotones = []
+  iconoMarker = '<i class="fas fa-map-marker-alt"> </i>'
+  iconoRadio = '<i class="fas fa-crosshairs"></i>'
+  iconoBarrios = '<i class="fas fa-map-marked"></i>'
+  iconoLimpiar = '<i class="fas fa-broom"></i>'
 
 
 
@@ -48,18 +52,18 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    this.clases = ["btn btn-primary", "btn btn-secondary"]
 
     this.arrayBotones = [
-      { funcion: "toggleCargando()", texto: "Toggle Cargando", tooltip: "alternaCarga" },
-      { funcion: "limpiarMapa()", texto: "Limpiar Mapa", tooltip: "limpia el mapa" },
-      { funcion: "limpiarRutas()", texto: "Limpiar Rutas", tooltip: "limpia rutas" },
-      { funcion: "toggleMarkers()", texto: "Alternar Markers", tooltip: "alternar markers" },
-      { funcion: "toggleRadio()", texto: "Alternar Radio", tooltip: "alternar radio" },
-      { funcion: "modoRutas()", texto: "Modo Rutas", tooltip: "modo rutas" },
-
-      { funcion: "toggleBarrios()", texto: "Alternar Barrios", tooltip: "alternar barrios" }]
+      { funcion: "toggleCargando()", texto: "Toggle Cargando", tooltip: "alternaCarga", tooltipPos: "top", toggles: true, active: false },
+      { funcion: "limpiarMapa()", texto: this.iconoLimpiar, tooltip: "limpia el mapa", tooltipPos: "top", toggles: false, active: false },
+      { funcion: "limpiarRutas()", texto: "Limpiar Rutas", tooltip: "limpia rutas", tooltipPos: "top", toggles: false, active: false },
+      { funcion: "toggleMarkers()", texto: this.iconoMarker, tooltip: "muestra u oculta marcadores", tooltipPos: "top", toggles: true, active: true },
+      { funcion: "toggleRadio()", texto: this.iconoRadio, tooltip: "alternar radio", tooltipPos: "top", toggles: true, active: true },
+      { funcion: "modoRutas()", texto: "Modo Rutas", tooltip: "modo rutas", tooltipPos: "top", toggles: true, active: false },
+      { funcion: "toggleBarrios()", texto: this.iconoBarrios, tooltip: "muestra u oculta distritos", tooltipPos: "top", toggles: true, active: true }]
     for (const boton of this.arrayBotones) {
-      boton.class = "btn btn-secondary"
+      boton.class = (boton.active) ? "btn btn-primary" : "btn btn-secondary"
     }
 
     // ' <button title="Limpiar mapa" class="btn btn-secondary" (click)="limpiarMapa()">LIMPIAR MAPA</button>',
@@ -71,8 +75,12 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
 
 
     $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
+      $('[data-toggle="tooltip"]').tooltip({
+        trigger: 'hover'
+      })
     })
+
+
 
 
 
@@ -118,38 +126,42 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
     this.appStateService.setCargando(false)
 
 
+
   }
 
   limpiarMapa() {
     this.limpiarBarrios()
     this.limpiarRutas()
     this.limpiarMarkers()
+    this.map.radio = true; // para quitarlo
+    this.arrayBotones[4].active = false
+    this.arrayBotones[4].class = this.clases[1]
     this.toggleRadio()
   }
 
   limpiarBarrios() {
     this.layerService.removeBarrios(this.map)
     this.map.barrios = false
-    this.textobarrios = "OCULTAR BARRIOS"
+    this.arrayBotones[6].active = false
+    this.arrayBotones[6].class = this.clases[1]
   }
 
   toggleBarrios() {
     (this.map.barrios) ? this.layerService.removeBarrios(this.map) : this.layerService.restoreBarrios(this.map)
-    this.textobarrios = (this.map.barrios) ? "MOSTRAR BARRIOS" : "OCULTAR BARRIOS"
     this.map.barrios = !this.map.barrios
   }
 
   limpiarRutas() { this.rutasService.limpiarRutas(this.map) }
   toggleMarkers() {
     (this.map.markers) ? this.markerService.removeMarkers(this.map) : this.markerService.addMarkers(this.map, null, this.radius)
-    this.textomarkers = (this.map.markers) ? "MOSTRAR MARKERS" : "OCULTAR MARKERS"
     this.map.markers = !this.map.markers
   }
   limpiarMarkers() {
 
-    this.textomarkers = "MOSTRAR MARKERS"
     this.map.markers = false
     this.markerService.removeMarkers(this.map)
+    this.arrayBotones[3].active = false
+    this.arrayBotones[3].class = this.clases[1]
   }
 
   toggleRadio() {
@@ -171,11 +183,16 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
   drop($event) { moveItemInArray(this.arrayBotones, $event.previousIndex, $event.currentIndex); }
 
   botonPresionado(boton) {
-    boton.class = "btn btn-primary"
-    // eval("this." + boton.funcion)
-    console.log(window)
-    BotoneraComponent[boton.funcion]
+    eval("this." + boton.funcion)
+    this.cambiarClaseABoton(boton)
 
+  }
+
+  cambiarClaseABoton(boton) {
+    if (boton.toggles) {
+      boton.active = !boton.active
+      boton.class = (boton.active) ? "btn btn-primary" : "btn btn-secondary"
+    }
   }
 
 }

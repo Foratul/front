@@ -16,7 +16,9 @@ export class Icono {
 
         this.positionIcon = icon({
             iconRetinaUrl: programmer,
-            iconUrl,
+            // iconRetinaUrl: "./assets/programmer-icon-16.png",
+
+            iconUrl: "./assets/programmer-icon-16.png",
             shadowUrl,
             iconSize: [55, 45],
             iconAnchor: [12, 41],

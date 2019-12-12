@@ -37,9 +37,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     private rutasService: RutasService
     , private appStateService: AppStateService) { }
   ngOnInit() {
-
     this.appStateService.setCargando(true)
     this.app = this.appStateService.getAppState()
+    this.appStateService.setHistorial('/map')
+
 
 
   }
@@ -178,7 +179,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     L.control.scale().addTo(this.map);
     //añade escala
-    this.markerService.createMarkerEspecial(this.map)
+    // this.markerService.createMarkerEspecial(this.map)
     // llamo al archivo de distritos y se lo paso al creador de layers
     this.datosBack.getDistritosLayer()
       .then((barriosgeoJson) => { this.layerService.initBarriosLayer(this.map, barriosgeoJson) })

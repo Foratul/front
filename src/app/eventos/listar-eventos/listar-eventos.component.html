@@ -1,43 +1,98 @@
-<p>listar-eventos works!</p>
+<div class="eventos container">
 
-<button (click)="botonPagina(-1)">PREV</button>
-<button (click)="botonPagina(1)">NEXT</button> {{paginaActual}}
-<select name="porPagina" id="selector" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
+    <div *ngIf="arrayEventosVisibles && arrayEventos" class=" cabecera">
+        <p>Mostrando eventos {{1+ (paginaActual-1)*porPagina}} al {{paginaActual*porPagina}} de
+            {{arrayEventos.length}}
+        </p>
+        <button (click)="botonPagina(-1)">PREV</button>
+        <button (click)="botonPagina(1)">NEXT</button> {{paginaActual}}
+        <span>Resultados por página</span>
 
-    <option value="10">10</option>
-    <option value="20">20</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
+        <select name="porPagina" id="paginar" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <select name="ordenarPor" id="ordenar" [(ngModel)]="ordenar" (change)="ordenarPor()">
+            <option value="ABC">Alfabéticamente</option>
+            <option value="SCORE">Puntuación</option>
+            <option value="VIEWS">Visitas en la página</option>
+            <option value="100">100</option>
+        </select>
 
+    </div>
 
+    <div class="listado">
+        <p *ngIf=!arrayEventosVisibles>No hay eventos seleccionados</p>
+        <span *ngIf="arrayEventosVisibles">
+            <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
+                <div cdkDrag *ngFor="let evento of arrayEventosVisibles" class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="recuadro">
+                        <div class="card mb-3 cuadro" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4 cuadroImagen">
+                                    <img class="quieto" src="{{evento.imagen}}" class="card-img" alt="..."> </div>
+                                <div class="col-md-8 pl-2">
+                                    <h5 class="card-title">{{evento.nombre}} <a *ngIf="evento.link"
+                                            title="enlace oficial" target="_blank" href={{evento.link}}><i
+                                                class="fas fa-external-link-alt"></i></a> </h5>
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                    <p class="card-text">{{evento.descripcion}}</p>
+                                    <p class="card-text"><small class="text-muted">{{evento.ID}}</small></p>
 
-</select>
-<div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
+                                    <!-- BOTON COMENTARIOS -->
 
-    <div cdkDrag *ngFor="let evento of arrayEventosVisibles" class="col-sm-12 col-md-6 col-lg-4">
+                                    <span class="orange" *ngIf="evento.valoraciones" [innerHTML]="evento.valoraciones">
+                                    </span><span *ngIf="!evento.valoraciones"><small class="text-muted">Se el primero en
+                                            valorarlo</small></span>
+                                    <button title="Dejar comentario" class="btn btn-primary redondo"
+                                        (click)="dejarComentarios(evento)" title="Añadir comentario"><i
+                                            class="far fa-comment-alt"></i></button>
+                                    <button (click)="modalClick(evento)" type="button" class="btn btn-primary"
+                                        data-toggle="modal" data-target="#exampleModalCenter"> >
+                                        Launch demo modal
+                                    </button>
 
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row">
-                <div class="col-md-4">
-                    <!-- <img src="https://www.madrid.es{{evento.imagen}}" class="card-img" alt="..."> -->
-                    <img src="{{evento.imagen}}" class="card-img" alt="...">
-
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">{{evento.nombre}}</h5>
-                        <p class="card-text">This is a wider card with supporting text below as
-                            a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins
-                                ago</small></p>
-                        <p class="card-text"><small class="text-muted"><a href="{{evento.link}}">enlace de
-                                    interés</a></small></p>
-                        <p class="card-text"><small class="text-muted">{{evento.imagen}}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div cdkDragHandle class="esquina"><i class="fas fa-arrows-alt"></i></div>
+                        <!-- LA X DE LA ESQUINA -->
 
                     </div>
+
                 </div>
+            </div>
+        </span>
+    </div>
+
+
+</div>
+
+
+<div class="modal fade myContainer" id="exampleModalCenter" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-insert-comentario *ngIf="modal"></app-insert-comentario>
+                <app-login *ngIf="modal?.loginScreen"></app-login>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- <app-modal *ngIf="app.modal" [modal]="{'insertComentario' : true}"></app-modal> -->

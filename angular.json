@@ -24,11 +24,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/mapbox-gl/dist/mapbox-gl.css",
               "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
-              "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css"
+              "node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css",
+              "src/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

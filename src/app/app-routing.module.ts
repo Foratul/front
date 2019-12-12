@@ -6,16 +6,25 @@ import { InsertComentarioComponent } from './comentarios/insert-comentario/inser
 import { RegistrarComponent } from './usuarios/registrar/registrar.component';
 import { LoginComponent } from './usuarios/login/login.component';
 import { ListarEventosComponent } from './eventos/listar-eventos/listar-eventos.component';
+import { MapComponent } from './map/map.component';
+import { LogoutComponent } from './usuarios/logout/logout.component';
+import { HomeComponent } from './home/home.component';
+import { VacioComponent } from './vacio/vacio.component';
+import { GuardiaGuard } from './guardia.guard';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: "home", component: MainComponent },
-  { path: "pruebas", component: PruebasComponent },
-  { path: "comentar", component: InsertComentarioComponent },
-  { path: "registrar", component: RegistrarComponent },
-  { path: "login", component: LoginComponent },
-  { path: "eventos", component: ListarEventosComponent }
+  { path: "home", component: HomeComponent, canActivate: [GuardiaGuard] },
+  { path: "pruebas", component: PruebasComponent, canActivate: [GuardiaGuard] },
+  { path: "comentar", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
+  { path: "comentar/:idEvento", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
+  { path: "registrar", component: RegistrarComponent, canActivate: [GuardiaGuard] },
+  { path: "login", component: LoginComponent, canActivate: [GuardiaGuard] },
+  { path: "logout", component: LogoutComponent, canActivate: [GuardiaGuard] },
+  { path: "eventos", component: ListarEventosComponent, canActivate: [GuardiaGuard] },
+  { path: "mapa", component: VacioComponent, canActivate: [GuardiaGuard] },
+
 ];
 
 @NgModule({

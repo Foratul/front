@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AppStateService } from 'src/app/services/appstate.service';
 import { datosBackService } from 'src/app/services/datosBack.service';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-login',
@@ -10,31 +13,45 @@ import { datosBackService } from 'src/app/services/datosBack.service';
 export class LoginComponent implements OnInit {
 
   constructor(
+    private router: Router,
     private dataService: datosBackService,
     private appStateService: AppStateService) {
   }
 
   ngOnInit() {
+    alert("carga app-login")
   }
 
   onSubmit(formulario) {
-    let exito
+    let resultado
 
     this.dataService.loginUsuario(formulario)
       .then((result) => {
-        exito = result['exito']
-        localStorage.setItem("token", result['token'])
-        this.appStateService.setLogueado(true)
+        resultado = result
       })
       .catch((error) => {
-        exito = false
+        resultado.exito = false
+        resultado.mensaje = "No se puede conectar, intentelo más tarde"
+        console.log(error)
       })
 
-      .finally(() => { this.afterSubmit(exito) })
+      .finally(() => { this.afterSubmit(resultado) })
 
   }
 
-  afterSubmit(exito) {
-    alert((exito) ? "Logueado con exito" : "Usuario y/o contraseña incorrectos")
+  afterSubmit(resultado) {
+    if (resultado.exito) {
+      localStorage.setItem("token", resultado.token)
+      this.appStateService.setLogueado(true)
+      this.appStateService.setUser({ username: resultado.user.username, ID: resultado.user.ID })
+
+    }
+
+    alert((resultado.exito) ? `Bienvenido de nuevo ${this.appStateService.getUser().username}, logueado con exito ` : `No se ha podido loguear ${resultado.mensaje}`)
+    if (resultado.exito) $("#modalHeader .close").click().click()
+
+
   }
+
+
 }

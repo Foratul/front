@@ -4,6 +4,7 @@ import { PopUpService } from './pop-up.service';
 import { Marker } from 'leaflet';
 import { Icono } from '../Icono';
 import { AppStateService } from './appstate.service';
+import { EventosService } from './eventos.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,9 @@ export class MarkerService {
 
   constructor(
     private appStateService: AppStateService,
-    private popUpService: PopUpService) {
+    private popUpService: PopUpService,
+    private eventosService: EventosService
+  ) {
     Marker.prototype.options.icon = this.icono.defaultIcon
 
   }
@@ -109,6 +112,7 @@ export class MarkerService {
           this.arrayVisibles.push(elemento)
           this.arrayMarkersActivos.push(marker)
         }
+        this.eventosService.setEventosCercanos(this.arrayVisibles)
       }
 
     }

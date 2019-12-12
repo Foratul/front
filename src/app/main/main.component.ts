@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MarkerService } from '../services/marker.service';
 import 'jquery'
 import { AppStateService } from '../services/appstate.service';
@@ -29,6 +29,8 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
+
+    // this.appStateService.setMostrarMapa(false)
     this.app = this.appStateService.getAppState()
 
   }

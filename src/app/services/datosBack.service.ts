@@ -49,4 +49,15 @@ export class datosBackService {
 
   }
 
+  getUsuarios() {
+    return this.http.get(this.urlApi + "usuarios/").toPromise()
+
+  }
+
+  getComentariosByEvento(evento): Promise<any> {
+    return this.http.get(this.urlApi + "comentarios/?eventoID=" + evento.ID).toPromise()
+
+
+  }
+
 }

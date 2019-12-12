@@ -1,5 +1,31 @@
- body{padding-top:100px;}
+body{background-image:"https://congresosalcala.fgua.es/descargas/files/madrid1.jpg";
 
+    background-color:#FFC;}
+
+
+.router-link{width:100vw;
+}
+    
+.aplicacion{
+    
+    height:80vh;
+    background-image:"https://congresosalcala.fgua.es/descargas/files/madrid1.jpg";
+    background-color:#FFC;
+    overflow:auto;
+    margin:0 auto;
+    border:2px solid blue;
+ 
+}
+
+ 
+#main{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+     }
+ 
  .leaflet-popup-content{color:red !important;}
 
 .menu{
@@ -41,3 +67,12 @@ transition:200ms ease-in-out;}
   padding: 0 !important;
   margin: 0 !important;
 }
+
+.inBisible{
+       
+    position:absolute;
+    top:-200%;
+
+}
+
+/* .animada{transition-duration:2s;} */

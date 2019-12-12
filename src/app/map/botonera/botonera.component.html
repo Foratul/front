@@ -14,14 +14,16 @@
             <input type="submit">
         </span>
 
-
     </form>
 
     <span cdkDropListOrientation="horizontal" cdkDropList (cdkDropListDropped)="drop($event)">
         <button cdkDrag *ngFor=" let boton of arrayBotones, let i=index" class={{boton.class}} data-toggle="tooltip"
-            data-placement="top" title={{boton.tooltip}} (click)="botonPresionado(boton)">{{boton.texto}}
+            attr.data-placement={{boton.tooltipPos}} title={{boton.tooltip}} (click)="botonPresionado(boton)"
+            [innerHTML]="boton.texto">
         </button>
     </span>
+    <!-- //CADA BOTON HACE UNA COSA DISTINTA, no USAN LA MISMA FUNCION y no deja poner (click)={{boton.funcion}} o  attr.onclick={{boton.funcion}} porque dice desabilitado por security reasons
+    lo de METERLOS EN UN ARRAY ES PORQUE HACE FALTA PARA EL cdkDrag -->
 
     <!-- <button title="Togasdasdgle cargando" class="btn btn-secondary" (click)="toggleCargando()">Toggle Cargando</button>
 
@@ -30,7 +32,7 @@
     <button class="btn btn-secondary" (click)="toggleMarkers()">{{textomarkers}}</button>
     <button class="btn btn-secondary" (click)="toggleRadio()">ALTERNAR RADIO</button>
     <button class="btn btn-secondary" (click)="modoRutas()" class="btn btn-secondary" data-toggle="tooltip"
-        data-placement="top" title="Muestra u oculta rutas">MODO RUTA</button>
+     data-placement="top" title="Muestra u oculta rutas">MODO RUTA</button>
     <button class="btn btn-secondary" (click)="toggleBarrios()">{{textobarrios}}</button> -->
 
 

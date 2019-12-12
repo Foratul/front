@@ -1,22 +1,37 @@
 <div class="wrapper ">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <span (click)="panelIzquierdo()" class="navbar-brand">X</span>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button (click)="mostrarMapa()">M</button>
+        <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
+        <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" type="button"
+            (click)="menuHeader()" [attr.aria-expanded]="!app.extenderHeader" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a [routerLink]="['/pruebas']">Pruebas</a>
-        <a [routerLink]="['/comentar']">Comentarios</a>
-        <a [routerLink]="['/registrar']">Registro</a>
-        <a [routerLink]="['/login']">Login</a>
-        <a [routerLink]="['/eventos']">Eventos</a>
 
 
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="!app.extenderHeader">
             <ul class="navbar-nav mr-auto">
+
+                <a [routerLink]="['/mapa']"> Mapa</a>
+
+                <a [routerLink]="['/comentar']">Comentarios</a>
+                <a *ngIf="!app.logueado" [routerLink]="['/registrar']">Registrarse</a>
+                <!-- <a *ngIf="!app.logueado" [routerLink]="['/login']">Login</a> -->
+                <span *ngIf="!app.logueado"><button><i class="fas fa-sign-in-alt" (click)="loginClick()"
+                            data-toggle="modal" data-target="#modalHeader"></i></button></span>
+                <a *ngIf="app.logueado">Conectado como {{app.user.username}}</a>
+                <span *ngIf="app.logueado"><button><i class="fas fa-sign-out-alt" (click)="logoutClick()"
+                            data-toggle="modal" data-target="#modalHeader"></i></button></span>
+
+                <a [routerLink]="['/eventos']">Eventos</a>
+
+
+
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i> <span
+                            class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -44,3 +59,31 @@
         </div>
     </nav>
 </div>
+
+<div class="modal fade myContainer" id="modalHeader" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <app-insert-comentario *ngIf="modal"></app-insert-comentario> -->
+                <app-login *ngIf="modalLogin"></app-login>
+                <app-logout *ngIf="modalLogout"></app-logout>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <app-modal *ngIf="modal" [modal]="{'loginScreen' : true}"></app-modal> -->

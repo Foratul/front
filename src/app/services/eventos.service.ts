@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { datosBackService } from './datosBack.service';
+import { AppStateService } from './appstate.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +8,12 @@ import { datosBackService } from './datosBack.service';
 export class EventosService {
 
   arrayEventos: any
+  eventosCercanos
+  eventoSeleccionado
 
-  constructor(private datosBackService: datosBackService) {
+  constructor(
+    private datosBackService: datosBackService,
+  ) {
     this.arrayEventos = []
   }
 
@@ -28,4 +33,22 @@ export class EventosService {
 
   getEventosVista() { return this.arrayEventos }
 
+
+  setEventosCercanos(arrayEventos) {
+    this.eventosCercanos = arrayEventos
+  }
+
+  getEventosCercanos() { return this.eventosCercanos }
+
+
+  setEventoSeleccionado(evento) {
+    this.eventoSeleccionado = evento;
+  }
+
+  getEventoSeleccionado() {
+    return this.eventoSeleccionado
+  }
 }
+
+
+

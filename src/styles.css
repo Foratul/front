@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-.RAJOY{color:red !important;
-background-color:yellow;}
 
-.leaflet-popup-content{color:red !important;}
+html, body {
+    box-sizing:border-box;
+    margin:0 auto;
+
+}
+ 
+
+.anchoVisible{width:100vw;}
