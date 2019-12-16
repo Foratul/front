@@ -16,20 +16,20 @@ width:100%;
   position:absolute;
   top:45%;
   left:55%;
-  z-index:2000000;
+  z-index:10000;
  
  }
 
- .busy.cargando.visible{display:block;}
+ /* .busy.cargando.visible{display:block;} */
 
 .map-container {
        /* position: absolute;   */
- 
+ width:100%;
     top:66px;
     left: 0;
     right: 0;
     bottom: 0;
-     height: 50vh;  
+     height: 75vh;; 
    }
  
 
@@ -39,21 +39,24 @@ width:100%;
     width:100%;
     border: 2px solid black;
     height: 100%;
-    margin:0 auto;
+    /* margin:0 auto; */
 
   }
   
-  #map {
-    height: 100%;
-  }
+  
+  #mapObjeto{height:100%; z-index:10000000000}
 
+  #mapZero{height:100%;
+  width:99vw}
+
+ 
   .loading{position:relative;
   top:50%;
 left:50%;}
 
 /* #map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div{} */
  
-#generate{z-index:9999;}
+/* #generate{z-index:9999;} */
 
 .RAJOY{color:red !important;
   background-color:yellow;}

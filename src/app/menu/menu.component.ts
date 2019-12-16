@@ -8,13 +8,17 @@ import { AppStateService } from '../services/appstate.service';
 })
 export class MenuComponent implements OnInit {
   @Input() arrayItems: any
-  app: any;
+  @Input() app: any;
   constructor(private appStateService: AppStateService) { }
 
   ngOnInit() {
 
-    this.app = this.appStateService.getAppState()
 
+  }
+
+  cerrarMenu() {
+    this.app.menu_desplegado = false
+    this.app.paginaDesplegable = "MENU"
   }
 
   modal() {

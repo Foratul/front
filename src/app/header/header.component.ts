@@ -17,6 +17,7 @@ declare let $
 export class HeaderComponent implements OnInit {
   modalLogin = false;
   modalLogout = false;
+  modalRegister = false
   app: any
   constructor(private appStateService: AppStateService) {
   }
@@ -35,10 +36,14 @@ export class HeaderComponent implements OnInit {
       .on('hidden.bs.modal', () => {
         this.modalLogin = false
         this.modalLogout = false
+        this.modalRegister = false
+
 
         $("#modal .close").click()
         this.modalLogin = false
         this.modalLogout = false
+        this.modalRegister = false
+
 
 
 
@@ -47,6 +52,8 @@ export class HeaderComponent implements OnInit {
     $('.close').click(() => {
       this.modalLogin = false
       this.modalLogout = false
+      this.modalRegister = false
+
 
     });
 
@@ -61,6 +68,11 @@ export class HeaderComponent implements OnInit {
     this.modalLogout = true
   }
 
+  registerClick() {
+    console.log("registerClick")
+
+    this.modalRegister = true
+  }
 
 
   panelIzquierdo() {
@@ -72,7 +84,7 @@ export class HeaderComponent implements OnInit {
 
   mostrarMapa() {
 
-    this.appStateService.setMostrarMapa(!this.appStateService.getMostrarMapa())
+    this.appStateService.setMostrarMapa(true)
   }
 
   menuHeader() {
@@ -80,4 +92,22 @@ export class HeaderComponent implements OnInit {
     this.appStateService.setExtenderHeader(!this.appStateService.getExtenderHeader())
   }
 
+
+  navegarAMapa() {
+
+
+
+    this.appStateService.setMostrarMapa(!this.appStateService.getMostrarMapa())
+  }
+
+
+  navegar(pagina) {
+    this.app.paginaMain = pagina
+    this.app.mostrarMapa = false
+    console.log("app.mainPagina vale", this.app.paginaMain)
+
+
+  }
+
+  escribiendoEnBuscadorHeader() { console.log("escriben en el header search") }
 }

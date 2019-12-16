@@ -1,34 +1,43 @@
  
-
-
-
-div.eventos{  
+div.eventos{  position:relative;
+  height:80vh;
+  width:100vw;
     
 }
 div.eventos div p {display:inline-block}
 
 
   div.cabecera {   
+    width:90vw;
+    
+    position:absolute;
+
+    top:0;
     margin:0 auto;
-     width: 85%;
-    z-index:1;
- position:fixed;
+     /* width: 85%; */
+        z-index:1;
+ /* position:fixed; */
      display:block; 
-     height:40px;
-     background-color:#FFC;
+     /* height:40px; */
+     /* background-color:#FFC; */
     }  
 
-div.listado{padding-top:80px;
+div.listado{
+  height:83vh;
+  overflow-x: hidden; /* Hide vertical scrollbar */
+
+  overflow-y:auto;
   /* position: relative; */
  
  }
  
+ h5 {font-size: 1em;}
  
 .redondo {border-radius:25%;}
 img {width:100% !important;}
 
 
-.orange{color:orange}
+/* .orange{color:orange} */
 
 .cuadro{height:200px; overflow:auto;
 }
@@ -36,7 +45,13 @@ img {width:100% !important;}
 /* .cuadroImagen{position:fixed;} */
 
 .quieto{position:fixed;}
-.recuadro{position:relative}
+.recuadro{position:relative;
+ max-height:500px;
+overflow:hidden;}
 .esquina{position:absolute;
   cursor : all-scroll;
-  bottom:10px; left:10px;}
+  bottom:10px; right:10px;}
+
+  .text {font-family : var (--fuentePrimaria)}
+
+  .comentar {height: 0.5em;}

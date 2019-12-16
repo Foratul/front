@@ -1,7 +1,6 @@
 .wrapper{
     
-  z-index:10;
-    border:2px solid black;
+     border:2px solid black;
    width:100%;
  
 background-color:lightgray;}
@@ -22,3 +21,8 @@ z-index:19999;
 } */
 
 
+.login a {background: url("https://s.libertaddigital.com/images/svg/usuario.svg") no-repeat center;
+  
+  overflow:hidden;
+  width: .9em;
+text-indent:300%}

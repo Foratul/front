@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { EventosService } from 'src/app/services/eventos.service';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { AppStateService } from 'src/app/services/appstate.service';
 import { Router } from '@angular/router';
 import { datosBackService } from 'src/app/services/datosBack.service';
 declare let $
+declare let funcionesComunes
 
 @Component({
   selector: 'app-listar-eventos',
@@ -13,7 +14,7 @@ declare let $
 })
 export class ListarEventosComponent implements OnInit {
   arrayEventos: Array<any> = []
-  porPagina: number = 10;
+  porPagina: number = 12;
   paginaActual: number = 1
   arrayEventosVisibles: Array<any> = []
   paginasTotales: number;
@@ -22,9 +23,11 @@ export class ListarEventosComponent implements OnInit {
   icono = "<i class='orange fas fa-star'</i>"
   medioicono = "<i class='orange fas fa-star-half'</i>"
   app
+  ascendente: boolean = true
   modal: any;
-  ordenar: string = "Alfabéticamente"
-
+  ordenar: string = "ABC"
+  textoAscendente = "Ascendente"
+  regexp = new RegExp(/[^a-zA-Z0-9 ]/g)
 
   constructor(
     private eventosService: EventosService,
@@ -44,8 +47,10 @@ export class ListarEventosComponent implements OnInit {
         this.modal = false
         $("#exampleModalCenter .close").click()
         this.modal = false
+      })
 
-
+      .on('hide.bs.modal', () => {
+        // this.comprobarComentarios(this.arrayEventos)
       })
 
     $('.close').click(() => {
@@ -58,18 +63,62 @@ export class ListarEventosComponent implements OnInit {
       })
     })
 
-    if (this.eventosService.getEventosCercanos()) {
-      // this.arrayEventos = this.aleatorizarArray(this.eventosService.getEventosCercanos())
-      this.arrayEventos = this.eventosService.getEventosCercanos()
-      this.paginasTotales = Math.floor(this.arrayEventos.length / this.porPagina) + 1
-      this.actualizarEventosVisibles() //cosas de la pagina, mostrar 20, 30, 100 etc , return un arrayEventosVisibles
-    }
 
-    for (const evento of this.arrayEventos) {
-      this.comprobarComentarios(evento)
-      console.log("comprobando " + evento.ID)
+
+
+    // this.arrayEventos = this.aleatorizarArray(this.eventosService.getEventosCercanos())
+    this.arrayEventos = this.eventosService.getEventosSeleccionados()
+    // alert("soy listar eventos, tengo array de " + this.arrayEventos.length)
+
+    this.paginasTotales = Math.floor(this.arrayEventos.length / this.porPagina) + 1
+    this.ordenarArrayPor(this.arrayEventos, "ABC")
+    this.actualizarEventosVisibles() //cosas de la pagina, mostrar 20, 30, 100 etc , return un arrayEventosVisibles
+
+
+    // this.comprobarComentarios(this.arrayEventos)
+  }
+
+  comprobarComentarios(arrayEventos) {
+
+    this.datosService.getEventosComentarios().then((results) => {
+
+
+      arrayEventos.forEach(evento => {
+        
+      });
+      for (const evento of arrayEventos) {
+
+        
+      }
+
+
+
+    })
+
+    for (const evento of arrayEventos) {
+      // console.log("voy a buscar comentarios de  " + evento.ID)
+      this.datosService.getComentarioByEventoID(evento.ID) //comprueba si un evento tiene comentarios
+        .then((results) => {
+          if (results.length > 0) {
+            let arrayComentarios = results;
+            console.log(evento.ID, " tiene este array de comentarios", results)
+
+            evento.nota = 0
+            for (const comentario of arrayComentarios) { //el reduce no estaba funcionando por alguna razons , asi que a lo bulce
+              evento.nota += comentario.valoracion
+            }
+            evento.votantes = arrayComentarios.length
+            evento.valoraciones = funcionesComunes.convertirNumeroAEstrellas(evento.nota / evento.votantes)
+            console.log("he mandado a dibujar estrellas ", evento.nota / evento.votantes)
+
+          }
+        })
+        .catch((err) => { console.log(err) })
+
+      // llamas a base de datos y que lo mire y ya le mando a la vista al html lo que sea con ngIf
     }
   }
+
 
   modalClick(evento) {
 
@@ -78,30 +127,7 @@ export class ListarEventosComponent implements OnInit {
     this.appState.setModal(true)
 
   }
-  comprobarComentarios(evento) {
 
-    this.datosService.getComentariosByEvento(evento) //comprueba si un evento tiene comentarios
-      .then((results) => {
-        if (results.length > 0) {
-          let arrayComentarios = results;
-          console.log(evento.ID, " tiene este array de comentarios", results)
-
-          evento.nota = 0
-          for (const comentario of arrayComentarios) { //el reduce no estaba funcionando por alguna razons , asi que a lo bulce
-            evento.nota += comentario.valoracion
-          }
-          evento.nota = evento.nota / arrayComentarios.length
-          evento.valoraciones = this.convertirNumeroAEstrellas(evento.nota)
-
-
-        }
-      })
-      .catch((err) => { console.log(err) })
-
-
-
-    // llamas a base de datos y que lo mire y ya le mando a la vista al html lo que sea con ngIf
-  }
 
 
   drop($event) {
@@ -147,43 +173,103 @@ export class ListarEventosComponent implements OnInit {
     this.router.navigate([`/comentar/${evento.ID}`])
   }
 
-  convertirNumeroAEstrellas(numero) {
-    let stringEstrellas = ""
-    for (let i = 0; i < numero; i++) { stringEstrellas += this.icono + " " }
-    if (numero - parseInt(numero) > 0.25) stringEstrellas += this.medioicono;
-    return stringEstrellas;
+
+
+  ascendenteOrden() {
+    console.log("click en ascendenteorden")
+    this.ascendente = !this.ascendente
+    this.textoAscendente = (this.ascendente) ? "ascendente" : "descendente"
+    this.arrayEventos.reverse()
+    this.actualizarEventosVisibles()
+    this.paginaActual = 1
+
   }
 
-  async ordenarPor() {
-    console.log(this.ordenar)
+  async ordenarPor(ordenar = this.ordenar) {
 
 
-    switch (this.ordenar) {
+    this.ascendente = true
+    this.textoAscendente = "ascendente"
+
+
+    switch (ordenar) {
       case "ABC":
-        console.log("abc")
+        this.ordenarArrayPor(this.arrayEventos, "ABC")
 
-        this.arrayEventos.sort((a, b) => (a.nombre > b.nombre) ? 1 : -1)
+
         break;
 
       case "SCORE":
-        console.log("score")
-        this.arrayEventos.sort(function (a, b) { return b.nota - a.nota })
+
+        this.ordenarArrayPor(this.arrayEventos, "SCORE")
+        this.ascendente = false;
+        this.textoAscendente = this.textoAscendente = "descendente"
+
 
         break;
 
       case "VIEWS":
 
-        this.arrayEventos.sort(function (a, b) { return b.visitas - a.visitas })
+        this.ordenarArrayPor(this.arrayEventos, "VIEWS")
 
+        break;
+
+      case "RANDOM":
+
+        this.ordenarArrayPor(this.arrayEventos, "RANDOM")
+
+        break;
+      case "DISTANCE":
         break;
     }
 
-    this.actualizarEventosVisibles()
     this.paginaActual = 1
+    this.actualizarEventosVisibles()
 
 
   }
 
+
+
+  ordenarArrayPor(array, metodo) {
+    if (metodo == "ABC") array.sort((a, b) => a.nombre.replace(this.regexp, "") > b.nombre.replace(this.regexp, "") ? 1 : -1)
+    if (metodo == "SCORE") this.arrayEventos.sort((a, b) => {
+      return (b.nota ? b.nota / b.votantes : 0) - (a.nota ? a.nota / a.votantes : 0)
+    })
+    if (metodo == "VIEWS") this.arrayEventos.sort(function (a, b) { return b.visitas - a.visitas })
+    if (metodo == "RANDOM") this.arrayEventos = this.aleatorizarArray(this.arrayEventos)
+    if (metodo == "DISTANCE") { }
+
+  }
+
+  comentarioExitoso() {
+
+    this.ordenarArrayPor(this.arrayEventos, this.ordenar)
+    this.actualizarEventosVisibles()
+
+    // this.comprobarComentarios(this.arrayEventos)
+    // this.actualizarEventosVisibles()
+
+  }
+  verComentarios(eventoID) {
+    console.log("ver Comentarios clicado", eventoID)
+    this.datosService.getComentarioByEventoID(eventoID).then((arrayComentarios => {
+
+      this.app.arrayComentarios = arrayComentarios
+      this.app.menu_desplegado = true
+      this.app.paginaDesplegble = "listarComentarios"
+    }))
+      .catch((err) => { console.log("error al pedir ComentariosByEvento ") })
+  }
+
+  detalleEvento(evento) {
+    console.log("a detalleEvento ha llegado", evento)
+    this.eventosService.setEventoSeleccionado(evento)
+    this.app.menu_desplegado = true
+    this.app.paginaDesplegable = "detalleEvento"
+
+
+  }
 }
 
 

@@ -7,7 +7,7 @@
         </select>
         <span *ngIf=markers>
             <!-- la vista se inicia antes que el input, so we have a problem -->
-            <input type="range" name="radius" value="1000" min="1000" max="10000" step="1000" ngModel
+            <input type="range" name="radius" value="5000" min="500" max="10000" step="500" ngModel
                 (mouseup)="onRadiusChange(formulario.value.radius)" class="custom-range col-2"> DISTANCIA
             {{formulario.value.radius}}
             <output for="radius" onforminput="value = foo.valueAsNumber;"></output>

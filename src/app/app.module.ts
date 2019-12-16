@@ -32,7 +32,11 @@ import { HomeComponent } from './home/home.component';
 import { VacioComponent } from './vacio/vacio.component';
 import { GuardiaGuard } from './guardia.guard';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ModalComponent } from './modal/modal.component'
+import { ModalComponent } from './modal/modal.component';
+import { ListarComentariosComponent } from './comentarios/listar-comentarios/listar-comentarios.component';
+import { BuscadorComponent } from './buscador/buscador.component'
+import { ReactiveFormsModule } from '@angular/forms';
+import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.component';
 
 
 
@@ -53,6 +57,9 @@ import { ModalComponent } from './modal/modal.component'
     HomeComponent,
     VacioComponent,
     ModalComponent,
+    ListarComentariosComponent,
+    BuscadorComponent,
+    DetalleEventoComponent,
   ],
   imports: [
     FormsModule,
@@ -60,7 +67,7 @@ import { ModalComponent } from './modal/modal.component'
     AppRoutingModule,
     HttpClientModule,
     NgbModule, DragDropModule,
-    FontAwesomeModule
+    FontAwesomeModule, ReactiveFormsModule
 
 
   ],

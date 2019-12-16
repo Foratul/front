@@ -25,7 +25,7 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
   distritos = []
   markers = true
   barrios = true
-  radius = 1000
+  radius = 500
   radio = true
   arrayItems
   clases
@@ -166,6 +166,7 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
 
   toggleRadio() {
     (this.map.radio) ? this.markerService.removeCircle(this.map) : this.markerService.addCircle(this.map)
+
   }
 
 

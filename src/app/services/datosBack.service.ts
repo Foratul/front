@@ -21,7 +21,7 @@ export class datosBackService {
 
   }
 
-  getEventos() {
+  getAllEventos(): Promise<any> {
     let prom = this.http.get(this.urlApi + "eventos").toPromise()
     return prom
   }
@@ -33,6 +33,7 @@ export class datosBackService {
   }
 
   enviarComentario(comentario) {
+    console.log("datos service envia comentario")
     return this.http.post(
       this.urlApi + "comentarios/add", comentario,
       { headers: new HttpHeaders({ token: localStorage.getItem("token") }) }
@@ -54,10 +55,38 @@ export class datosBackService {
 
   }
 
-  getComentariosByEvento(evento): Promise<any> {
-    return this.http.get(this.urlApi + "comentarios/?eventoID=" + evento.ID).toPromise()
+  getComentarioByID(ID): Promise<any> {
+    return this.http.get(this.urlApi + "comentarios/?ID=" + ID).toPromise()
+  }
+
+  getComentarioByEventoID(ID): Promise<any> {
+    return this.http.get(this.urlApi + "comentarios/?EventoID=" + ID).toPromise()
+  }
+
+  getEventoByID(ID) {
+    console.log("getEventoByID en el service")
+
+    return this.http.get(this.urlApi + "eventos/?ID=" + ID).toPromise()
+
+  }
+
+  getEventosByAnyFields(objeto): Promise<any> {
+
+    return this.http.post(this.urlApi + "eventos/buscador", objeto).toPromise()
+
+  }
+
+  getUsuarioByID(ID) {
+    console.log("getUsuarioByID en el service")
 
 
+    return this.http.get(this.urlApi + "usuarios/?ID=" + ID).toPromise()
+
+  }
+
+  getEventosComentarios() {
+
+    return this.http.get(this.urlApi + "comentarios/tablaIndices/").toPromise()
   }
 
 }

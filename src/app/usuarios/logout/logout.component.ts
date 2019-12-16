@@ -17,7 +17,6 @@ export class LogoutComponent implements OnInit {
     localStorage.removeItem("token")
     alert(`el usuario ${this.appState.getUser()} ha cerrado sesión`)
     this.appState.setUser(null)
-    this.router.navigate([this.appState.getHistorial()])
 
   }
 

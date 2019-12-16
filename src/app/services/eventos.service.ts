@@ -10,6 +10,8 @@ export class EventosService {
   arrayEventos: any
   eventosCercanos
   eventoSeleccionado
+  arrayEventosSeleccionados
+  arrayEventosDescargados = []
 
   constructor(
     private datosBackService: datosBackService,
@@ -18,37 +20,42 @@ export class EventosService {
   }
 
 
-  getEventos() {
-    let prom = new Promise((resolve, reject) => {
-      this.datosBackService.getEventos()
-        .then((datos) => {
-          this.arrayEventos = datos
-          resolve(datos)
-        })
-        .catch((error) => { reject(error) })
+  getAllEventos() {
+    this.datosBackService.getAllEventos()
+      .then((datos) => { this.arrayEventos = datos })
+      .catch((error) => { console.log(error) })
 
-    })
-    return prom;
   }
 
-  getEventosVista() { return this.arrayEventos }
+
+  getEventosSeleccionados() { return this.arrayEventos }
+  setEventosSeleccionados(arrayEventos) { this.arrayEventos = arrayEventos }
 
 
-  setEventosCercanos(arrayEventos) {
-    this.eventosCercanos = arrayEventos
-  }
-
+  setEventosCercanos(arrayEventos) { this.eventosCercanos = arrayEventos }
   getEventosCercanos() { return this.eventosCercanos }
 
 
-  setEventoSeleccionado(evento) {
-    this.eventoSeleccionado = evento;
+
+
+  getEventosDescargados() {
+    return this.arrayEventosDescargados
+  }
+
+  setEventosDescargados(arrayEventos) {
+    this.arrayEventosDescargados = arrayEventos;
   }
 
   getEventoSeleccionado() {
     return this.eventoSeleccionado
   }
+
+
+  setEventoSeleccionado(evento) {
+    this.eventoSeleccionado = evento;
+  }
 }
+
 
 
 

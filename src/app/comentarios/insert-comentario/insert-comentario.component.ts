@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { datosBackService } from 'src/app/services/datosBack.service';
 import { AppStateService } from 'src/app/services/appstate.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventosService } from 'src/app/services/eventos.service';
 declare let $;
+declare let funcionesComunes
 
 @Component({
   selector: 'app-insert-comentario',
@@ -16,19 +17,29 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
   evento
   app
   arrayEstrellas = []
+  @Output() comentarioExitoso: EventEmitter<boolean>
+
   constructor(
     private dataService: datosBackService,
     private appState: AppStateService,
     private activatedRoute: ActivatedRoute,
     private eventosService: EventosService
-  ) { }
+  ) {
+
+
+
+    this.comentarioExitoso = new EventEmitter<boolean>()
+
+  }
   icono = 'far fa-star'
   medioicono = 'fas fa-star-half'
   n = 0;
   recomendable = false
+  alerta
 
   ngOnDestroy() {
-    alert("componente insertcomentario destruido")
+
+    console.log("insert comentario destruido")
 
 
   }
@@ -36,9 +47,13 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
 
+    $(".alert").hide()
+
+
+
     this.evento = this.eventosService.getEventoSeleccionado()
 
-    alert("TENGO evento" + this.evento.nombre)
+    // alert("TENGO evento" + this.evento.nombre)
 
     for (let i = 0; i < 5; i++) {
       this.arrayEstrellas.push({ icono: this.icono })
@@ -67,6 +82,14 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
         console.log(result)
         if (result['exito']) {
           mensaje = "Comentario insertado con éxito, gracias por su opinión"
+          console.log(this.evento.votantes, this.evento.nota)
+          this.evento.votantes = (this.evento.votantes) ? this.evento.votantes + 1 : 1
+          this.evento.nota = (this.evento.nota) ? this.evento.nota + this.n : this.n
+          let numero = this.evento.nota / this.evento.votantes
+
+          console.log(numero)
+          this.evento.valoraciones = funcionesComunes.convertirNumeroAEstrellas(numero)
+
           this.exito = true
         }
         if (result['loginError']) mensaje = "Necesitas estar logueado para esto"
@@ -86,9 +109,36 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
   }
 
   afterSubmit(mensaje) {
-    alert(mensaje)
-    if (this.exito) $("#exampleModalCenter .close").click().click()
+
+    this.alerta = mensaje
+    $(".alert").show()
+
+
+    if (this.exito) {
+
+      $(".alert").removeClass("alert-warning").addClass("alert-success")
+      $(".formulario").hide()
+      setTimeout(() => {
+        // $("#modalHeader .close").click().click()
+        this.comentarioExitoso.emit(true)
+
+      }, 2000)
+
+
+
+
+    }
+
     // if (this.exito) $("#modal .close").hide()
+
+
+
+
+
+
+
+
+
 
 
 

@@ -27,7 +27,29 @@ li {
 color:white;
 
 
+
 }
+
+
+.folio{position:absolute; 
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+background-color:white;
+overflow:auto;}
+
+.cerrar{position:absolute;
+  width:50px;
+  height:50px;
+top:10 x;
+right:10px;
+transition-duration:400ms;}
+
+
+.fas.fa-times:hover{transform:rotate(180DEG);
+  transition-duration:400ms;}
+
 
 #listado{
   /* max-width:300px; */

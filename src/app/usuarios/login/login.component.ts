@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  alerta = "Alerta"
   constructor(
     private router: Router,
     private dataService: datosBackService,
@@ -19,7 +20,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    alert("carga app-login")
+    $(".alert").hide()
+    $(".formulario").show()
+
+
   }
 
   onSubmit(formulario) {
@@ -46,9 +50,18 @@ export class LoginComponent implements OnInit {
       this.appStateService.setUser({ username: resultado.user.username, ID: resultado.user.ID })
 
     }
+    $(".alert").show()
 
-    alert((resultado.exito) ? `Bienvenido de nuevo ${this.appStateService.getUser().username}, logueado con exito ` : `No se ha podido loguear ${resultado.mensaje}`)
-    if (resultado.exito) $("#modalHeader .close").click().click()
+
+    this.alerta = (resultado.exito) ? `Bienvenido de nuevo ${this.appStateService.getUser().username}, logueado con exito ` : `No se ha podido loguear ${resultado.mensaje}`
+
+
+    if (resultado.exito)
+      $(".alert").removeClass("alert-warning").addClass("alert-success")
+    $(".formulario").hide()
+
+
+    setTimeout(() => { $("#modalHeader .close").click().click() }, 3000)
 
 
   }

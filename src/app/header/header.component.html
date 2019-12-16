@@ -1,5 +1,5 @@
 <div class="wrapper ">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <span (click)="panelIzquierdo()" class="navbar-brand">X</span>
         <button (click)="mostrarMapa()">M</button>
         <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
@@ -12,20 +12,22 @@
 
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="!app.extenderHeader">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav ml-auto">
 
-                <a [routerLink]="['/mapa']"> Mapa</a>
+                <a class="enlace text-dark" (click)="navegarAMapa()"> Mapa</a>
 
-                <a [routerLink]="['/comentar']">Comentarios</a>
-                <a *ngIf="!app.logueado" [routerLink]="['/registrar']">Registrarse</a>
-                <!-- <a *ngIf="!app.logueado" [routerLink]="['/login']">Login</a> -->
-                <span *ngIf="!app.logueado"><button><i class="fas fa-sign-in-alt" (click)="loginClick()"
-                            data-toggle="modal" data-target="#modalHeader"></i></button></span>
-                <a *ngIf="app.logueado">Conectado como {{app.user.username}}</a>
+                <a class="text-dark" [routerLink]="['/comentar']">Comentarios</a>
+                <button data-toggle="modal" data-target="#modalHeader" *ngIf="!app.logueado"
+                    (click)="registerClick()">Registrarse</button>
+                <span *ngIf="!app.logueado"><button><i class="text-dark" class="fas fa-sign-in-alt"
+                            (click)="loginClick()" data-toggle="modal" data-target="#modalHeader"></i></button></span>
+                <a class="text-dark" *ngIf="app.logueado">Conectado como {{app.user.username}}</a>
                 <span *ngIf="app.logueado"><button><i class="fas fa-sign-out-alt" (click)="logoutClick()"
                             data-toggle="modal" data-target="#modalHeader"></i></button></span>
 
-                <a [routerLink]="['/eventos']">Eventos</a>
+                <a class="enlace" (click)="navegar('listarEventos')">Eventos</a>
+                <a class="enlace" (click)="navegar('buscador')">Buscador</a>
+
 
 
 
@@ -52,10 +54,12 @@
                     <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <div class="buscadorHeader" onforminput="escribiendoEnBuscadorHeader()">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
         </div>
     </nav>
 </div>
@@ -74,6 +78,7 @@
                 <!-- <app-insert-comentario *ngIf="modal"></app-insert-comentario> -->
                 <app-login *ngIf="modalLogin"></app-login>
                 <app-logout *ngIf="modalLogout"></app-logout>
+                <app-registrar *ngIf="modalRegister"></app-registrar>
 
 
             </div>
@@ -84,6 +89,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- <app-modal *ngIf="modal" [modal]="{'loginScreen' : true}"></app-modal> -->

@@ -1,22 +1,22 @@
 <div class="envoltorioMapa">
     <div class="botonera">
-        <app-botonera [map]=map>
-        </app-botonera>
+        <app-botonera [map]=map></app-botonera>
     </div>
 
-    <div class="mapcontainer">
+    <!-- <div class="mapcontainer">
         <div class="busy cargando" *ngIf="app.cargando" [ngClass]="{'visible': app.cargando}">
             <div class="spinner-border" role="status">
             </div>
-        </div>
-        <div class="map-container" [ngClass]="{'cargando': app.cargando}">
-            <div class="map-frame">
-                <div id="map"></div>
-                <!-- <div id="distance">
+        </div> -->
+    <div class="map-container">
+        <!-- [ngClass]="{'cargando': app.cargando}"> -->
+        <div class="map-frame">
+            <div *ngIf="!mapaIniciado" id="mapZero"></div>
+            <!-- <div id="mapObjeto"></div> -->
+            <!-- <div id="distance">
                 </div> -->
-
-            </div>
 
         </div>
     </div>
+
 </div>

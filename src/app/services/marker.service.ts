@@ -5,6 +5,7 @@ import { Marker } from 'leaflet';
 import { Icono } from '../Icono';
 import { AppStateService } from './appstate.service';
 import { EventosService } from './eventos.service';
+declare let $
 
 @Injectable({
   providedIn: 'root'
@@ -83,14 +84,14 @@ export class MarkerService {
   addMarkers(map, arrayDatos, radius = 1000) {
     this.appStateService.setCargando(true)
 
-    console.log("voy a dibujar los markers en un radio de : ", radius)
     if (arrayDatos == null) arrayDatos = this.currentArrayDatos  //mete el ultimo array recibido en el servicio
     this.currentArrayDatos = arrayDatos
+    console.log("voy a dibujar los markers en un radio de : ", radius, "tengo un array de tamaño ", arrayDatos.length)
+
     this.arrayVisibles = [] //vacia lo visible porque se recrea
 
     map.radius = radius
 
-    console.log("voy a pintar los markers")
     for (const [index, elemento] of arrayDatos.entries()) {
       if (elemento.latitude && elemento.longitude) { //comprueba que traen lat y lng antes de añadir
         const marker = L.marker([elemento.latitude + Math.random() / 5000, elemento.longitude + Math.random() / 5000], { icon: this.icono.blueIcon, riseOnHover: true })
@@ -111,6 +112,7 @@ export class MarkerService {
           })
           this.arrayVisibles.push(elemento)
           this.arrayMarkersActivos.push(marker)
+          if (elemento.centrar) map.setView(new L.LatLng(elemento.latitude, elemento.longitude), 8);
         }
         this.eventosService.setEventosCercanos(this.arrayVisibles)
       }
@@ -141,6 +143,7 @@ export class MarkerService {
     console.log("se ha clicado en el dbID numero:", evento.target.dataset.id)
     let popupElement = document.querySelector("#popUpText")
     popupElement.innerHTML += "L-OREM-"
+    $(".leaflet-popup-content").blur()
 
 
   }
@@ -159,21 +162,15 @@ export class MarkerService {
   }
 
   returnVisibles() {
-    console.log(this.arrayVisibles)
+    console.log("return visibles, array de", this.arrayVisibles.length)
     return this.arrayVisibles
   }
 
-  createMarkerEspecial(map) {
-    console.log("INDIA")
-    var markerFrom = L.circleMarker([28.6100, 77.2300], { color: "#F00", radius: 10 });
-    var markerTo = L.circleMarker([18.9750, 72.8258], { color: "#4AFF00", radius: 10 });
-    var from = markerFrom.getLatLng();
-    var to = markerTo.getLatLng();
-    markerFrom.bindPopup('Delhi ' + (from).toString());
-    markerTo.bindPopup('Mumbai ' + (to).toString());
-    map.addLayer(markerTo);
-    map.addLayer(markerFrom);
-    this.getDistance(from, to);
+  createMarkerEspecial(map, evento) {
+
+    let marcadorEspecial = L.marker([evento.latitude, evento.longitude], { riseOnHover: true, icon: this.icono.greenIcon });
+    marcadorEspecial.addTo(map)
+    map.setView(new L.LatLng(evento.latitude, evento.longitude), 15)
   }
 
   getDistance(from, to) {

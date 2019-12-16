@@ -5,12 +5,14 @@ import { MainComponent } from './main/main.component';
 import { InsertComentarioComponent } from './comentarios/insert-comentario/insert-comentario.component';
 import { RegistrarComponent } from './usuarios/registrar/registrar.component';
 import { LoginComponent } from './usuarios/login/login.component';
-import { ListarEventosComponent } from './eventos/listar-eventos/listar-eventos.component';
 import { MapComponent } from './map/map.component';
 import { LogoutComponent } from './usuarios/logout/logout.component';
 import { HomeComponent } from './home/home.component';
 import { VacioComponent } from './vacio/vacio.component';
 import { GuardiaGuard } from './guardia.guard';
+import { ListarComentariosComponent } from './comentarios/listar-comentarios/listar-comentarios.component';
+import { ListarEventosComponent } from './eventos/listar-eventos/listar-eventos.component';
+import { BuscadorComponent } from './buscador/buscador.component';
 
 
 const routes: Routes = [
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: "logout", component: LogoutComponent, canActivate: [GuardiaGuard] },
   { path: "eventos", component: ListarEventosComponent, canActivate: [GuardiaGuard] },
   { path: "mapa", component: VacioComponent, canActivate: [GuardiaGuard] },
+  { path: "listarComentarios", component: ListarComentariosComponent, canActivate: [GuardiaGuard] },
+  { path: "buscador", component: BuscadorComponent, canActivate: [GuardiaGuard] },
 
 ];
 

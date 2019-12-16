@@ -1,74 +1,83 @@
-<div class="eventos container">
+<div class="eventos container no-padding- no-gutters ml-2">
 
-    <div *ngIf="arrayEventosVisibles && arrayEventos" class=" cabecera">
+    <div *ngIf="arrayEventosVisibles && arrayEventos" class="cabecera">
         <p>Mostrando eventos {{1+ (paginaActual-1)*porPagina}} al {{paginaActual*porPagina}} de
             {{arrayEventos.length}}
         </p>
-        <button (click)="botonPagina(-1)">PREV</button>
-        <button (click)="botonPagina(1)">NEXT</button> {{paginaActual}}
+        <button (click)="botonPagina(-1)"><i class="fas fa-arrow-left"></i></button> {{paginaActual}}
+        <button (click)="botonPagina(1)"><i class="fas fa-arrow-right"></i></button>
         <span>Resultados por página</span>
 
         <select name="porPagina" id="paginar" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+            <option value="12">12</option>
+            <option value="24">24</option>
+            <option value="48">48</option>
+            <option value="96">96</option>
         </select>
         <select name="ordenarPor" id="ordenar" [(ngModel)]="ordenar" (change)="ordenarPor()">
             <option value="ABC">Alfabéticamente</option>
             <option value="SCORE">Puntuación</option>
             <option value="VIEWS">Visitas en la página</option>
-            <option value="100">100</option>
+            <option value="RANDOM">Aleatorio</option>
         </select>
+        <button (click)="ascendenteOrden()">Orden {{textoAscendente}}}</button>
 
-    </div>
-
-    <div class="listado">
-        <p *ngIf=!arrayEventosVisibles>No hay eventos seleccionados</p>
-        <span *ngIf="arrayEventosVisibles">
-            <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
-                <div cdkDrag *ngFor="let evento of arrayEventosVisibles" class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="recuadro">
-                        <div class="card mb-3 cuadro" style="max-width: 540px;">
-                            <div class="row no-gutters">
-                                <div class="col-md-4 cuadroImagen">
-                                    <img class="quieto" src="{{evento.imagen}}" class="card-img" alt="..."> </div>
-                                <div class="col-md-8 pl-2">
-                                    <h5 class="card-title">{{evento.nombre}} <a *ngIf="evento.link"
+        <div class="listado">
+            <p *ngIf=!arrayEventosVisibles>No hay eventos seleccionados</p>
+            <span *ngIf="arrayEventosVisibles">
+                <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
+                    <div cdkDrag *ngFor="let evento of arrayEventosVisibles"
+                        class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="recuadro">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title texto">{{evento.nombre}} <a (click)="detalleEvento(evento)"><i
+                                                class="enlace fas fa-info-circle"></i></a><a *ngIf="evento.link"
                                             title="enlace oficial" target="_blank" href={{evento.link}}><i
-                                                class="fas fa-external-link-alt"></i></a> </h5>
-                                    <p class="card-text"><small class="text-muted"></small></p>
-                                    <p class="card-text">{{evento.descripcion}}</p>
-                                    <p class="card-text"><small class="text-muted">{{evento.ID}}</small></p>
-
-                                    <!-- BOTON COMENTARIOS -->
+                                                class="fas fa-external-link-alt"></i></a>
+                                        <a *ngIf="!evento.link && evento.relation" title="enlace oficial"
+                                            target="_blank" href={{evento.relation}}><i
+                                                class="fas fa-external-link-alt"></i></a></h5>
 
                                     <span class="orange" *ngIf="evento.valoraciones" [innerHTML]="evento.valoraciones">
-                                    </span><span *ngIf="!evento.valoraciones"><small class="text-muted">Se el primero en
-                                            valorarlo</small></span>
-                                    <button title="Dejar comentario" class="btn btn-primary redondo"
-                                        (click)="dejarComentarios(evento)" title="Añadir comentario"><i
-                                            class="far fa-comment-alt"></i></button>
-                                    <button (click)="modalClick(evento)" type="button" class="btn btn-primary"
-                                        data-toggle="modal" data-target="#exampleModalCenter"> >
-                                        Launch demo modal
-                                    </button>
+                                    </span>
 
+                                    <img src="{{evento.imagen}}" class="card-img" alt="...">
+                                    <div class="cuadro">
+                                        <p class="card-text">{{evento.descripcion}}</p>
+                                        <p class="card-text"><small class="text-muted">{{evento.ID}}</small></p>
+                                    </div>
+                                    <div>
+                                        <span *ngIf="!evento.valoraciones"><small class="text-muted">Se el primero
+                                                en valorarlo</small></span>
+                                        <span data-toggle="tooltip" tooltip="Añadir Comentario"
+                                            attr.data-placement="bottom" title="Comentar"><button
+                                                (click)="modalClick(evento)" type="button"
+                                                class="comentar btn btn-primary" data-toggle="modal"
+                                                data-target="#exampleModalCenter">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                        </span>
+
+
+                                        <span class="valoraciones">
+                                            <div *ngIf="evento.valoraciones" (click)="verComentarios(evento.ID)">Ver
+                                                {{evento.votantes}} comentario<span *ngIf="evento.votantes>1">s</span>
+                                            </div>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                            <div cdkDragHandle class="esquina"><i class="fas fa-arrows-alt"></i></div>
                         </div>
-                        <div cdkDragHandle class="esquina"><i class="fas fa-arrows-alt"></i></div>
-                        <!-- LA X DE LA ESQUINA -->
-
                     </div>
-
                 </div>
-            </div>
-        </span>
+            </span>
+        </div>
+
     </div>
-
-
 </div>
+
 
 
 <div class="modal fade myContainer" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -76,19 +85,21 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar opinón</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <app-insert-comentario *ngIf="modal"></app-insert-comentario>
-                <app-login *ngIf="modal?.loginScreen"></app-login>
+                <span *ngIf="modal">
+                    <app-insert-comentario (comentarioExitoso)="comentarioExitoso()"></app-insert-comentario>
+                </span>
+                <!-- <app-login *ngIf="modal?.loginScreen"></app-login> -->
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
             </div>
         </div>
     </div>

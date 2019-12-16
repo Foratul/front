@@ -9,6 +9,7 @@ import { AppStateService } from '../services/appstate.service';
 import { MarkerService } from '../services/marker.service';
 import { datosBackService } from '../services/datosBack.service';
 import { EventosService } from '../services/eventos.service';
+import { getHtmlTagDefinition } from '@angular/compiler';
 
 declare let L
 declare let Routing
@@ -23,10 +24,13 @@ declare let Routing
 })
 export class MapComponent implements OnInit, AfterViewInit {
   map
+  @Input() mapID
   app
   geoCapable: boolean = false
   datosGlobales: any
   distritos = []
+  arrayEventos = []
+  mapaIniciado = false
 
   constructor(
     private markerService: MarkerService,
@@ -36,20 +40,45 @@ export class MapComponent implements OnInit, AfterViewInit {
     private eventosService: EventosService,
     private rutasService: RutasService
     , private appStateService: AppStateService) { }
+
   ngOnInit() {
     this.appStateService.setCargando(true)
     this.app = this.appStateService.getAppState()
+    // this.mapID = this.app.mapID;
     this.appStateService.setHistorial('/map')
+    this.arrayEventos = this.eventosService.getEventosSeleccionados()
+    // if (this.app.mapaIniciado) {
 
+    // alert("creo hijo DOM")
+    // this.mapaIniciado = true
+    // var eElement = document.getElementsByClassName("map-frame")[0]
+    // var newFirstElement = document.createElement("div")
+    // newFirstElement.setAttribute("id", "mapObjeto")
+    // eElement.insertBefore(newFirstElement, eElement.firstChild);
 
+    // // }
 
+    // alert("this.app.mapaIniciado vale " + this.app.mapaIniciado)
+    // alert("MAPA INCIADO VALE " + this.mapaIniciado)
+
+    this.appStateService.setMapaIniciado(true)
   }
-  ngAfterViewInit() {
 
+  async ngAfterViewInit() {
+
+
+
+
+    // setTimeout(() => {
+    //   this.initMap({ coords: { latitude: 40.458121, longitude: -3.700676 } })
+
+
+    // }, 10)
 
 
     this.getPosition()
       .then((position) => {
+
         this.geoCapable = true
         // position = { coords: { latitude: 40.458121, longitude: -3.700676 } }
         //para empezar en TETUAN
@@ -67,8 +96,8 @@ export class MapComponent implements OnInit, AfterViewInit {
       .catch((error) => {
         this.geoCapable = false
 
-        alert(error.mensaje)
-        console.log(error.debug)
+        alert("this Getposition catch" + error.mensaje)
+        console.log(error)
         this.initMap(
           { coords: { latitude: 40.458121, longitude: -3.700676 } }
         )
@@ -78,39 +107,43 @@ export class MapComponent implements OnInit, AfterViewInit {
   getPosition(): Promise<any> {
 
     let prom = new Promise((resolve, reject) => {
-      if (!navigator.geolocation) reject("GEOLOCALIZACION NO FUNCIONA")
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve(position)
-        reject("ERROR, no se puede GEOLOCALIZAR")
-      }, (error) => {
-        reject({ mensaje: "ERROR, este dispositivo no permite GEOLOCALIZAR; SE USARÁ UNA POSICION POR DEFECTO", debug: error })
-      })
+      if (!navigator.geolocation) reject({ mensaje: "GEOLOCALIZACION NO FUNCIONA" })
+      else {
+        navigator.geolocation.getCurrentPosition((position) => {
+          resolve(position)
+          reject({ mensaje: "ERROR, este dispositivo no permite GEOLOCALIZAR; SE USARÁ UNA POSICION POR DEFECTO", debug: "promesa de geolocation rechazada" })
+        })
+      }
     })
     return prom;
   }
 
-
-  initMap(position): void {
+  async initMap(position) {
 
     // mapboxgl.accessToken = 'pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazI5YnFtNWIyaHcxM2lucnd5ZTJuZWd3In0._XB0qU2AeBff9ThO003CFw';
     // var map = new mapboxgl.Map({
     //   container: 'YOUR_CONTAINER_ELEMENT_ID',
     //   style: 'mapbox://styles/mapbox/streets-v11'
     // });
+    // alert("creada instancia de mapa + voy a meterla en ID " + this.mapID)
 
-    this.map = new L.map('map', {
+
+
+    this.map = new L.map(this.mapID, {
       center: [position.coords.latitude, position.coords.longitude],
-      zoom: 15,
+      zoom: 10,
       // minZoom: 10
 
     })
-    this.map.myPosition = {
-      coords: { latitude: position.coords.latitude, longitude: position.coords.longitude }
-    }
+
+    this.map.myPosition = { coords: { latitude: position.coords.latitude, longitude: position.coords.longitude } }
     this.map.radius = 1000
     this.map.barrios = true
     this.map.layers = true
     this.map.markers = true
+    this.map.mostrarCercanos = true
+    this.app.map = this.map
+
 
     console.log("MY POSICION ES", this.map.myPosition)
 
@@ -135,24 +168,32 @@ export class MapComponent implements OnInit, AfterViewInit {
       }))
       .on("swipe", function (event) { console.log("se ha hecho swipe") })
 
-
     this.addContentToMap()
-
 
     // this.map.on("click", calcularDistancia)
 
 
     this.markerService.addMarkerOnMyLocation(this.map)
+    this.addMarkers()
+    this.eventosService.setEventosDescargados(this.arrayEventos)
+    this.eventosService.setEventosSeleccionados(this.eventosService.getEventosCercanos())
+
+
+
 
 
   }
   addContentToMap() {
+
+    let tileLayer = { openStreet: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", mapBox: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ" }
     this.map.getSize();
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // 
+    const tiles = L.tileLayer(tileLayer.mapBox, {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      // maxZoom: 18,
+      tileSize: 256,
+      maxZoom: 55,
       id: 'mapbox.streets',
-      accessToken: 'your.mapbox.access.token'
+      accessToken: "pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ"
     })
     L.Control.geocoder().addTo(this.map)
     tiles.addTo(this.map);
@@ -164,18 +205,18 @@ export class MapComponent implements OnInit, AfterViewInit {
 
 
     //leo datos y los paso al servicio de markers para dibujarlos
-    this.eventosService.getEventos()
-      .then((datos) => {
-        console.log("hemos cargado los datos de tamaño : ", datos['length'])
-        this.datosGlobales = datos;
-        this.markerService.addMarkers(this.map, this.datosGlobales, this.map.radius);
-        console.log("markers iniciales añadidos")
-      })
-      .catch((error) => { console.log(error) })
-      .finally(() => {
-        this.appStateService.setCargando(false)
+    // this.datosBack.getAllEventos()
+    //   .then((datos) => {
+    //     console.log("hemos cargado los datos de tamaño : ", datos['length'])
+    //     this.datosGlobales = datos;
+    //     console.log("markers iniciales añadidos")
+    //   })
+    //   .catch((error) => { console.log(error) })
+    //   .finally(() => {
+    //     this.appStateService.setCargando(false)
 
-      })
+    //   })
+
 
     L.control.scale().addTo(this.map);
     //añade escala
@@ -184,6 +225,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.datosBack.getDistritosLayer()
       .then((barriosgeoJson) => { this.layerService.initBarriosLayer(this.map, barriosgeoJson) })
       .catch((error) => { console.log(error) })
+
   }
 
   botonderecho($event) {
@@ -232,6 +274,13 @@ export class MapComponent implements OnInit, AfterViewInit {
     setInterval(async () => {
       this.markerService.addMarkerOnMyLocation(this.map, await this.getPosition())
     }, intervalo)
+  }
+
+  addMarkers() {
+
+    console.log("add Markers vamos", this.arrayEventos.length)
+    this.markerService.addMarkers(this.map, this.arrayEventos, this.map.radius);
+
   }
 
 
