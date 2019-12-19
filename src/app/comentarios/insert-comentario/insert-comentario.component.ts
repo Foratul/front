@@ -121,8 +121,12 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         // $("#modalHeader .close").click().click()
         this.comentarioExitoso.emit(true)
+        this.dataService.getComentarioByEventoID(this.evento.ID)
+          .then((results) => { this.app.arrayComentarios = results })
+          .catch((error) => { console.log(error) })
 
       }, 2000)
+      this.appState.setComentarioExitoso(true)
 
 
 

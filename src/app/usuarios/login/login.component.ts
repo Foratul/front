@@ -21,8 +21,22 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     $(".alert").hide()
-    $(".formulario").show()
 
+    $(".formulario").show()
+    $(document).ready(function () {
+      $("#show_hide_password a").on('click', function (event) {
+        event.preventDefault();
+        if ($('#show_hide_password input').attr("type") == "text") {
+          $('#show_hide_password input').attr('type', 'password');
+          $('#show_hide_password i').addClass("fa-eye-slash");
+          $('#show_hide_password i').removeClass("fa-eye");
+        } else if ($('#show_hide_password input').attr("type") == "password") {
+          $('#show_hide_password input').attr('type', 'text');
+          $('#show_hide_password i').removeClass("fa-eye-slash");
+          $('#show_hide_password i').addClass("fa-eye");
+        }
+      });
+    });
 
   }
 
@@ -44,6 +58,7 @@ export class LoginComponent implements OnInit {
   }
 
   afterSubmit(resultado) {
+    alert(resultado)
     if (resultado.exito) {
       localStorage.setItem("token", resultado.token)
       this.appStateService.setLogueado(true)

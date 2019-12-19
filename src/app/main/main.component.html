@@ -12,7 +12,7 @@
         <div>
             <div class="menu col-12" (mouseenter)="app.menu_desplegado=true"
                 [ngClass]="{'desplegado' : app.menu_desplegado}">
-                <app-menu [arrayItems]=arrayItems [app]=app></app-menu>
+                <app-menu></app-menu>
             </div>
 
             <app-map [mapID]="'mapZero'" class="mobile" *ngIf="datosCargados"
@@ -20,7 +20,8 @@
             <router-outlet></router-outlet>
 
             <div [ngSwitch]="app.paginaMain" [ngClass]="{'borroso' : app.menu_desplegado}">
-                <app-listar-eventos *ngSwitchCase="'listarEventos'"></app-listar-eventos>
+                <app-listar-eventos (comentarioExitoso)="comentarioExitoso()" *ngSwitchCase="'listarEventos'">
+                </app-listar-eventos>
                 <app-home *ngSwitchCase="'HOME'"></app-home>
                 <app-buscador *ngSwitchCase="'buscador'"></app-buscador>
 

@@ -10,6 +10,7 @@ height:100%;
 width:100%;
 ;}
 
+
 .busy.cargando{
    display:none;
   opacity:0.5;
@@ -42,9 +43,9 @@ width:100%;
     /* margin:0 auto; */
 
   }
+  .leaflet-pane {z-index:150 !important;}
   
-  
-  #mapObjeto{height:100%; z-index:10000000000}
+  #mapObjeto{height:100%; z-index:100}
 
   #mapZero{height:100%;
   width:99vw}

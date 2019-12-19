@@ -13,18 +13,31 @@ export class RegistrarComponent implements OnInit {
   constructor(private dataService: datosBackService) {
 
     this.formulario = new FormGroup({
-      username: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2)]
+      username: new FormControl('',
+        { validators: [Validators.required, Validators.minLength(2)], updateOn: 'blur' }
       ),
 
-      email: new FormControl('', Validators.pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)),
-      password: new FormControl('', Validators.required),
+      email: new FormControl('', { validators: Validators.pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/), updateOn: 'blur' }),
+      password: new FormControl('', { validators: Validators.required, updateOn: 'blur' }),
       repite_password: new FormControl('', Validators.required)
     }, [this.passwordValidator])
   }
 
   ngOnInit() {
+    $(document).ready(function () {
+      $(".show_hide_password a").on('click', function (event) {
+        event.preventDefault();
+        if ($('.show_hide_password input').attr("type") == "text") {
+          $('.show_hide_password input').attr('type', 'password');
+          $('.show_hide_password i').addClass("fa-eye-slash");
+          $('.show_hide_password i').removeClass("fa-eye");
+        } else if ($('.show_hide_password input').attr("type") == "password") {
+          $('.show_hide_password input').attr('type', 'text');
+          $('.show_hide_password i').removeClass("fa-eye-slash");
+          $('.show_hide_password i').addClass("fa-eye");
+        }
+      });
+    });
   }
 
 

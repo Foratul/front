@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
@@ -9,13 +10,25 @@ import { DOCUMENT } from '@angular/common';
 
 export class AppStateService {
 
-  app = { cargando: false, menu_desplegado: false, logueado: false, user: { username: null, ID: null }, developerMode: false, historial: [], mostrarMapa: false, mostrarAplicacion: true, extenderHeader: false, modal: false, paginaDesplegable: "HOME", arrayComentarios: null, map: null, eventosCercanos: true, paginaMain: "HOME", mapZero: "mapZero", mapID: "mapZero", mapaIniciado: false }
+  iconoRadio = '<i class="fas fa-crosshairs"></i>'
+  iconoBarrios = '<i class="fas fa-map-marked"></i>'
+  iconoLimpiar = '<i class="fas fa-broom"></i>'
+  iconoMarker = '<i class="fas fa-map-marker-alt"> </i>'
 
-  constructor(@Inject(DOCUMENT) private document: HTMLDocument) {
-
-
+  app = {
+    cargando: false, menu_desplegado: false, logueado: false, user: { username: null, ID: null }, developerMode: false, historial: [], mostrarMapa: false, mostrarAplicacion: true, extenderHeader: false, modal: {}, paginaDesplegable: "HOME", paginaPrevia: "MENU", arrayComentarios: null, map: null, eventosCercanos: true, paginaMain: "HOME", mapZero: "mapZero", mapID: "mapZero", mapaIniciado: false, arrayBotones: [],
+    comentarioExitoso: new Subject<boolean>(),
+    comentarioExitoso$: null
   }
 
+
+
+  constructor(@Inject(DOCUMENT) private document: HTMLDocument) {
+    this.app.comentarioExitoso$ = this.app.comentarioExitoso.asObservable()
+    console.log(this.app)
+
+  }
+  setComentarioExitoso(boolean) { this.app.comentarioExitoso.next(boolean) }
 
   getAppState() {
     return this.app
@@ -61,10 +74,6 @@ export class AppStateService {
   getPaginaMain() { return this.app.paginaMain }
 
 
-
-
-
-
   setDeveloperMode(p) {
     this.app.developerMode = p;
   }
@@ -96,9 +105,34 @@ export class AppStateService {
   setPaginaDesplegable(p) { this.app.paginaDesplegable = p }
   getPaginaDesplegable() { return this.app.paginaDesplegable }
 
+  setMap(map) {
+    this.app.map = map
+    console.log("han llamado a setMap() , devuelvo : ", this.app.map)
+    setTimeout(() => {
+      this.actualizaBotonera(map)
+
+    }, 1)
+
+  }
+  getMap() {
+
+    console.log("han llamado a getMap() , devuelvo : ", this.app.map)
+    return this.app.map
+  }
+
   setMapaIniciado(p) { this.app.mapaIniciado = p }
   getMapaIniciado(p) { return this.app.mapaIniciado; }
 
+  actualizaBotonera(map = this.app.map) {
+    this.app.arrayBotones = [
+      { funcion: "toggleCargando()", texto: "Toggle Cargando", tooltip: "alternaCarga", tooltipPos: "top", toggles: true, active: false },
+      { funcion: "limpiarMapa()", texto: this.iconoLimpiar, tooltip: "limpia el mapa", tooltipPos: "top", toggles: false, active: false },
+      { funcion: "limpiarRutas()", texto: "Limpiar Rutas", tooltip: "limpia rutas", tooltipPos: "top", toggles: false, active: false },
+      { funcion: "toggleMarkers()", texto: this.iconoMarker, tooltip: "muestra u oculta marcadores", tooltipPos: "top", toggles: true, active: map.mostrarMarkers },
+      { funcion: "toggleRadio()", texto: this.iconoRadio, tooltip: "alternar radio", tooltipPos: "top", toggles: true, active: map.mostrarRadio },
+      { funcion: "modoRutas()", texto: "Modo Rutas", tooltip: "modo rutas", tooltipPos: "top", toggles: true, active: false },
+      { funcion: "toggleBarrios()", texto: this.iconoBarrios, tooltip: "muestra u oculta distritos", tooltipPos: "top", toggles: true, active: map.mostrarBarrios }]
+  }
 
 }
 

@@ -1,29 +1,38 @@
-<div class="eventos container no-padding- no-gutters ml-2">
+<div class="eventos container no-padding mt-1 no-gutters">
 
-    <div *ngIf="arrayEventosVisibles && arrayEventos" class="cabecera">
-        <p>Mostrando eventos {{1+ (paginaActual-1)*porPagina}} al {{paginaActual*porPagina}} de
-            {{arrayEventos.length}}
-        </p>
-        <button (click)="botonPagina(-1)"><i class="fas fa-arrow-left"></i></button> {{paginaActual}}
-        <button (click)="botonPagina(1)"><i class="fas fa-arrow-right"></i></button>
-        <span>Resultados por página</span>
+    <div *ngIf="arrayEventosVisibles && arrayEventos.length>0" class="cabecera">
+        <div class="roboto fondoGrey anchoVisible">
+            <p>Mostrando eventos {{1+ (paginaActual-1)*porPagina}} al {{paginaActual*porPagina}} de
+                {{arrayEventos.length}}
+            </p>
+            <button class="redondo50 enlace" (click)="botonPagina(-1)">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            {{paginaActual}}
+            <button class="redondo50 enlace" (click)="botonPagina(+1)">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <p>Resultados por página</p>
 
-        <select name="porPagina" id="paginar" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
-            <option value="12">12</option>
-            <option value="24">24</option>
-            <option value="48">48</option>
-            <option value="96">96</option>
-        </select>
-        <select name="ordenarPor" id="ordenar" [(ngModel)]="ordenar" (change)="ordenarPor()">
-            <option value="ABC">Alfabéticamente</option>
-            <option value="SCORE">Puntuación</option>
-            <option value="VIEWS">Visitas en la página</option>
-            <option value="RANDOM">Aleatorio</option>
-        </select>
-        <button (click)="ascendenteOrden()">Orden {{textoAscendente}}}</button>
+            <select name="porPagina" id="paginar" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+            </select>
+            <select name="ordenarPor" id="ordenar" [(ngModel)]="ordenar" (change)="ordenarPor()">
+                <option value="ABC">Alfabéticamente</option>
+                <option value="SCORE">Puntuación</option>
+                <option value="VIEWS">Visitas en la página</option>
+                <option value="RANDOM">Aleatorio</option>
+            </select>
+            <button (click)="ascendenteOrden()" [innerHTML]=iconoAscendente></button>
+            <button (click)="toggleCercanos()">{{criterioCercania}}</button>
+        </div>
 
-        <div class="listado">
-            <p *ngIf=!arrayEventosVisibles>No hay eventos seleccionados</p>
+
+        <div class="listado ml-2">
+            <h3 *ngIf="!arrayEventosVisibles ||  !arrayEventos.length>0">No hay eventos seleccionados</h3>
             <span *ngIf="arrayEventosVisibles">
                 <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
                     <div cdkDrag *ngFor="let evento of arrayEventosVisibles"
@@ -45,16 +54,18 @@
                                     <img src="{{evento.imagen}}" class="card-img" alt="...">
                                     <div class="cuadro">
                                         <p class="card-text">{{evento.descripcion}}</p>
-                                        <p class="card-text"><small class="text-muted">{{evento.ID}}</small></p>
+                                        <p class="card-text"><small class="text-muted">{{evento.ID}}</small>
+                                        </p>
                                     </div>
                                     <div>
-                                        <span *ngIf="!evento.valoraciones"><small class="text-muted">Se el primero
+                                        <span *ngIf="!evento.valoraciones"><small class="text-muted">Se el
+                                                primero
                                                 en valorarlo</small></span>
                                         <span data-toggle="tooltip" tooltip="Añadir Comentario"
                                             attr.data-placement="bottom" title="Comentar"><button
-                                                (click)="modalClick(evento)" type="button"
+                                                (click)="addComentario(evento)" type="button"
                                                 class="comentar btn btn-primary" data-toggle="modal"
-                                                data-target="#exampleModalCenter">
+                                                data-target="#modalHeader">
                                                 <i class="far fa-comment-alt"></i>
                                             </button>
                                         </span>
@@ -80,30 +91,7 @@
 
 
 
-<div class="modal fade myContainer" id="exampleModalCenter" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Agregar opinón</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <span *ngIf="modal">
-                    <app-insert-comentario (comentarioExitoso)="comentarioExitoso()"></app-insert-comentario>
-                </span>
-                <!-- <app-login *ngIf="modal?.loginScreen"></app-login> -->
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-        </div>
-    </div>
-</div>
+<!--  -->
 
 
 <!-- <app-modal *ngIf="app.modal" [modal]="{'insertComentario' : true}"></app-modal> -->

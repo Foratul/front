@@ -1,6 +1,6 @@
 <div class="envoltorioMapa">
     <div class="botonera">
-        <app-botonera [map]=map></app-botonera>
+        <app-botonera *ngIf="app.map"></app-botonera>
     </div>
 
     <!-- <div class="mapcontainer">
@@ -19,4 +19,22 @@
         </div>
     </div>
 
+</div>
+
+<!-- //ESTO LO HUBIERA GENERADO DINAMICAMENTE; PERO LUEGO NO HAY DIOS DE BINDEAR EVENTO A FUNCION -->
+<!-- UN NG IF FUNSIONA MAL; TIENE DELAY-->
+<div id="menuContextual" class="inBisible">
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            {{nombreMenu}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="enlace dropdown-item">Buscar eventos cercanos</a>
+            <a (click)="generarRuta()" class="enlace dropdown-item">Trazar ruta hasta aquí</a>
+            <a (click)="setMyPosition()" class="enlace dropdown-item">Establecer como mi
+                posición</a>
+        </div>
+    </div>
 </div>

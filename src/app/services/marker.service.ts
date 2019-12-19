@@ -5,6 +5,9 @@ import { Marker } from 'leaflet';
 import { Icono } from '../Icono';
 import { AppStateService } from './appstate.service';
 import { EventosService } from './eventos.service';
+import "leaflet.awesome-markers/dist/leaflet.awesome-markers";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { datosBackService } from './datosBack.service';
 declare let $
 
 @Injectable({
@@ -12,20 +15,23 @@ declare let $
 
 })
 export class MarkerService {
-
+  app
   arrayMarkersActivos: Array<Marker> = []
   arrayMarkersMyPosition: Array<Marker> = []
   currentArrayDatos: Array<Marker>
   arrayVisibles: Array<any>
   icono = new Icono()
   circle
-
+  self = this
+  arraColores = ['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black']
 
   constructor(
     private appStateService: AppStateService,
     private popUpService: PopUpService,
-    private eventosService: EventosService
+    private eventosService: EventosService,
+    private datosBack: datosBackService
   ) {
+    this.app = appStateService.getAppState()
     Marker.prototype.options.icon = this.icono.defaultIcon
 
   }
@@ -41,20 +47,17 @@ export class MarkerService {
     this.circle = L.circle([position.coords.latitude, position.coords.longitude], { radius: radius, dashArray: '20, 20', dashOffset: '20', weight: 6, fillOpacity: 0.4, opacity: 0.6 })
     console.log("creadno cirlca")
     this.circle.addTo(map).bringToBack();
-    map.radio = true
   }
 
   removeCircle(map) {
     console.log("destrueydno cirlca")
-
     map.removeLayer(this.circle)
-    map.radio = false
 
 
   }
   addMarkerOnMyLocation(map, position = map.myPosition) {
 
-    const marker = L.marker([position.coords.latitude, position.coords.longitude], { title: "POSICION ACTUAL", draggable: true, icon: this.icono.positionIcon, zIndexOffset: 666666, riseOnHover: true })
+    const marker = L.marker([position.coords.latitude, position.coords.longitude], { title: "ESTAMOS AQUÍ", draggable: true, icon: this.icono.positionIcon, zIndexOffset: 666666, riseOnHover: true })
     marker.addTo(map);
     this.addCircle(map, map.position, map.radius)
     marker.bindPopup(this.popUpService.addPopUp({ className: "PopUp" }))
@@ -68,9 +71,11 @@ export class MarkerService {
         map.myPosition.coords.latitude = event.target['_latlng'].lat
         map.myPosition.coords.longitude = event.target['_latlng'].lng
         this.removeCircle(map)
-        this.addCircle(map)
-        if (map.markers) {
-          this.removeMarkers(map)
+        if (map.mostrarRadio) this.addCircle(map)
+        this.removeMarkers(map) //esto te lo hace el addMarkers ya con remove visibles creo
+
+
+        if (map.mostrarMarkers) {
           this.addMarkers(map, null, map.radius)
         }
         this.appStateService.setCargando(false)
@@ -78,6 +83,9 @@ export class MarkerService {
 
     // this.arrayMarkersMyPosition.pop()
     this.arrayMarkersMyPosition.push(marker)
+    if (this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 2]) this.removeMarkers(map, [this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 2]])
+
+
 
 
   }
@@ -90,29 +98,34 @@ export class MarkerService {
 
     this.arrayVisibles = [] //vacia lo visible porque se recrea
 
+
     map.radius = radius
 
     for (const [index, elemento] of arrayDatos.entries()) {
       if (elemento.latitude && elemento.longitude) { //comprueba que traen lat y lng antes de añadir
-        const marker = L.marker([elemento.latitude + Math.random() / 5000, elemento.longitude + Math.random() / 5000], { icon: this.icono.blueIcon, riseOnHover: true })
+        const marker = L.marker([elemento.latitude + Math.random() / 5000, elemento.longitude + Math.random() / 5000], { icon: this.determinarIcono(elemento), riseOnHover: true })
         if (map.distance(marker.getLatLng(), this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 1].getLatLng()) < radius) {
-
-          let pepe = L.popup({ className: "RAJOY" }).setContent("VIVA EL VINO")
+          elemento.esCercano = true
           elemento.arrayIndex = index //para pasarselo al popup binder luego
-          marker.bindPopup(this.popUpService.addPopUp(elemento));
+            ;
           // marker.bindPopup(pepe)
-          //  let buton = document.getElementById("infoPopUp")
+          let buton = document.getElementById("infoPopUp")
           // marker['barrio'] = Math.random();
           // console.log(map.distance(marker.getLatLng(), marker.getLatLng()))
+          marker.bindPopup(this.popUpService.addPopUp(elemento))
           marker.addTo(map);
           marker.on("click", ($event) => {
             let boton = document.getElementById("infoPopUp")
-            boton.addEventListener("click", this.ampliarInformacion)
+            let _this = this;
+            boton.addEventListener("click", this.ampliarInformacion.bind(_this))
             // console.log(marker['barrio'])
           })
           this.arrayVisibles.push(elemento)
           this.arrayMarkersActivos.push(marker)
-          if (elemento.centrar) map.setView(new L.LatLng(elemento.latitude, elemento.longitude), 8);
+          if (elemento.centrar) {
+            map.setView(new L.LatLng(elemento.latitude, elemento.longitude), 15)
+            elemento.centrra = false;
+          }
         }
         this.eventosService.setEventosCercanos(this.arrayVisibles)
       }
@@ -142,11 +155,19 @@ export class MarkerService {
     console.log("se ha clicado en el arrayMarker numero:", evento.target.dataset.arrayindex)
     console.log("se ha clicado en el dbID numero:", evento.target.dataset.id)
     let popupElement = document.querySelector("#popUpText")
-    popupElement.innerHTML += "L-OREM-"
     $(".leaflet-popup-content").blur()
+    console.log(this, this.self)
+    this.datosBack.getEventoByID(evento.target.dataset.id).then((results) => {
+      this.eventosService.setEventoSeleccionado(results)
+      this.app.menu_desplegado = true
+      this.app.paginaDesplegable = "detalleEvento"
+    })
+
 
 
   }
+
+  hacerCosas() { alert("viva el vino") }
 
   removeMarkers(map, arrayMarkers = this.arrayMarkersActivos, barrio = null) {
     console.log("removeMarkers")
@@ -168,9 +189,17 @@ export class MarkerService {
 
   createMarkerEspecial(map, evento) {
 
-    let marcadorEspecial = L.marker([evento.latitude, evento.longitude], { riseOnHover: true, icon: this.icono.greenIcon });
+    let marcadorEspecial = L.marker([evento.latitude, evento.longitude], { riseOnHover: true, icon: this.determinarIcono(evento) });
     marcadorEspecial.addTo(map)
     map.setView(new L.LatLng(evento.latitude, evento.longitude), 15)
+    marcadorEspecial.bindPopup(this.popUpService.addPopUp(evento))
+    marcadorEspecial.addTo(map);
+    marcadorEspecial.on("click", ($event) => {
+      let boton = document.getElementById("infoPopUp")
+      let _this = this;
+      boton.addEventListener("click", this.ampliarInformacion.bind(_this))
+      // console.log(marker['barrio'])
+    })
   }
 
   getDistance(from, to) {
@@ -183,4 +212,44 @@ export class MarkerService {
     this.removeMarkers(map)
     this.addMarkers(map, null, radius)
   }
+
+
+
+  determinarIcono(elemento) {
+
+    switch (parseInt(elemento.superindex)) {
+      case 1:
+        return this.icono.culturaOcio
+      case 2:
+        return this.icono.deportes
+      case 4:
+        return this.icono.cementerio
+      case 7:
+        return this.icono.wifi
+      case 9:
+        return this.icono.estudioSala
+      case 10:
+        return this.icono.bibliotecaIcon
+      case 11:
+        return this.icono.parkIcon
+      case 13:
+        return (Math.random() > 0.49) ? this.icono.informacionMujeres : this.icono.informacionMujeres2
+      case 14:
+        return (Math.random() > 0.49) ? this.icono.informacionTurismo1 : this.icono.informacionTurismo2
+      case 15:
+        return (Math.random() > 0.49) ? this.icono.museos1 : this.icono.museos2
+      case 16:
+        return this.icono.monumentIcon
+      case 17:
+        return (Math.random() > 0.49) ? this.icono.churchIcon : this.icono.iglesias2
+      default:
+        return this.icono.blackIcon
+    }
+
+
+  }
+
+
 }
+
+

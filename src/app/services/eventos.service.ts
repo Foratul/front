@@ -7,50 +7,40 @@ import { AppStateService } from './appstate.service';
 })
 export class EventosService {
 
-  arrayEventos: any
-  eventosCercanos
   eventoSeleccionado
-  arrayEventosSeleccionados
+  arrayEventosCercanos = []
+  arrayEventosSeleccionados = []
   arrayEventosDescargados = []
 
   constructor(
     private datosBackService: datosBackService,
   ) {
-    this.arrayEventos = []
   }
 
 
   getAllEventos() {
     this.datosBackService.getAllEventos()
-      .then((datos) => { this.arrayEventos = datos })
+      .then((datos) => { this.arrayEventosDescargados = datos })
       .catch((error) => { console.log(error) })
 
   }
 
 
-  getEventosSeleccionados() { return this.arrayEventos }
-  setEventosSeleccionados(arrayEventos) { this.arrayEventos = arrayEventos }
+  getEventosSeleccionados() { return this.arrayEventosSeleccionados }
+  setEventosSeleccionados(arrayEventos) { this.arrayEventosSeleccionados = arrayEventos }
 
 
-  setEventosCercanos(arrayEventos) { this.eventosCercanos = arrayEventos }
-  getEventosCercanos() { return this.eventosCercanos }
-
-
-
-
+  setEventosCercanos(arrayEventos) { this.arrayEventosCercanos = arrayEventos }
+  getEventosCercanos() { return this.arrayEventosCercanos }
   getEventosDescargados() {
     return this.arrayEventosDescargados
   }
-
   setEventosDescargados(arrayEventos) {
     this.arrayEventosDescargados = arrayEventos;
   }
-
   getEventoSeleccionado() {
     return this.eventoSeleccionado
   }
-
-
   setEventoSeleccionado(evento) {
     this.eventoSeleccionado = evento;
   }

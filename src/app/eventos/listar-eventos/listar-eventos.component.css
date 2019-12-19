@@ -8,7 +8,7 @@ div.eventos div p {display:inline-block}
 
 
   div.cabecera {   
-    width:90vw;
+    width:94vw;
     
     position:absolute;
 
@@ -46,7 +46,8 @@ img {width:100% !important;}
 
 .quieto{position:fixed;}
 .recuadro{position:relative;
- max-height:500px;
+  padding-bottom:100px;
+ /* max-height:500px; */
 overflow:hidden;}
 .esquina{position:absolute;
   cursor : all-scroll;
@@ -54,4 +55,8 @@ overflow:hidden;}
 
   .text {font-family : var (--fuentePrimaria)}
 
-  .comentar {height: 0.5em;}
+  .comentar {position:relative;
+    top:-10px;
+  margin-top:-10px;}
+
+ 

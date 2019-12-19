@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanActivateChild, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, CanActivateChild, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AppStateService } from './services/appstate.service';
 
@@ -12,7 +12,8 @@ import { AppStateService } from './services/appstate.service';
 export class GuardiaGuard implements CanActivate, CanActivateChild, CanLoad {
 
 
-  constructor(private appState: AppStateService) { }
+  constructor(private router: Router,
+    private appState: AppStateService) { }
 
   canActivate(
 
@@ -24,6 +25,7 @@ export class GuardiaGuard implements CanActivate, CanActivateChild, CanLoad {
     this.appState.setMostrarMapa(false)
     this.appState.setMostrarAplicacion(true)
     this.appState.setExtenderHeader(false)
+    // if (!this.appState.getLogueado()) this.router.navigate(['/login'])
 
     //oculta el mapa cada vez que navega a otro sitio
     return true;

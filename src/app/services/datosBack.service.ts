@@ -84,9 +84,16 @@ export class datosBackService {
 
   }
 
-  getEventosComentarios() {
+  getEventosComentarios(): any {
 
     return this.http.get(this.urlApi + "comentarios/tablaIndices/").toPromise()
   }
+  getEventosMetodoOR(string) { return this.http.get(this.urlApi + "eventos/?AnyField=" + string).toPromise() }
 
+  hacerGeocoding(direccion) {
+
+    return this.http.get("https://maps.google.com/maps/api/geocode/json?" + direccion + "&key=AIzaSyB9CobDD06h6vgzmUpmoKIpCgSXc43B7B0").toPromise()
+
+
+  }
 }

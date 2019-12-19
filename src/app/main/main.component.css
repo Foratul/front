@@ -56,12 +56,11 @@ height:100%;
 right:99.5%;
  background-color:black;
 transition:0.75s;
-z-index:19999;
+z-index:1040;
 
  }
  
-.menu{  z-index:999999;
-}
+ 
 
 .menu.desplegado{
     
@@ -92,12 +91,7 @@ transition:200ms ease-in-out;}
   margin: 0 !important;
 }
 
-.inBisible{
-       
-    position:absolute;
-    top:-200%;
 
-}
  
 .mobile{}
 

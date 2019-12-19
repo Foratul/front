@@ -4,6 +4,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { AppStateService } from 'src/app/services/appstate.service';
 import { Router } from '@angular/router';
 import { datosBackService } from 'src/app/services/datosBack.service';
+import { Observable, Subject } from 'rxjs';
 declare let $
 declare let funcionesComunes
 
@@ -22,109 +23,108 @@ export class ListarEventosComponent implements OnInit {
   mensaje: string = "Sin valoraciones. Se el primero en dejar un comentario"
   icono = "<i class='orange fas fa-star'</i>"
   medioicono = "<i class='orange fas fa-star-half'</i>"
-  app
+
   ascendente: boolean = true
-  modal: any;
+  // modal: any;
   ordenar: string = "ABC"
   textoAscendente = "Ascendente"
   regexp = new RegExp(/[^a-zA-Z0-9 ]/g)
-
+  iconoAscendente = '<i class="fas fa-sort-alpha-down"></i>'
+  cercanos = false
+  criterioCercania = "Mostrando todos los coincidentes"
+  observar = new Observable()
+  app
+  stringVar = new Subject<string>();
+  subscripcion
   constructor(
     private eventosService: EventosService,
     private appState: AppStateService,
     private router: Router,
     private datosService: datosBackService) { }
 
+
+
   ngOnInit() {
 
     this.app = this.appState.getAppState()
 
-    $('#exampleModalCenter')
-      .on('shown.bs.modal', () => {
-        $('#myInput').trigger('focus')
-      })
-      .on('hidden.bs.modal', () => {
-        this.modal = false
-        $("#exampleModalCenter .close").click()
-        this.modal = false
-      })
 
-      .on('hide.bs.modal', () => {
-        // this.comprobarComentarios(this.arrayEventos)
-      })
+    this.subscripcion = this.app.comentarioExitoso$.subscribe((datos) => {
+      if (datos) {
 
-    $('.close').click(() => {
-      this.modal = false
-    });
-
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip({
-        trigger: 'hover'
-      })
+        // alert("el observable ha cambiado")
+        this.comentarioExitoso()
+      }
     })
-
-
-
-
+    console.log("hay descargados " + this.eventosService.getEventosDescargados().length,
+      "hay seleccionados : " + this.eventosService.getEventosSeleccionados().length,
+      "hay cercanos:" + this.eventosService.getEventosCercanos().length)
     // this.arrayEventos = this.aleatorizarArray(this.eventosService.getEventosCercanos())
-    this.arrayEventos = this.eventosService.getEventosSeleccionados()
-    // alert("soy listar eventos, tengo array de " + this.arrayEventos.length)
+    this.arrayEventos = this.eventosService.getEventosDescargados()
+    this.refrescarListado()
+    this.comprobarComentarios(this.arrayEventos)
 
-    this.paginasTotales = Math.floor(this.arrayEventos.length / this.porPagina) + 1
-    this.ordenarArrayPor(this.arrayEventos, "ABC")
-    this.actualizarEventosVisibles() //cosas de la pagina, mostrar 20, 30, 100 etc , return un arrayEventosVisibles
-
-
-    // this.comprobarComentarios(this.arrayEventos)
   }
+  refrescarListado() {
+    this.paginasTotales = Math.floor(this.arrayEventos.length / this.porPagina) + 1
+    this.ordenarArrayPor(this.arrayEventos, this.ordenar)
+    this.actualizarEventosVisibles() //cosas de la pagina, mostrar 20, 30, 100 etc , return un arrayEventosVisibles
+  }
+  // alert("soy listar eventos, tengo array de " + this.arrayEventos.length)
 
   comprobarComentarios(arrayEventos) {
+    let a = Date.now()
 
     this.datosService.getEventosComentarios().then((results) => {
+      //me traigo la tabla de indices
 
 
-      arrayEventos.forEach(evento => {
-        
-      });
-      for (const evento of arrayEventos) {
+      let arrayEventosID = results.map((item) => { return item.eventoID })
+      let arrayIDEventos = arrayEventos.map((item) => { return item.ID })
 
-        
-      }
+      // saco los indices de la tabla de indices
 
+      let arrayEventosConComentarios = arrayIDEventos.filter((item) => { return arrayEventosID.includes(item) })
+      console.log(arrayEventosConComentarios)
 
+      for (const id of arrayEventosConComentarios) {
+        console.log("pido comentarios de id = ", id)
+        let evento = arrayEventos.find((item) => { return item.ID == id })
 
-    })
+        // console.log("voy a buscar comentarios de  " + evento.ID)
+        this.datosService.getComentarioByEventoID(id) //comprueba si un evento tiene comentarios
+          .then((results) => {
+            if (results.length > 0) {
+              let arrayComentarios = results;
+              console.log(id, " tiene este array de comentarios", results)
 
-    for (const evento of arrayEventos) {
-      // console.log("voy a buscar comentarios de  " + evento.ID)
-      this.datosService.getComentarioByEventoID(evento.ID) //comprueba si un evento tiene comentarios
-        .then((results) => {
-          if (results.length > 0) {
-            let arrayComentarios = results;
-            console.log(evento.ID, " tiene este array de comentarios", results)
+              evento.nota = 0
+              for (const comentario of arrayComentarios) { //el reduce no estaba funcionando por alguna razons , asi que a lo bulce
+                evento.nota += comentario.valoracion
+              }
+              evento.votantes = arrayComentarios.length
+              evento.valoraciones = funcionesComunes.convertirNumeroAEstrellas(evento.nota / evento.votantes)
+              console.log("he mandado a dibujar estrellas para el evento ID", evento.ID, evento.nota / evento.votantes)
 
-            evento.nota = 0
-            for (const comentario of arrayComentarios) { //el reduce no estaba funcionando por alguna razons , asi que a lo bulce
-              evento.nota += comentario.valoracion
             }
-            evento.votantes = arrayComentarios.length
-            evento.valoraciones = funcionesComunes.convertirNumeroAEstrellas(evento.nota / evento.votantes)
-            console.log("he mandado a dibujar estrellas ", evento.nota / evento.votantes)
+          })
+          .catch((err) => { console.log(err) })
 
-          }
-        })
-        .catch((err) => { console.log(err) })
-
-      // llamas a base de datos y que lo mire y ya le mando a la vista al html lo que sea con ngIf
-    }
+        // llamas a base de datos y que lo mire y ya le mando a la vista al html lo que sea con ngIf
+      }
+      let b = Date.now()
+      console.log("el algoritmo ha tardado" + (b - a))
+      //3600
+    })
   }
 
 
-  modalClick(evento) {
+
+  addComentario(evento) {
 
     this.eventosService.setEventoSeleccionado(evento);
-    this.modal = true
-    this.appState.setModal(true)
+    this.app.modal.insertComentario = true
+    // this.appState.setModal(true)
 
   }
 
@@ -168,29 +168,33 @@ export class ListarEventosComponent implements OnInit {
   }
 
 
-  dejarComentarios(evento) {
-    this.eventosService.setEventoSeleccionado(evento)
-    this.router.navigate([`/comentar/${evento.ID}`])
-  }
+  // dejarComentarios(evento) {
+  //   this.eventosService.setEventoSeleccionado(evento)
+  //   this.router.navigate([`/comentar/${evento.ID}`])
+  // }
 
 
 
   ascendenteOrden() {
     console.log("click en ascendenteorden")
     this.ascendente = !this.ascendente
-    this.textoAscendente = (this.ascendente) ? "ascendente" : "descendente"
+    this.actualizarIconoOrden()
     this.arrayEventos.reverse()
     this.actualizarEventosVisibles()
     this.paginaActual = 1
 
   }
 
+  actualizarIconoOrden() {
+    if (this.ordenar === "ABC") { this.iconoAscendente = (this.ascendente) ? '<i class="fas fa-sort-alpha-down-alt"></i>' : '<i class="fas fa-sort-alpha-down"></i>' }
+    else this.iconoAscendente = (this.ascendente) ? '<i class="fas fa-sort-amount-down-alt"></i>' : '<i class="fas fa-sort-amount-down"></i>'
+  }
+
   async ordenarPor(ordenar = this.ordenar) {
 
 
     this.ascendente = true
-    this.textoAscendente = "ascendente"
-
+    this.actualizarIconoOrden()
 
     switch (ordenar) {
       case "ABC":
@@ -203,7 +207,7 @@ export class ListarEventosComponent implements OnInit {
 
         this.ordenarArrayPor(this.arrayEventos, "SCORE")
         this.ascendente = false;
-        this.textoAscendente = this.textoAscendente = "descendente"
+        this.actualizarIconoOrden()
 
 
         break;
@@ -243,6 +247,7 @@ export class ListarEventosComponent implements OnInit {
   }
 
   comentarioExitoso() {
+    alert("exito evento")
 
     this.ordenarArrayPor(this.arrayEventos, this.ordenar)
     this.actualizarEventosVisibles()
@@ -257,7 +262,7 @@ export class ListarEventosComponent implements OnInit {
 
       this.app.arrayComentarios = arrayComentarios
       this.app.menu_desplegado = true
-      this.app.paginaDesplegble = "listarComentarios"
+      this.app.paginaDesplegable = "listarComentarios"
     }))
       .catch((err) => { console.log("error al pedir ComentariosByEvento ") })
   }
@@ -268,6 +273,14 @@ export class ListarEventosComponent implements OnInit {
     this.app.menu_desplegado = true
     this.app.paginaDesplegable = "detalleEvento"
 
+
+  }
+
+  toggleCercanos() {
+    this.cercanos = !this.cercanos
+    this.criterioCercania = (this.cercanos) ? `Mostrando solo cercanos (${this.app.map.radius} m)` : `Mostrando todos los coincidentes`
+    this.arrayEventos = (this.cercanos) ? this.eventosService.getEventosCercanos() : this.eventosService.getEventosDescargados()
+    this.refrescarListado()
 
   }
 }

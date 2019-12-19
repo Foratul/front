@@ -41,7 +41,7 @@ export class RutasService {
         // altLineOptions: { styles: [{ color: '#ed6852', weight: 3 }] },
         collapsible: true,
         fitSelectedRoutes: true,
-        // router: L.routing.mapbox('pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazI5YnFtNWIyaHcxM2lucnd5ZTJuZWd3In0._XB0qU2AeBff9ThO003CFw', { profile: 'mapbox/walking' }),
+        router: L.routing.mapbox('pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazI5YnFtNWIyaHcxM2lucnd5ZTJuZWd3In0._XB0qU2AeBff9ThO003CFw', { profile: 'mapbox/walking' }),
 
         geocoder: L.Control.Geocoder.nominatim()
       }).addTo(map)

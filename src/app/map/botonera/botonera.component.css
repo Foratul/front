@@ -8,3 +8,7 @@
     top:-100%}
 
     button {border-radius:15px;}
+.alert{top:-100%;
+     
+position:absolute;}
+.alert.activa{top:0;}

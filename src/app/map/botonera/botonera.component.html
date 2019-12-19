@@ -5,21 +5,21 @@
             <option *ngFor="let distrito of distritos" value={{distrito}}>{{distrito}}</option>
             <!-- <option value="SALAMANCA">SALAMANCA</option> -->
         </select>
-        <span *ngIf=markers>
+        <span *ngIf="true">
             <!-- la vista se inicia antes que el input, so we have a problem -->
-            <input type="range" name="radius" value="5000" min="500" max="10000" step="500" ngModel
-                (mouseup)="onRadiusChange(formulario.value.radius)" class="custom-range col-2"> DISTANCIA
+            <input type="range" name="radius" value="500" min="500" max="10000" step="500" [(ngModel)]="radius"
+                (mouseup)="onRadiusChange(formulario.value.radius)" class="custom-range col-2">DISTANCIA
             {{formulario.value.radius}}
             <output for="radius" onforminput="value = foo.valueAsNumber;"></output>
             <input type="submit">
         </span>
-
     </form>
 
     <span cdkDropListOrientation="horizontal" cdkDropList (cdkDropListDropped)="drop($event)">
-        <button cdkDrag *ngFor=" let boton of arrayBotones, let i=index" class={{boton.class}} data-toggle="tooltip"
-            attr.data-placement={{boton.tooltipPos}} title={{boton.tooltip}} (click)="botonPresionado(boton)"
-            [innerHTML]="boton.texto">
+        <button cdkDrag *ngFor="let boton of app.arrayBotones, let i=index"
+            [ngClass]="{'enlace' : true, 'btn' : true , 'btn-primary' : boton.active, 'btn-secondary' : !boton.active}"
+            data-toggle="tooltip" attr.data-placement={{boton.tooltipPos}} title={{boton.tooltip}}
+            (click)="botonPresionado(boton)" [innerHTML]="boton.texto">
         </button>
     </span>
     <!-- //CADA BOTON HACE UNA COSA DISTINTA, no USAN LA MISMA FUNCION y no deja poner (click)={{boton.funcion}} o  attr.onclick={{boton.funcion}} porque dice desabilitado por security reasons
@@ -37,4 +37,13 @@
 
 
 
+</div>
+
+<div class="alert alert-warning alert-dismissible fade show">
+    <h4 class="alert-heading"><i class="fa fa-warning"></i>Atención!</h4>
+    <p>Establecer el rango de búsqueda por encima de 5 km puede suponer un consumo elevado de recursos en equipos
+        mierdosos como el del developer.</p>
+    <hr>
+    <p class="mb-0"></p>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
 </div>

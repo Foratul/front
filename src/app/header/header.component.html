@@ -1,7 +1,8 @@
 <div class="wrapper ">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <span (click)="panelIzquierdo()" class="navbar-brand">X</span>
-        <button (click)="mostrarMapa()">M</button>
+        <!-- <button (click)="mostrarMapa()">M</button>
+        <button (click)="actualizarBotonera()">BOTONERA</button> -->
         <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
         <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" type="button"
             (click)="menuHeader()" [attr.aria-expanded]="!app.extenderHeader" aria-expanded="false"
@@ -15,22 +16,17 @@
             <ul class="navbar-nav ml-auto">
 
                 <a class="enlace text-dark" (click)="navegarAMapa()"> Mapa</a>
-
-                <a class="text-dark" [routerLink]="['/comentar']">Comentarios</a>
-                <button data-toggle="modal" data-target="#modalHeader" *ngIf="!app.logueado"
-                    (click)="registerClick()">Registrarse</button>
-                <span *ngIf="!app.logueado"><button><i class="text-dark" class="fas fa-sign-in-alt"
-                            (click)="loginClick()" data-toggle="modal" data-target="#modalHeader"></i></button></span>
+                <span data-toggle="modal" data-target="#modalHeader" class="enlace" *ngIf="!app.logueado"
+                    (click)="registerClick()">Registrarse</span>
+                <span *ngIf="!app.logueado"><i class="text-dark" class="enlace redondo fas fa-sign-in-alt"
+                        (click)="loginClick()" data-toggle="modal" data-target="#modalHeader"></i>
+                </span>
                 <a class="text-dark" *ngIf="app.logueado">Conectado como {{app.user.username}}</a>
-                <span *ngIf="app.logueado"><button><i class="fas fa-sign-out-alt" (click)="logoutClick()"
-                            data-toggle="modal" data-target="#modalHeader"></i></button></span>
-
-                <a class="enlace" (click)="navegar('listarEventos')">Eventos</a>
-                <a class="enlace" (click)="navegar('buscador')">Buscador</a>
+                <span *ngIf="app.logueado"><i class="enlace redondo fas fa-sign-out-alt" (click)="logoutClick()"
+                        data-toggle="modal" data-target="#modalHeader"></i></span>
 
 
-
-
+                <a [routerLink]="['/eventos']">Eventos</a>
                 <li class="nav-item active">
                     <a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i> <span
                             class="sr-only">(current)</span></a>
@@ -38,7 +34,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Dropdown
@@ -49,16 +45,21 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
             </ul>
-            <div class="buscadorHeader" onforminput="escribiendoEnBuscadorHeader()">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <div class="buscadorHeader">
+                <form #formulario="ngForm" class=" form-inline my-2 my-lg-0" (ngSubmit)="buscadorSimple()">
+                    <input [(ngModel)]="busquedaSimple" name="busqueda" class="form-control mr-sm-2" type="search"
+                        placeholder="Buscar" aria-label="Search">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0"><i
+                            class="fas fa-search"></i></button>
                 </form>
+
+                <button><i (click)="buscadorClick()" data-toggle="modal"
+                        data-target="#modalHeader">Avanzada</i></button>
             </div>
         </div>
     </nav>
@@ -67,18 +68,25 @@
 <div class="modal fade myContainer" id="modalHeader" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div cdkDrag id="arrastrable" class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span id="modalSpan">Soy el modal del header</span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- <app-insert-comentario *ngIf="modal"></app-insert-comentario> -->
-                <app-login *ngIf="modalLogin"></app-login>
-                <app-logout *ngIf="modalLogout"></app-logout>
-                <app-registrar *ngIf="modalRegister"></app-registrar>
+                <app-login *ngIf="app.modal.Login"></app-login>
+                <app-logout *ngIf="app.modal.Logout"></app-logout>
+                <app-registrar *ngIf="app.modal.Register"></app-registrar>
+                <app-buscador *ngIf="app.modal.Buscador"></app-buscador>
+
+                <app-insert-comentario *ngIf="app.modal.insertComentario" (comentarioExitoso)="comentarioExitoso()">
+                </app-insert-comentario>
+
+
 
 
             </div>

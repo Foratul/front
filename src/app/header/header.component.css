@@ -26,3 +26,14 @@ z-index:19999;
   overflow:hidden;
   width: .9em;
 text-indent:300%}
+
+
+.buscadorHeader.active{
+position:absolute;
+top:0;
+left:0;
+right:0;
+  width:100vw;
+  transition-delay: 0.5;
+  z-index:200;
+}

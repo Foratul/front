@@ -9,10 +9,12 @@ import { AppStateService } from '../services/appstate.service';
 import { MarkerService } from '../services/marker.service';
 import { datosBackService } from '../services/datosBack.service';
 import { EventosService } from '../services/eventos.service';
-import { getHtmlTagDefinition } from '@angular/compiler';
+import { PopUpService } from '../services/pop-up.service';
 
 declare let L
+
 declare let Routing
+declare let $
 // import 'lrm-graphhopper'
 
 
@@ -31,6 +33,10 @@ export class MapComponent implements OnInit, AfterViewInit {
   distritos = []
   arrayEventos = []
   mapaIniciado = false
+  nombreMenu
+  posicionNueva
+  mostrarMenuDesplegable = false
+
 
   constructor(
     private markerService: MarkerService,
@@ -39,9 +45,13 @@ export class MapComponent implements OnInit, AfterViewInit {
     private filtrarService: FiltrarService,
     private eventosService: EventosService,
     private rutasService: RutasService
-    , private appStateService: AppStateService) { }
+    , private appStateService: AppStateService,
+    private popUpService: PopUpService) { }
 
   ngOnInit() {
+
+
+
     this.appStateService.setCargando(true)
     this.app = this.appStateService.getAppState()
     // this.mapID = this.app.mapID;
@@ -65,6 +75,15 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
+    $('.dropdown').on('show.bs.dropdown', function () {
+      $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+    });
+
+    // Add slideUp animation to Bootstrap dropdown when collapsing.
+    $('.dropdown').on('hide.bs.dropdown', function () {
+      $(this).find('.dropdown-menu').first().stop(true, true).slideUp(150);
+    });
+
 
 
 
@@ -131,18 +150,24 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     this.map = new L.map(this.mapID, {
       center: [position.coords.latitude, position.coords.longitude],
-      zoom: 10,
+      zoom: 15,
       // minZoom: 10
 
     })
 
     this.map.myPosition = { coords: { latitude: position.coords.latitude, longitude: position.coords.longitude } }
-    this.map.radius = 1000
-    this.map.barrios = true
+    // this.map.radius = 1000
+    // this.map.barrios = true
+    this.appStateService.setMap(this.map)
     this.map.layers = true
-    this.map.markers = true
+    // this.map.markers = true
     this.map.mostrarCercanos = true
-    this.app.map = this.map
+    this.map.mostrarMarkers = true
+    this.map.mostrarBarrios = true
+    this.map.radius = 500
+    this.map.mostrarRadio = true
+    this.app.mapaIniciado = true
+
 
 
     console.log("MY POSICION ES", this.map.myPosition)
@@ -168,6 +193,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       }))
       .on("swipe", function (event) { console.log("se ha hecho swipe") })
 
+
     this.addContentToMap()
 
     // this.map.on("click", calcularDistancia)
@@ -187,8 +213,10 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     let tileLayer = { openStreet: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", mapBox: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ" }
     this.map.getSize();
-    // 
-    const tiles = L.tileLayer(tileLayer.mapBox, {
+
+    let layer = (Math.random() > 0.5) ? tileLayer.openStreet : tileLayer.mapBox
+
+    const tiles = L.tileLayer(layer, {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       tileSize: 256,
       maxZoom: 55,
@@ -233,43 +261,15 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     this.generarMenu($event)
 
-    this.generarRuta($event.latlng)
+    // this.generarRuta($event.latlng)
     // document.body.removeChild(generatedMenu)
   }
 
-  generarMenu($event) { // ME SACAS UN MENU{
-    console.dir("CLICK DERECHO FUNCION " + $event.containerPoint)
-    // estoy usando una mezcla de jQuery y JS, por eso originalEvent
-    let x = $event.originalEvent.clientX
-    let y = $event.originalEvent.clientY
-
-
-    console.log(x, y)
-    let generatedMenu = document.createElement("div")
-    generatedMenu.innerHTML = `<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Dropdown button
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
-    </div>
-  </div>`
-    generatedMenu.style.position = "absolute"
-    generatedMenu.style.left = x + "px"
-    generatedMenu.style.top = y + "px"
-    generatedMenu.style.zIndex = "9999"
-    document.body.appendChild(generatedMenu);
-    document.querySelector("#dropdownMenuButton").setAttribute("aria-expanded", "true")
-  }
 
 
 
-  generarRuta(destino, origen = this.map.posicion) {
-    this.map.enrutando = true;
-    this.rutasService.generarRuta(this.map, origen, destino)
-  }
+
+
   updateMyPosition(intervalo = 60000) {
     setInterval(async () => {
       this.markerService.addMarkerOnMyLocation(this.map, await this.getPosition())
@@ -283,7 +283,81 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   }
 
+  generarMenu($event, nombreMenu = "ACCIONES") { // ME SACAS UN MENU{
+    $('#menuContextual').show()
+
+
+    // $event.stopPropagation();
+    console.dir("CLICK DERECHO FUNCION " + $event.containerPoint)
+    //   // estoy usando una mezcla de jQuery y JS, por eso originalEvent
+    // $event.target.preventDefault()
+
+    let menuContextual = document.getElementById("menuContextual")
+    let x = $event.originalEvent.clientX
+    let y = $event.originalEvent.clientY - 127
+    this.nombreMenu = nombreMenu
+
+
+    this.posicionNueva = $event.latlng
+    menuContextual.style.position = "absolute"
+    menuContextual.style.left = x + "px"
+    menuContextual.style.top = y + "px"
+    menuContextual.style.zIndex = "9999"
+
+    $('#dropdownMenuButton').click()
+
+
+
+    $('.dropdown').on('hidden.bs.dropdown', function () {
+      setTimeout(() => { $('#menuContextual').hide() }, 200)
+    })
+
+
+    // $('.dropdown-toggle').dropdown('toggle')
+    // 
+
+    $('.dropdown-item').on('mousein', () => { $('dropdown-item').addClass('active') }).on('mouseout', () => { $('dropdown-item').removeClass('active') })
+
+
+  }
+
+  setMyPosition(posicion) {
+
+    setTimeout(() => {
+      this.mostrarMenuDesplegable = false
+    }, 1)  // hay que meterle esta mierda por el ngClass y el ngIf van a su puta bola
+
+
+    console.log(this.posicionNueva)
+    this.map.myPosition.coords.latitude = this.posicionNueva.lat
+    this.map.myPosition.coords.longitude = this.posicionNueva.lng
+    console.log(this.map.myPosition)
+    this.markerService.removeCircle(this.map)
+    this.markerService.addMarkerOnMyLocation(this.map, this.map.myPosition)
+    this.markerService.removeMarkers(this.map)
+    this.map.setView(new L.LatLng(this.posicionNueva.lat, this.posicionNueva.lng))
+    if (this.map.mostrarMarkers) this.markerService.addMarkers(this.map, this.eventosService.getEventosDescargados(), this.map.radius)
+
+    if ($('.dropdown').find('.dropdown-menu').is(":visible")) {
+      $('.dropdown-toggle').dropdown('toggle');
+    }
+
+  }
+
+
+  generarRuta(destino = this.posicionNueva, origen = this.map.posicion) {
+
+    // hay que meterle esta mierda por el ngClass y el ngIf van a su puta bola
+
+    this.map.enrutando = true;
+    this.rutasService.generarRuta(this.map, origen, destino)
+
+    if ($('.dropdown').find('.dropdown-menu').is(":visible")) {
+      $('.dropdown-toggle').dropdown('toggle');
+    }
+
+
+  }
 
 }
-
 

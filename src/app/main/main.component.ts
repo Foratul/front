@@ -36,6 +36,11 @@ export class MainComponent implements OnInit {
   ngOnInit() {
 
 
+
+
+
+
+
     // $('.mobile').resizable({
     //   handles: 'n,w,s,e',
     //   minWidth: 200,

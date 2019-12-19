@@ -17,17 +17,18 @@ import { BuscadorComponent } from './buscador/buscador.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: "home", component: HomeComponent, canActivate: [GuardiaGuard] },
+  { path: "home", component: HomeComponent },
   { path: "pruebas", component: PruebasComponent, canActivate: [GuardiaGuard] },
   { path: "comentar", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
   { path: "comentar/:idEvento", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
   { path: "registrar", component: RegistrarComponent, canActivate: [GuardiaGuard] },
-  { path: "login", component: LoginComponent, canActivate: [GuardiaGuard] },
+  { path: "login", component: LoginComponent },
   { path: "logout", component: LogoutComponent, canActivate: [GuardiaGuard] },
   { path: "eventos", component: ListarEventosComponent, canActivate: [GuardiaGuard] },
   { path: "mapa", component: VacioComponent, canActivate: [GuardiaGuard] },
   { path: "listarComentarios", component: ListarComentariosComponent, canActivate: [GuardiaGuard] },
   { path: "buscador", component: BuscadorComponent, canActivate: [GuardiaGuard] },
+  { path: "vacio", component: VacioComponent }
 
 ];
 
