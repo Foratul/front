@@ -48,6 +48,7 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
 
 
     $(".alert").hide()
+    $('#modalSpan').text('Opinar');
 
 
 
@@ -68,7 +69,6 @@ export class InsertComentarioComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.arrayEstrellas.length; i++) {
       if (i <= n) this.arrayEstrellas[i].active = true, this.arrayEstrellas[i].icono = 'fas fa-star'
       else this.arrayEstrellas[i].active = false, this.arrayEstrellas[i].icono = 'far fa-star'
-
     }
   }
 

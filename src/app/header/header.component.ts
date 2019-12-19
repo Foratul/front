@@ -106,7 +106,7 @@ export class HeaderComponent implements OnInit {
 
   registerClick() {
     console.log("registerClick")
-    $('#modalSpan').text('Resgistro');
+    $('#modalSpan').text('Registro');
 
     this.app.modal.Register = true
   }

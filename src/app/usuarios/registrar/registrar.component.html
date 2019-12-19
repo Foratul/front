@@ -25,14 +25,13 @@
 
             <div class="form-group show_hide_password">
                 <label>Password</label> <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-                <input class="form-control" type="password" name="password" ngModel formControlName="password">
+                <input class="form-control" type="password" name="password" formControlName="password">
             </div>
 
             <div class="form-group show_hide_password">
                 <label>Repite Password</label> <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-                <input class="form-control" type="password" name="password" ngModel formControlName="password">
+                <input class="form-control" type="password" name="repitepassword" formControlName="repite_password">
             </div>
-
             <input type="submit" value="enviar" [disabled]="!formulario.valid" *ngIf="formulario.valid"
                 class="btn btn-block btn-primary">
             <!-- errors es nulo -->

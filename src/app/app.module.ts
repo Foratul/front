@@ -37,7 +37,6 @@ import { ListarComentariosComponent } from './comentarios/listar-comentarios/lis
 import { BuscadorComponent } from './buscador/buscador.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.component';
-import * as AwesomeMarkers from 'leaflet.awesome-markers';
 
 
 

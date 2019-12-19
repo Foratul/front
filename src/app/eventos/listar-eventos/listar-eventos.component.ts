@@ -247,7 +247,6 @@ export class ListarEventosComponent implements OnInit {
   }
 
   comentarioExitoso() {
-    alert("exito evento")
 
     this.ordenarArrayPor(this.arrayEventos, this.ordenar)
     this.actualizarEventosVisibles()

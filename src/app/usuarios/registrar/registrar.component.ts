@@ -14,11 +14,11 @@ export class RegistrarComponent implements OnInit {
 
     this.formulario = new FormGroup({
       username: new FormControl('',
-        { validators: [Validators.required, Validators.minLength(2)], updateOn: 'blur' }
+        { validators: [Validators.required, Validators.minLength(2)] }
       ),
 
-      email: new FormControl('', { validators: Validators.pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/), updateOn: 'blur' }),
-      password: new FormControl('', { validators: Validators.required, updateOn: 'blur' }),
+      email: new FormControl('', { validators: Validators.pattern(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/) }),
+      password: new FormControl('', { validators: Validators.required }),
       repite_password: new FormControl('', Validators.required)
     }, [this.passwordValidator])
   }
@@ -66,7 +66,6 @@ export class RegistrarComponent implements OnInit {
   }
 
   afterSubmit(mensaje, exit = false) {
-    alert(mensaje.mensaje)
     if (mensaje.exito) $("#exampleModalCenter .close").click().click()
 
   }

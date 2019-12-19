@@ -28,15 +28,12 @@ export class ModalComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.appState.setModal(false);
         }, 288)
-        alert("evento hidden")
         $('#exampleModalCenter').toggle()
       }
       )
 
     console.log(this.modal)
 
-
-    alert("CARGA MODAL component")
 
   }
 

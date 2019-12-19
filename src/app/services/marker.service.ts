@@ -109,7 +109,6 @@ export class MarkerService {
           elemento.arrayIndex = index //para pasarselo al popup binder luego
             ;
           // marker.bindPopup(pepe)
-          let buton = document.getElementById("infoPopUp")
           // marker['barrio'] = Math.random();
           // console.log(map.distance(marker.getLatLng(), marker.getLatLng()))
           marker.bindPopup(this.popUpService.addPopUp(elemento))
@@ -167,7 +166,6 @@ export class MarkerService {
 
   }
 
-  hacerCosas() { alert("viva el vino") }
 
   removeMarkers(map, arrayMarkers = this.arrayMarkersActivos, barrio = null) {
     console.log("removeMarkers")

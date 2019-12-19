@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
   }
 
   afterSubmit(resultado) {
-    alert(resultado)
     if (resultado.exito) {
       localStorage.setItem("token", resultado.token)
       this.appStateService.setLogueado(true)

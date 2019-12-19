@@ -15,7 +15,6 @@ export class PopUpService {
     function setMyPosition() {
       console.log("Entramos")
 
-      alert("setMyPosition")
     }
 
 
@@ -39,7 +38,7 @@ export class PopUpService {
     return this.texto
   }
 
-  hacerCosas() { alert("viva el vino") }
+  hacerCosas() { }
 
 
   generarMenu($event, nombreMenu = "ACCIONES") { // ME SACAS UN MENU{

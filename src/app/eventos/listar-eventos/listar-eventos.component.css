@@ -47,7 +47,7 @@ img {width:100% !important;}
 .quieto{position:fixed;}
 .recuadro{position:relative;
   padding-bottom:100px;
- /* max-height:500px; */
+   height:555px;  
 overflow:hidden;}
 .esquina{position:absolute;
   cursor : all-scroll;
