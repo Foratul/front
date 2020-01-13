@@ -1,4 +1,12 @@
 <div class="registrar">
+    <div class="alert alert-warning alert-dismissible fade show col-12" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{alerta?.mensaje}}
+        <div class="enlace" *ngIf="unactive" (click)="reenviarActivacion()">Haz click para volver a recibir el mensaje
+            de activación</div>
+    </div>
 
 
     <div class="form-group col-12 roboto">
@@ -8,19 +16,19 @@
                 <label>Nombre de usuario</label>
                 <input type="text" class="form-control" formControlName="username">
             </div>
-            <div *ngIf="!formulario.controls.username.valid">
+            <!-- <div *ngIf="!formulario.controls.username.valid">
                 <p class="text-danger small">El nombre de usuario contiene errores</p>
                 <p class="text-danger small" *ngIf="formulario.controls.username.errors?.required">campo requerido</p>
                 <p class="text-danger small" *ngIf="formulario.controls.username.errors?.minlength">mínimo
                     {{formulario.controls.username.errors?.minlength.requiredLength}} carácteres</p>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <label>Email</label>
                 <input type="text" class="form-control" formControlName="email">
                 <div class="text-danger small"
-                    *ngIf="formulario.controls.email.value.length>=55 || formulario.controls.email.errors">
-                    Formato incorrecto</div>
+                    *ngIf="formulario.controls.email.value.length>=8 && formulario.controls.email.errors">
+                    Introduzca un formato correcto</div>
             </div>
 
             <div class="form-group show_hide_password">
@@ -32,8 +40,8 @@
                 <label>Repite Password</label> <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                 <input class="form-control" type="password" name="repitepassword" formControlName="repite_password">
             </div>
-            <input type="submit" value="enviar" [disabled]="!formulario.valid" *ngIf="formulario.valid"
-                class="btn btn-block btn-primary">
+            <input type="submit" value="enviar" class="btn"
+                [ngClass]="{'btn-primary' : formulario.valid , 'btn-secondary' : !formulario.valid}">
             <!-- errors es nulo -->
         </form>
     </div>

@@ -199,6 +199,15 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
     this.appStateService.toggleCargando()
 
   }
+
+  toggleMotor() {
+    this.app.cargando = true
+    this.layerService.removeTiles()
+    this.layerService.addTiles(this.app.map)
+    this.app.cargando = false
+
+
+  }
   drop($event) { moveItemInArray(this.arrayBotones, $event.previousIndex, $event.currentIndex); }
 
   botonPresionado(boton) {

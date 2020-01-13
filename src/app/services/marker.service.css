@@ -7,3 +7,6 @@
 color:green;}
 
 .leaflet-popup-content-wrapper{background-color:red !important}
+
+.leaflet-routing-collapse-btn:after {
+    content: "A" !important;}

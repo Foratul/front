@@ -93,7 +93,11 @@ export class datosBackService {
   hacerGeocoding(direccion) {
 
     return this.http.get("https://maps.google.com/maps/api/geocode/json?" + direccion + "&key=AIzaSyB9CobDD06h6vgzmUpmoKIpCgSXc43B7B0").toPromise()
-
-
   }
+
+  reenviarMail(objeto)
+
+  {return this.http.post(this.urlApi+"usuarios/reenviarMail" , objeto).toPromise()}
 }
+
+

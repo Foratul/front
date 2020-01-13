@@ -13,6 +13,9 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   alerta = "Alerta"
+  lastMail : string
+  unactive = false;
+  userID
   constructor(
     private router: Router,
     private dataService: datosBackService,
@@ -46,6 +49,7 @@ export class LoginComponent implements OnInit {
     this.dataService.loginUsuario(formulario)
       .then((result) => {
         resultado = result
+        this.lastMail = formulario.email
       })
       .catch((error) => {
         resultado.exito = false
@@ -69,16 +73,23 @@ export class LoginComponent implements OnInit {
 
     this.alerta = (resultado.exito) ? `Bienvenido de nuevo ${this.appStateService.getUser().username}, logueado con exito ` : `No se ha podido loguear ${resultado.mensaje}`
 
-
-    if (resultado.exito)
-      $(".alert").removeClass("alert-warning").addClass("alert-success")
+    this.unactive = resultado.unactive
+    this.userID = resultado.userID
+    if (resultado.exito){
+    $(".alert").removeClass("alert-warning").addClass("alert-success")
     $(".formulario").hide()
+    setTimeout(() => { $("#modalHeader .close").click().click() }, 3000)}
+     
+  }
 
+  reenviarActivacion(){
 
-    setTimeout(() => { $("#modalHeader .close").click().click() }, 3000)
+    console.log(this.lastMail , this.userID)
+    this.dataService.reenviarMail({ID : this.userID , email : this.lastMail})
+    .then((result)=>{this.alerta = result['mensaje']
+  this.unactive=false})
 
 
   }
-
 
 }

@@ -20,6 +20,10 @@ z-index:19999;
 
 } */
 
+.textoModal{color:grey;}
+
+.modalActivo{color:black;transform: scale(1.2);}
+
 
 .login a {background: url("https://s.libertaddigital.com/images/svg/usuario.svg") no-repeat center;
   
@@ -37,3 +41,9 @@ right:0;
   transition-delay: 0.5;
   z-index:200;
 }
+
+li {margin-left:10px;
+  border : 0;
+  outline : none;}
+
+li img{width:30px}

@@ -55,8 +55,8 @@ overflow:hidden;}
 
   .text {font-family : var (--fuentePrimaria)}
 
-  .comentar {position:relative;
+  /* .comentar {position:relative;
     top:-10px;
-  margin-top:-10px;}
+  margin-top:-10px;} */
 
  

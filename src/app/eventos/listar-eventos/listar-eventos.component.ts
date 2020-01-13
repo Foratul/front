@@ -5,6 +5,7 @@ import { AppStateService } from 'src/app/services/appstate.service';
 import { Router } from '@angular/router';
 import { datosBackService } from 'src/app/services/datosBack.service';
 import { Observable, Subject } from 'rxjs';
+
 declare let $
 declare let funcionesComunes
 
@@ -45,6 +46,9 @@ export class ListarEventosComponent implements OnInit {
 
 
   ngOnInit() {
+    this.appState.setMostrarMapa(false)
+    this.appState.setMostrarAplicacion(true)
+    this.appState.setExtenderHeader(false)
 
     this.app = this.appState.getAppState()
 

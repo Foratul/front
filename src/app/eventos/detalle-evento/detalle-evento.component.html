@@ -1,0 +1,54 @@
+<h1>{{evento.nombre}}</h1>
+<div class="row">
+    <ngui-map class="col-6" *ngIf="evento.latitude" center="{{pos.lat}} , {{pos.lng}}" zoom="22" mapTypeId="satellite"
+        tilt="45"
+        streetView="StreetViewPanorama(document.querySelector('div#sv'), {position:new google.maps.LatLng({{pos.lat}} , {{pos.lng}})}">
+        <div id="sv"></div>
+        <marker [position]="pos" (initialized$)="onMarkerInit($event)"></marker>
+
+    </ngui-map>
+
+
+    <div>
+
+
+        <div class="col-6" *ngIf="evento.imagen"><img src="{{evento.imagen}}" alt=""></div>
+    </div>
+</div>
+
+<strong>Categoría</strong> : <a tooltip="ver más elementos de esta categoría" class="enlace"
+    (click)="campoClicado({field : 'supertipo', valor : evento.supertipo})">{{evento.supertipo}}</a>
+{{evento.descripcion}}
+<div *ngIf="!evento.descripcion && evento.descripcionScrap"> {{evento.descripcion}}
+</div>
+
+<div>
+    <span *ngIf="evento.fecha_inicio">
+        Fecha inicio <i class="far fa-calendar-check"></i>
+        {{evento.fecha_inicio  | date: 'dd/MM/yyyy'}} Fecha final <i class="far fa-calendar-times"></i>
+        {{evento.fecha_final  | date: 'dd/MM/yyyy'}}
+    </span>
+
+</div>
+<a *ngIf="evento.link" title="enlace oficial" target="_blank" href={{evento.link}}><i
+        class="fas fa-external-link-alt"></i></a>
+{{evento.direccion}}
+{{evento.barrio}}
+<div *ngIf="evento.direccion || evento.longitude || evento.direccionScrap">
+    <div (click)="mostrarMapa(evento)">
+        <p class="small">mostrar en mapa <i class="enlace fas fa-search-location"></i></p>
+    </div>
+    <div (click)="mostrarCercanos(evento)">MOSTRAR SIMILARES CERCA</div>
+    <div (click)="mostrarGlobales(evento)">MOSTRAR SIMILARES POR TODA LA CIUDAD</div>
+</div>
+<div *ngIf="evento.valoraciones">
+    <span class="orange" [innerHTML]="evento.valoraciones">
+    </span>
+    <p (click)="verComentarios()">Ver {{evento.votantes}} comentarios</p>
+</div>
+<span data-toggle="tooltip" tooltip="Añadir Comentario" attr.data-placement="bottom" title="Comentar"><button
+        (click)="addComentario(evento)" type="button" class="comentar enlace redondo btn btn-primary"
+        data-toggle="modal" data-target="#modalHeader">
+        <i class="far fa-comment-alt"></i>
+    </button>
+</span>

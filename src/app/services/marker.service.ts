@@ -8,6 +8,7 @@ import { EventosService } from './eventos.service';
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { datosBackService } from './datosBack.service';
+import { RutasService } from './rutas.service';
 declare let $
 
 @Injectable({
@@ -18,6 +19,7 @@ export class MarkerService {
   app
   arrayMarkersActivos: Array<Marker> = []
   arrayMarkersMyPosition: Array<Marker> = []
+  arrayMarkersEspeciales
   currentArrayDatos: Array<Marker>
   arrayVisibles: Array<any>
   icono = new Icono()
@@ -29,18 +31,17 @@ export class MarkerService {
     private appStateService: AppStateService,
     private popUpService: PopUpService,
     private eventosService: EventosService,
-    private datosBack: datosBackService
+    private datosBack: datosBackService,
+    private rutasService: RutasService
   ) {
     this.app = appStateService.getAppState()
     Marker.prototype.options.icon = this.icono.defaultIcon
-
   }
 
   addMarkerOnPosition(map, position) {
     const marker = L.marker(position)
     // console.log(marker)
     marker.addTo(map);
-
   }
 
   addCircle(map, position = map.myPosition, radius = map.radius) {
@@ -50,7 +51,7 @@ export class MarkerService {
   }
 
   removeCircle(map) {
-    console.log("destrueydno cirlca")
+    console.log("destruyendo circulo")
     map.removeLayer(this.circle)
 
 
@@ -60,7 +61,10 @@ export class MarkerService {
     const marker = L.marker([position.coords.latitude, position.coords.longitude], { title: "ESTAMOS AQUÍ", draggable: true, icon: this.icono.positionIcon, zIndexOffset: 666666, riseOnHover: true })
     marker.addTo(map);
     this.addCircle(map, map.position, map.radius)
-    marker.bindPopup(this.popUpService.addPopUp({ className: "PopUp" }))
+    marker
+      // .bindPopup(
+      //   // this.popUpService.addPopUp({ className: "PopUp" })
+      // )
       .on('mouseover', function (event) { marker.openPopup() })
       .on('mouseout', function (event) { marker.closePopup() })
       .on('dragstart', () => {
@@ -84,21 +88,15 @@ export class MarkerService {
     // this.arrayMarkersMyPosition.pop()
     this.arrayMarkersMyPosition.push(marker)
     if (this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 2]) this.removeMarkers(map, [this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 2]])
-
-
-
-
   }
+
   addMarkers(map, arrayDatos, radius = 1000) {
     this.appStateService.setCargando(true)
 
     if (arrayDatos == null) arrayDatos = this.currentArrayDatos  //mete el ultimo array recibido en el servicio
     this.currentArrayDatos = arrayDatos
     console.log("voy a dibujar los markers en un radio de : ", radius, "tengo un array de tamaño ", arrayDatos.length)
-
     this.arrayVisibles = [] //vacia lo visible porque se recrea
-
-
     map.radius = radius
 
     for (const [index, elemento] of arrayDatos.entries()) {
@@ -107,23 +105,29 @@ export class MarkerService {
         if (map.distance(marker.getLatLng(), this.arrayMarkersMyPosition[this.arrayMarkersMyPosition.length - 1].getLatLng()) < radius) {
           elemento.esCercano = true
           elemento.arrayIndex = index //para pasarselo al popup binder luego
-            ;
           // marker.bindPopup(pepe)
           // marker['barrio'] = Math.random();
           // console.log(map.distance(marker.getLatLng(), marker.getLatLng()))
           marker.bindPopup(this.popUpService.addPopUp(elemento))
           marker.addTo(map);
           marker.on("click", ($event) => {
+            console.log(elemento)
+            $event['elemento'] = elemento
             let boton = document.getElementById("infoPopUp")
+            let botonR = document.getElementById("rutaPopUp")
+
             let _this = this;
             boton.addEventListener("click", this.ampliarInformacion.bind(_this))
+            botonR.addEventListener("click", this.rutaHere.bind(_this))
+
+
             // console.log(marker['barrio'])
           })
           this.arrayVisibles.push(elemento)
           this.arrayMarkersActivos.push(marker)
           if (elemento.centrar) {
             map.setView(new L.LatLng(elemento.latitude, elemento.longitude), 15)
-            elemento.centrra = false;
+            elemento.centrar = false;
           }
         }
         this.eventosService.setEventosCercanos(this.arrayVisibles)
@@ -139,6 +143,38 @@ export class MarkerService {
 
   }
 
+  rutaHere(evento) {
+    this.limpiarPopups()
+
+    let lat = evento.target.dataset.lat
+    let lng = evento.target.dataset.lng
+    this.app.map.enrutando = true;
+    this.rutasService.generarRuta(this.app.map, this.app.map.myPosition, { lat: lat, lng: lng })
+    setTimeout(() => {
+      // $(".leaflet-routing-collapse-btn::after").css({ 'content': '_' })
+
+      $(".leaflet-routing-collapse-btn").on("click", (event) => {
+
+        this.rutasService.limpiarRutas(this.app.map)
+        console.log(event)
+        event.preventDefault
+
+      })
+    }, 1000)
+
+  }
+
+  limpiarPopups() {
+
+    var aa = $(".leaflet-popup-close-button").length
+    if (aa > 0) {
+      for (var i = 0; i < aa; i++) {
+        $(".leaflet-popup-close-button")[i].click();
+      }
+    }
+  }
+
+
   prueba(app) {
 
     app.cargando = !app.cargando
@@ -151,15 +187,18 @@ export class MarkerService {
     console.log(evento.target.dataset)
     let popup = document.querySelector(".leaflet-popup") as HTMLElement
     popup.style.top = "-100px"
-    console.log("se ha clicado en el arrayMarker numero:", evento.target.dataset.arrayindex)
-    console.log("se ha clicado en el dbID numero:", evento.target.dataset.id)
+    // console.log("se ha clicado en el arrayMarker numero:", evento.target.dataset.arrayindex)
+    // console.log("se ha clicado en el dbID numero:", evento.target.dataset.id)
     let popupElement = document.querySelector("#popUpText")
-    $(".leaflet-popup-content").blur()
-    console.log(this, this.self)
+
+
+
+    // console.log(JSON.parse(evento.target.dataset.elemento))
     this.datosBack.getEventoByID(evento.target.dataset.id).then((results) => {
       this.eventosService.setEventoSeleccionado(results)
       this.app.menu_desplegado = true
       this.app.paginaDesplegable = "detalleEvento"
+      this.limpiarPopups()
     })
 
 
@@ -198,6 +237,7 @@ export class MarkerService {
       boton.addEventListener("click", this.ampliarInformacion.bind(_this))
       // console.log(marker['barrio'])
     })
+    this.arrayMarkersEspeciales.push(marcadorEspecial)
   }
 
   getDistance(from, to) {

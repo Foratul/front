@@ -17,7 +17,7 @@
 
     <span cdkDropListOrientation="horizontal" cdkDropList (cdkDropListDropped)="drop($event)">
         <button cdkDrag *ngFor="let boton of app.arrayBotones, let i=index"
-            [ngClass]="{'enlace' : true, 'btn' : true , 'btn-primary' : boton.active, 'btn-secondary' : !boton.active}"
+            [ngClass]="{'inBisible' : !boton.show , 'enlace' : true, 'btn' : true , 'btn-primary' : boton.active, 'btn-secondary' : !boton.active}"
             data-toggle="tooltip" attr.data-placement={{boton.tooltipPos}} title={{boton.tooltip}}
             (click)="botonPresionado(boton)" [innerHTML]="boton.texto">
         </button>
@@ -41,8 +41,9 @@
 
 <div class="alert alert-warning alert-dismissible fade show">
     <h4 class="alert-heading"><i class="fa fa-warning"></i>Atención!</h4>
-    <p>Establecer el rango de búsqueda por encima de 5 km puede suponer un consumo elevado de recursos en equipos
-        mierdosos como el del developer.</p>
+    <p>Establecer el rango de búsqueda por encima de 5 km puede suponer un consumo elevado de recursos en equipos menos
+        potentes
+        .</p>
     <hr>
     <p class="mb-0"></p>
     <button type="button" class="close" data-dismiss="alert">&times;</button>

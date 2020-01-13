@@ -36,6 +36,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   nombreMenu
   posicionNueva
   mostrarMenuDesplegable = false
+  tilesActual
 
 
   constructor(
@@ -197,54 +198,27 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.addContentToMap()
 
     // this.map.on("click", calcularDistancia)
-
-
     this.markerService.addMarkerOnMyLocation(this.map)
     this.addMarkers()
     this.eventosService.setEventosDescargados(this.arrayEventos)
     this.eventosService.setEventosSeleccionados(this.eventosService.getEventosCercanos())
-
-
-
-
-
   }
+
+
   addContentToMap() {
 
-    let tileLayer = { openStreet: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", mapBox: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ" }
+
     this.map.getSize();
 
-    let layer = (Math.random() > 0.5) ? tileLayer.openStreet : tileLayer.mapBox
 
-    const tiles = L.tileLayer(layer, {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      tileSize: 256,
-      maxZoom: 55,
-      id: 'mapbox.streets',
-      accessToken: "pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ"
-    })
+
     L.Control.geocoder().addTo(this.map)
-    tiles.addTo(this.map);
+    this.layerService.addTiles(this.map)
 
     // var roads = L.gridLayer.googleMutant({
     //   type: 'satellite'	// valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
     // })
     // roads.addTo(this.map);
-
-
-    //leo datos y los paso al servicio de markers para dibujarlos
-    // this.datosBack.getAllEventos()
-    //   .then((datos) => {
-    //     console.log("hemos cargado los datos de tamaño : ", datos['length'])
-    //     this.datosGlobales = datos;
-    //     console.log("markers iniciales añadidos")
-    //   })
-    //   .catch((error) => { console.log(error) })
-    //   .finally(() => {
-    //     this.appStateService.setCargando(false)
-
-    //   })
-
 
     L.control.scale().addTo(this.map);
     //añade escala
@@ -351,6 +325,18 @@ export class MapComponent implements OnInit, AfterViewInit {
 
     this.map.enrutando = true;
     this.rutasService.generarRuta(this.map, origen, destino)
+    setTimeout(() => {
+      // $(".leaflet-routing-collapse-btn::after").css({ 'content': '_' })
+
+      $(".leaflet-routing-collapse-btn").on("click", (event) => {
+
+        this.rutasService.limpiarRutas(this.app.map)
+        console.log(event)
+        event.preventDefault
+
+      })
+    }, 1000)
+
 
     if ($('.dropdown').find('.dropdown-menu').is(":visible")) {
       $('.dropdown-toggle').dropdown('toggle');
@@ -358,6 +344,24 @@ export class MapComponent implements OnInit, AfterViewInit {
 
 
   }
+
+  eventosDistrito() {
+
+    this.map.lastBarrio
+    this.datosBack.getEventosByAnyFields([{ "field": "distrito", "valor": this.map.lastBarrio.toUpperCase().slice(0.4) }]).then((results) => {
+      console.log("se ha buscado eventos por" + this.map.lastBarrio, "han llegado", results)
+
+      this.eventosService.setEventosSeleccionados = results
+      this.markerService.addMarkers(this.app.map, results, 10000)
+    })
+  }
+  eventosGlobales() {
+    console.log("Globales")
+    this.eventosService.setEventosSeleccionados(this.eventosService.getEventosDescargados())
+    this.eventosService.setEventosCercanos(this.eventosService.getEventosDescargados())
+    this.markerService.addMarkers(this.app.map, this.eventosService.getEventosDescargados(), this.app.map.radius)
+  }
+
 
 }
 

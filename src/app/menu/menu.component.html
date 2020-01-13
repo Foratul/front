@@ -1,8 +1,5 @@
-<p>menu works!</p>
-
 <div class="folio">
     <span class="cerrar"> <span><i (click)="cerrarMenu()" class="fas fa-times"></i> </span></span>
-    App paginaDesplegable = {{app.paginaDesplegable}}
     <div [ngSwitch]="app.paginaDesplegable">
         <app-listar-comentarios *ngSwitchCase="'listarComentarios'"></app-listar-comentarios>
         <app-detalle-evento *ngSwitchCase="'detalleEvento'"></app-detalle-evento>

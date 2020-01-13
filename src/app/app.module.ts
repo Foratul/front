@@ -37,6 +37,9 @@ import { ListarComentariosComponent } from './comentarios/listar-comentarios/lis
 import { BuscadorComponent } from './buscador/buscador.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.component';
+import { LimiteTextoPipe } from './limite-texto.pipe';
+import { NguiMapModule } from '@ngui/map';
+
 
 
 
@@ -60,6 +63,7 @@ import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.
     ListarComentariosComponent,
     BuscadorComponent,
     DetalleEventoComponent,
+    LimiteTextoPipe,
   ],
   imports: [
     FormsModule,
@@ -67,7 +71,8 @@ import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.
     AppRoutingModule,
     HttpClientModule,
     NgbModule, DragDropModule,
-    FontAwesomeModule, ReactiveFormsModule
+    FontAwesomeModule, ReactiveFormsModule, NguiMapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyB8uSF6f-AYEcUPTfui_zWOEMheiBcv7rI' })
+
 
 
   ],

@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   app: any
   buscadorActivo
   busquedaSimple
+  modalActivo = 0
 
   constructor(
     private appStateService: AppStateService,
@@ -51,12 +52,11 @@ export class HeaderComponent implements OnInit {
         $('#myInput').trigger('focus')
       })
       .on('hidden.bs.modal', () => {
-        this.desactivarComponentes()
-
-
         $("#modal .close").click()
-        this.desactivarComponentes()
-        this.resetArrastrado()
+        setTimeout(() => {
+          this.desactivarComponentes()
+          this.resetArrastrado()
+        }, 100)
 
 
 
@@ -69,8 +69,14 @@ export class HeaderComponent implements OnInit {
     });
   }
   buscadorClick() {
+    this.modalActivo = 2;
+
+    this.app.modal.Register = false;
     this.app.modal.Buscador = true
+    this.app.modal.Login = false;
     $('#modalSpan').text('Buscador');
+    $('#modalSpanSecundario').text('');
+
   }
 
   buscadorSimple() {
@@ -90,8 +96,14 @@ export class HeaderComponent implements OnInit {
 
 
   loginClick() {
+    this.modalActivo = 0;
+
+    this.app.modal.Register = false;
+    this.app.modal.Buscador = false;
     this.app.modal.Login = true
     $('#modalSpan').text('Login');
+    $('#modalSpanSecundario').text('Registro');
+
 
 
   }
@@ -105,10 +117,15 @@ export class HeaderComponent implements OnInit {
   }
 
   registerClick() {
+    this.modalActivo = 1;
+    this.app.modal.Register = true;
+    this.app.modal.Buscador = false;
+    this.app.modal.Login = false;
     console.log("registerClick")
     $('#modalSpan').text('Registro');
+    $('#modalSpanSecundario').text('Login');
 
-    this.app.modal.Register = true
+
   }
 
 

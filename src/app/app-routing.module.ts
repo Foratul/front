@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: "home", component: HomeComponent },
   { path: "pruebas", component: PruebasComponent, canActivate: [GuardiaGuard] },
-  { path: "comentar", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
+  { path: "comentar", component: InsertComentarioComponent, canActivate: [GuardiaGuard], canLoad: [GuardiaGuard] },
   { path: "comentar/:idEvento", component: InsertComentarioComponent, canActivate: [GuardiaGuard] },
   { path: "registrar", component: RegistrarComponent, canActivate: [GuardiaGuard] },
   { path: "login", component: LoginComponent },
