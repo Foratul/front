@@ -46,7 +46,7 @@ export class MarkerService {
 
   addCircle(map, position = map.myPosition, radius = map.radius) {
     this.circle = L.circle([position.coords.latitude, position.coords.longitude], { radius: radius, dashArray: '20, 20', dashOffset: '20', weight: 6, fillOpacity: 0.4, opacity: 0.6 })
-    console.log("creadno cirlca")
+    console.log("CREO CIRCULO de radio", radius)
     this.circle.addTo(map).bringToBack();
   }
 
@@ -97,7 +97,7 @@ export class MarkerService {
     this.currentArrayDatos = arrayDatos
     console.log("voy a dibujar los markers en un radio de : ", radius, "tengo un array de tamaño ", arrayDatos.length)
     this.arrayVisibles = [] //vacia lo visible porque se recrea
-    map.radius = radius
+    // map.radius = radius
 
     for (const [index, elemento] of arrayDatos.entries()) {
       if (elemento.latitude && elemento.longitude) { //comprueba que traen lat y lng antes de añadir
@@ -262,6 +262,8 @@ export class MarkerService {
         return this.icono.deportes
       case 4:
         return this.icono.cementerio
+      case 6:
+        return this.icono.homeless
       case 7:
         return this.icono.wifi
       case 9:
@@ -280,6 +282,8 @@ export class MarkerService {
         return this.icono.monumentIcon
       case 17:
         return (Math.random() > 0.49) ? this.icono.churchIcon : this.icono.iglesias2
+      case 99:
+        return this.icono.cameraIcon
       default:
         return this.icono.blackIcon
     }

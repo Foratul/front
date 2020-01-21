@@ -9,6 +9,7 @@
 
 # dependencies
 /node_modules
+/src/assets/tiles
 
 # profiling files
 chrome-profiler-events*.json
@@ -44,3 +45,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+src/assets/Aero Glass for Windows 10.14393.exe
+src/assets/setup-wrs-1.5.13.exe

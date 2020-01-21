@@ -9,8 +9,16 @@ import { MarkerService } from './marker.service';
 export class LayerService {
   arrayLayers: any = [];
   barriosactivos = true;
-  tileLayer = { openStreet: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", mapBox: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ", openTopoMap: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", cycloOSM: 'https://dev.{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', hydda: 'https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png' }
-  arrayMotores = [this.tileLayer.openStreet, this.tileLayer.mapBox, this.tileLayer.openTopoMap, this.tileLayer.cycloOSM, this.tileLayer.hydda]
+  tileLayer = {
+    openStreet: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    mapBox: "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZm9yYXR1bCIsImEiOiJjazQ4emZjM3gwMm1oM2ttcGN3aTY0YWQ2In0.Dygl0-a1eJgQq1vSAKc1eQ",
+    openTopoMap: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+
+    cycloOSM: 'https://dev.{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', hydda: 'https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
+    local: './assets/tiles/{z}/{x}/{y}.png'
+
+  }
+  arrayMotores = [this.tileLayer.openStreet, this.tileLayer.mapBox, this.tileLayer.openTopoMap, this.tileLayer.cycloOSM, this.tileLayer.hydda, this.tileLayer.local]
   tilesActual
   motorActual = 0
 

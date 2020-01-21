@@ -31,7 +31,7 @@ export class PopUpService {
     this.texto += "<div>" + url + "</div>";
 
     this.texto += `<div class="customPopup" id = "popUpText"> </div>`
-    console.log(elemento)
+    // console.log(elemento)
     this.texto += `<button data-ID=${elemento.ID} data-arrayIndex=${elemento.arrayIndex} data-elemento=${elemento} (click)="ampliarInformacion()" class="customPopup" id="infoPopUp"><i class="fas fa-info"></i></button>`
     this.texto += `<button data-lat=${elemento.latitude} data-lng=${elemento.longitude} (click)="rutaHere()" class="customPopup" id="rutaPopUp">Ruta hasta aquí</button>`
 

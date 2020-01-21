@@ -10,6 +10,7 @@ import { MarkerService } from '../services/marker.service';
 import { datosBackService } from '../services/datosBack.service';
 import { EventosService } from '../services/eventos.service';
 import { PopUpService } from '../services/pop-up.service';
+declare let funcionesComunes
 
 declare let L
 
@@ -108,6 +109,7 @@ export class MapComponent implements OnInit, AfterViewInit {
               coords: { latitude: position.coords.latitude, longitude: position.coords.longitude }
             }
             console.log("updating POSITION")
+            this.markerService.removeCircle
             this.markerService.addMarkerOnMyLocation(this.map)
           })
         }, 60 * 60 * 1000) //tiempo de update
@@ -347,13 +349,18 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   eventosDistrito() {
 
-    this.map.lastBarrio
-    this.datosBack.getEventosByAnyFields([{ "field": "distrito", "valor": this.map.lastBarrio.toUpperCase().slice(0.4) }]).then((results) => {
-      console.log("se ha buscado eventos por" + this.map.lastBarrio, "han llegado", results)
+    let buscarCadena = this.map.lastBarrio.toUpperCase().slice(0, 8).replace(" ", "")
+    this.datosBack.getEventosByAnyFields([
+      { "field": "distrito", "valor": buscarCadena },
+      { "field": "distrito", "valor": funcionesComunes.reemplazarAcentos(buscarCadena), "operador": "OR" },
+      { "field": "barrioScrap", "valor": funcionesComunes.reemplazarAcentos(buscarCadena), "operador": "OR" }
+    ])
+      .then((results) => {
+        console.log("se ha buscado eventos por " + buscarCadena + "han llegado ", results.length + " resultados")
 
-      this.eventosService.setEventosSeleccionados = results
-      this.markerService.addMarkers(this.app.map, results, 10000)
-    })
+        this.eventosService.setEventosSeleccionados = this.eventosService.getEventosSeleccionados() + results
+        this.markerService.addMarkers(this.app.map, results, 10000000)
+      })
   }
   eventosGlobales() {
     console.log("Globales")

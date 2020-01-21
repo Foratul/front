@@ -31,9 +31,8 @@
             {{nombreMenu}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a *ngIf="app.map  &&app.map.mostrarBarrios" (click)="eventosDistrito()" class="enlace dropdown-item">Buscar
-                eventos en
-                {{app.map.lastBarrio}}</a>
+            <a *ngIf="app.map  &&app.map.mostrarBarrios" (click)="eventosDistrito()" class="enlace dropdown-item">Puntos
+                de interés en {{app.map.lastBarrio}}</a>
             <a (click)="eventosGlobales()" class="enlace dropdown-item">Buscar
                 sin restricción de distrito</a>
             <a (click)="generarRuta()" class="enlace dropdown-item">Trazar ruta hasta aquí</a>

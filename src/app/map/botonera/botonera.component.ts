@@ -32,6 +32,7 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
   iconoMarker = '<i class="fas fa-map-marker-alt"> </i>'
   arrayBotones
   radius = 500;
+  avisado = false;
 
 
 
@@ -126,19 +127,22 @@ export class BotoneraComponent implements OnInit, AfterViewInit {
 
     if (radius == this.map.radius) return //si no ha habido cambio, no actualices
 
-    $(".alert").addClass('activa')
 
-    if (radius > 5000)
+    if (radius > 5000 && !this.avisado) {
+      $(".alert").addClass('activa')
+      this.avisado = true
+    }
 
-      this.map.radius = radius;
+
+    this.map.radius = radius;
     // this.map.radius = radius
-
 
     this.appStateService.setCargando(true)
     if (this.map.mostrarMarkers) this.markerService.redibujarMarkers(this.map, radius)
     this.markerService.removeCircle(this.map)
     if (this.map.mostrarRadio) this.markerService.addCircle(this.map, this.map.position, this.map.radius)
     this.appStateService.setCargando(false)
+    this.map.radius = radius;
 
 
 

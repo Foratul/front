@@ -31,6 +31,7 @@ export class Icono {
     culturaOcio
     templos
     homeless
+    cameraIcon
 
 
     constructor() {
@@ -135,15 +136,15 @@ export class Icono {
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
-            })
-        this.churchIcon = new L.Icon({
-            iconUrl: '../assets/churchIcon.png',
-            shadowUrl: '/assets/marker-shadow.png',
-            iconSize: [60, 66],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
+            }),
+            this.churchIcon = new L.Icon({
+                iconUrl: '../assets/churchIcon.png',
+                shadowUrl: '/assets/marker-shadow.png',
+                iconSize: [60, 66],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            }),
 
             this.bibliotecaIcon = new L.Icon({
                 iconUrl: '../assets/biblioteca2Icon.png',
@@ -262,20 +263,22 @@ export class Icono {
             }), this.homeless = new L.Icon({
                 iconUrl: '../assets/homeless.png',
                 shadowUrl: '/assets/marker-shadow.png',
+                iconSize: [40, 55],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            }), this.cameraIcon = new L.Icon({
+                iconUrl: '../assets/cameraIcon.jpg',
+                shadowUrl: '/assets/marker-shadow.png',
                 iconSize: [60, 66],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
+
             })
-
-
-
-
 
     }
 
+
 }
-
-
-
 

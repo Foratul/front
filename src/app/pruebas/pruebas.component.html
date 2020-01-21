@@ -20,8 +20,21 @@
     </div>
 
     <main>
+
+        <p>TENEMOS ESTA CADENA {{cadena}}</p>
+        <p *ngIf="resultado">TENEMOS ESTE RESULTADO {{resultado}}</p>
+
+        <button id="increment" (click)="increment()">Increment</button>
+
+        <div>Current Count: {{ count$ | async }}</div>
+
+        <button id="decrement" (click)="decrement()">Decrement</button>
+
+        <button id="reset" (click)="reset()">Reset Counter</button>
         <div cdkDrag class="content">
             <app-map></app-map>
         </div>
+
+
     </main>
 </div>

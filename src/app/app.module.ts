@@ -39,6 +39,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DetalleEventoComponent } from './eventos/detalle-evento/detalle-evento.component';
 import { LimiteTextoPipe } from './limite-texto.pipe';
 import { NguiMapModule } from '@ngui/map';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './counter.reducer';
+
+
 
 
 
@@ -71,7 +75,12 @@ import { NguiMapModule } from '@ngui/map';
     AppRoutingModule,
     HttpClientModule,
     NgbModule, DragDropModule,
-    FontAwesomeModule, ReactiveFormsModule, NguiMapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyB8uSF6f-AYEcUPTfui_zWOEMheiBcv7rI' })
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    NguiMapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyB8uSF6f-AYEcUPTfui_zWOEMheiBcv7rI' }),
+    StoreModule.forRoot({ count: counterReducer })
+
+
 
 
 
