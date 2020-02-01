@@ -19,7 +19,7 @@ export class AppStateService {
   app = {
     cargando: false, menu_desplegado: false, logueado: false, user: { username: null, ID: null }, developerMode: false, historial: [], mostrarMapa: false, mostrarAplicacion: true, extenderHeader: false, modal: {}, paginaDesplegable: "HOME", paginaPrevia: "MENU", arrayComentarios: null, map: null, eventosCercanos: true, paginaMain: "HOME", mapZero: "mapZero", mapID: "mapZero", mapaIniciado: false, arrayBotones: [],
     comentarioExitoso: new Subject<boolean>(),
-    comentarioExitoso$: null
+    comentarioExitoso$: null, localhost: true
   }
 
 
@@ -129,14 +129,14 @@ export class AppStateService {
 
   actualizaBotonera(map = this.app.map) {
     this.app.arrayBotones = [
-      { funcion: "toggleCargando()", texto: '<div class="inbisible spinner-border" role="status"></div>', tooltip: "alternaCarga", tooltipPos: "top", toggles: true, active: false },
-      { funcion: "limpiarMapa()", texto: this.iconoLimpiar, tooltip: "limpia el mapa", tooltipPos: "top", toggles: false, active: false, show: true },
-      { funcion: "limpiarRutas()", texto: "Limpiar Rutas", tooltip: "limpia rutas", tooltipPos: "top", toggles: false, active: false },
-      { funcion: "toggleMarkers()", texto: this.iconoMarker, tooltip: "muestra u oculta marcadores", tooltipPos: "top", toggles: true, active: map.mostrarMarkers, show: true },
-      { funcion: "toggleRadio()", texto: this.iconoRadio, tooltip: "alternar radio", tooltipPos: "top", toggles: true, active: map.mostrarRadio, show: true },
-      { funcion: "modoRutas()", texto: "Modo Rutas", tooltip: "modo rutas", tooltipPos: "top", toggles: true, active: false },
-      { funcion: "toggleBarrios()", texto: this.iconoBarrios, tooltip: "muestra u oculta distritos", tooltipPos: "top", toggles: true, active: map.mostrarBarrios, show: true }
-      , { funcion: "toggleMotor()", texto: this.iconoMotor, tooltip: "cambia motor de Mapas", tooltipPos: "top", toggles: true, active: true, show: true }]
+      { funcion: "toggleCargando()", texto: '<div class="inbisible spinner-border" role="status"></div>', tooltip: "alternaCarga", tooltipPos: "right", toggles: true, active: false },
+      { funcion: "limpiarMapa()", texto: this.iconoLimpiar, tooltip: "limpia el mapa", tooltipPos: "right", toggles: false, active: false, show: true },
+      { funcion: "limpiarRutas()", texto: "Limpiar Rutas", tooltip: "limpia rutas", tooltipPos: "right", toggles: false, active: false },
+      { funcion: "toggleMarkers()", texto: this.iconoMarker, tooltip: "muestra u oculta marcadores", tooltipPos: "right", toggles: true, active: map.mostrarMarkers, show: true },
+      { funcion: "toggleRadio()", texto: this.iconoRadio, tooltip: "alternar radio", tooltipPos: "right", toggles: true, active: map.mostrarRadio, show: true },
+      { funcion: "modoRutas()", texto: "Modo Rutas", tooltip: "modo rutas", tooltipPos: "right", toggles: true, active: false },
+      { funcion: "toggleBarrios()", texto: this.iconoBarrios, tooltip: "muestra u oculta distritos", tooltipPos: "right", toggles: true, active: map.mostrarBarrios, show: true }
+      , { funcion: "toggleMotor()", texto: this.iconoMotor, tooltip: "cambia motor de Mapas", tooltipPos: "right", toggles: true, active: true, show: true }]
   }
 
 }

@@ -1,14 +1,43 @@
+ 
+
 .botonera {
     
+     position:absolute;
+        top:100px;
+        left:10px;
+        width:50px;
+        z-index:1035;
 /* z-index:5; */
 
 }
+.control{position:absolute;
+    left:-40px;
+    bottom:175px;
+    margin:0 auto;
+    z-index:1035;
+    transform:rotate(-90DEG);
+    z-index:1035;
+    display:inline-block;
+}
+.custom-range {width:100px;}
+ 
+.radius{display:inline }
 
+.texto{
+    font-size:1em;
+    font-weight:900;
+    display:inline-block;
+    transform:rotate(90DEG)}
+    
+    
 .visible{position:absolute;
     top:-100%}
 
-    button {border-radius:15px;}
+    button {border-radius:15px;
+    display:block}
+
 .alert{top:-100%;
      
 position:absolute;}
-.alert.activa{top:0;}
+.alert.activa{top:0;
+z-index:2000;}

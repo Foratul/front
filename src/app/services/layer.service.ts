@@ -18,7 +18,10 @@ export class LayerService {
     local: './assets/tiles/{z}/{x}/{y}.png'
 
   }
-  arrayMotores = [this.tileLayer.openStreet, this.tileLayer.mapBox, this.tileLayer.openTopoMap, this.tileLayer.cycloOSM, this.tileLayer.hydda, this.tileLayer.local]
+  arrayMotores = [this.tileLayer.openStreet, this.tileLayer.mapBox, this.tileLayer.openTopoMap, this.tileLayer.cycloOSM, this.tileLayer.hydda,
+    // this.tileLayer.local NOT WORKING AS EXPECTED
+
+  ]
   tilesActual
   motorActual = 0
 

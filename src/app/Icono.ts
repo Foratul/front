@@ -268,7 +268,7 @@ export class Icono {
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             }), this.cameraIcon = new L.Icon({
-                iconUrl: '../assets/cameraIcon.jpg',
+                iconUrl: '../assets/cameraIcon.png',
                 shadowUrl: '/assets/marker-shadow.png',
                 iconSize: [60, 66],
                 iconAnchor: [12, 41],

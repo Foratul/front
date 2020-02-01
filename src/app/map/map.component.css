@@ -24,13 +24,13 @@ width:100%;
  /* .busy.cargando.visible{display:block;} */
 
 .map-container {
-       /* position: absolute;   */
+       position: relative;   
  width:100%;
-    top:66px;
+    top:0;
     left: 0;
     right: 0;
     bottom: 0;
-     height: 75vh;; 
+     height: 90vh;; 
    }
  
 
@@ -58,6 +58,8 @@ left:50%;}
 /* #map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div{} */
  
 /* #generate{z-index:9999;} */
+
+
 
 .RAJOY{color:red !important;
   background-color:yellow;}

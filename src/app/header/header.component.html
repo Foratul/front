@@ -4,6 +4,12 @@
         <!-- <button (click)="mostrarMapa()">M</button>
         <button (click)="actualizarBotonera()">BOTONERA</button> -->
         <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
+        <button (click)="app.localhost=!app.localhost">
+            <span *ngIf="app.localhost">Modo localhost</span>
+            <span *ngIf="!app.localhost">Modo produccion</span>
+
+        </button>
+
         <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" type="button"
             (click)="menuHeader()" [attr.aria-expanded]="!app.extenderHeader" aria-expanded="false"
             aria-label="Toggle navigation">

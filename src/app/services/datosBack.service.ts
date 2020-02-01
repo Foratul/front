@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AppStateService } from './appstate.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class datosBackService {
+  app
+  constructor(private http: HttpClient,
+    private appState: AppStateService) {
 
-  constructor(private http: HttpClient) { }
+
+  }
 
   corsPrefix: string = "https://cors-anywhere.herokuapp.com/"
   // url: string = "https://datos.madrid.es/egob/catalogo/206717-0-agenda-eventos-bibliotecas.json"
 
-  urlApi = "http://localhost:3000/api/"
 
+  urlApi = (this.appState.getAppState().localhost) ? "http://localhost:3000/api/" : "https://neoland2.herokuapp.com/api"
 
   getDistritosLayer(): Promise<any> {
     let url = "./assets/Distritos_de_Madrid.geojson"
@@ -31,6 +36,7 @@ export class datosBackService {
     return this.http.get(url).toPromise()
 
   }
+
 
   enviarComentario(comentario) {
     console.log("datos service envia comentario")
@@ -71,6 +77,8 @@ export class datosBackService {
   }
 
   getEventosByAnyFields(objeto): Promise<any> {
+    console.log(this.urlApi)
+
 
     return this.http.post(this.urlApi + "eventos/buscador", objeto).toPromise()
 
@@ -95,9 +103,7 @@ export class datosBackService {
     return this.http.get("https://maps.google.com/maps/api/geocode/json?" + direccion + "&key=AIzaSyB9CobDD06h6vgzmUpmoKIpCgSXc43B7B0").toPromise()
   }
 
-  reenviarMail(objeto)
-
-  {return this.http.post(this.urlApi+"usuarios/reenviarMail" , objeto).toPromise()}
+  reenviarMail(objeto) { return this.http.post(this.urlApi + "usuarios/reenviarMail", objeto).toPromise() }
 }
 
 

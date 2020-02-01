@@ -1,7 +1,5 @@
 <div class="envoltorioMapa">
-    <div class="botonera">
-        <app-botonera *ngIf="app.map"></app-botonera>
-    </div>
+
 
     <!-- <div class="mapcontainer">
         <div class="busy cargando" *ngIf="app.cargando" [ngClass]="{'visible': app.cargando}">
@@ -9,6 +7,9 @@
             </div>
         </div> -->
     <div class="map-container">
+        <div class="botonera">
+            <app-botonera *ngIf="app.map"></app-botonera>
+        </div>
         <!-- [ngClass]="{'cargando': app.cargando}"> -->
         <div class="map-frame">
             <div *ngIf="!mapaIniciado" id="mapZero"></div>

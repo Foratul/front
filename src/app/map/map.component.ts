@@ -358,9 +358,10 @@ export class MapComponent implements OnInit, AfterViewInit {
       .then((results) => {
         console.log("se ha buscado eventos por " + buscarCadena + "han llegado ", results.length + " resultados")
 
-        this.eventosService.setEventosSeleccionados = this.eventosService.getEventosSeleccionados() + results
+        this.eventosService.setEventosSeleccionados(this.eventosService.getEventosSeleccionados().concat(results))
         this.markerService.addMarkers(this.app.map, results, 10000000)
       })
+      .catch((reason) => { console.log(reason) })
   }
   eventosGlobales() {
     console.log("Globales")
