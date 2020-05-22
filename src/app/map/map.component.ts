@@ -297,7 +297,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   }
 
-  setMyPosition(posicion) {
+  setMyPosition(posicion = this.map.myPosition) {
 
     setTimeout(() => {
       this.mostrarMenuDesplegable = false

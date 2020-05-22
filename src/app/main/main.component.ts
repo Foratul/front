@@ -33,6 +33,8 @@ export class MainComponent implements OnInit {
 
   }
 
+  comentarioExitoso() { }
+
   ngOnInit() {
 
 

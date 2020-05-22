@@ -67,4 +67,6 @@ export class MenuComponent implements OnInit {
 
   }
 
+  comentarioExitoso() { }
+
 }

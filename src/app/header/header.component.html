@@ -1,47 +1,47 @@
 <div class="wrapper ">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <span (click)="panelIzquierdo()" class="navbar-brand">X</span>
-        <!-- <button (click)="mostrarMapa()">M</button>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <span (click)="panelIzquierdo()" class="navbar-brand">X</span>
+    <!-- <button (click)="mostrarMapa()">M</button>
         <button (click)="actualizarBotonera()">BOTONERA</button> -->
-        <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
-        <button (click)="app.localhost=!app.localhost">
-            <span *ngIf="app.localhost">Modo localhost</span>
-            <span *ngIf="!app.localhost">Modo produccion</span>
+    <button (click)="app.mostrarAplicacion=!app.mostrarAplicacion">A</button>
+    <button (click)="app.localhost=!app.localhost">
+      <span *ngIf="app.localhost; else notLocalhost">Modo localhost</span>
+      <ng-template #notLocalhost><span *ngIf="!app.localhost">Modo produccion</span></ng-template>
 
-        </button>
+    </button>
 
-        <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" type="button"
-            (click)="menuHeader()" [attr.aria-expanded]="!app.extenderHeader" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="!app.extenderHeader">
-            <ul class="navbar-nav ml-auto">
-
-                <li class="enlace text-dark" (click)="navegarAMapa()"> Mapa</li>
-                <li data-toggle="modal" data-target="#modalHeader" class="enlace" *ngIf="!app.logueado"
-                    (click)="registerClick()">Registrarse </li>
-                <li *ngIf="!app.logueado" class="enlace">Login <i class="text-dark enlace redondo fas fa-sign-in-alt"
-                        (click)="loginClick()" data-toggle="modal" data-target="#modalHeader"></i>
-                </li>
-                <li class="text-dark" *ngIf="app.logueado">{{app.user.username}} <img
-                        src="https://cdn3.iconfinder.com/data/icons/fillies-small/64/id-card-512.png"></li>
-                <li *ngIf="app.logueado" class="enlace">Logout <i class="enlace redondo fas fa-sign-out-alt"
-                        (click)="logoutClick()" data-toggle="modal" data-target="#modalHeader"></i></li>
+    <button class="navbar-toggler" type="button" data-target="#navbarSupportedContent" type="button"
+      (click)="menuHeader()" [attr.aria-expanded]="!app.extenderHeader" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
 
-                <li class="enlace redondo" [routerLink]="['/eventos']">Eventos</li>
-                <li class="nav-item active">
-                    <a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i> <span
-                            class="sr-only">(current)</span></a>
-                </li>
-                <li *ngIf="false" class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <!-- <li class="nav-item dropdown">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="!app.extenderHeader">
+      <ul class="navbar-nav ml-auto">
+
+        <li class="enlace text-dark" (click)="navegarAMapa()" [routerLink]="['/home']"> Mapa</li>
+        <li data-toggle="modal" data-target="#modalHeader" class="enlace" *ngIf="!app.logueado"
+          (click)="registerClick()">Registrarse </li>
+        <li *ngIf="!app.logueado" class="enlace">Login <i class="text-dark enlace redondo fas fa-sign-in-alt"
+            (click)="loginClick()" data-toggle="modal" data-target="#modalHeader"></i>
+        </li>
+        <li class="text-dark" *ngIf="app.logueado">{{app.user.username}} <img
+            src="https://cdn3.iconfinder.com/data/icons/fillies-small/64/id-card-512.png"></li>
+        <li *ngIf="app.logueado" class="enlace">Logout <i class="enlace redondo fas fa-sign-out-alt"
+            (click)="logoutClick()" data-toggle="modal" data-target="#modalHeader"></i></li>
+
+
+        <li class="enlace redondo" [routerLink]="['/eventos']">Eventos</li>
+        <li class="nav-item active">
+          <a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i> <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li *ngIf="false" class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Dropdown
@@ -53,63 +53,61 @@
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
                 </li> -->
-                <li [routerLink]="['/pruebas']">PRUEBAS</li>
-                <li *ngIf=" false" class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <div class="buscadorHeader">
-                <form #formulario="ngForm" class=" form-inline my-2 my-lg-0" (ngSubmit)="buscadorSimple()">
-                    <input [(ngModel)]="busquedaSimple" name="busqueda" class="form-control mr-sm-2" type="search"
-                        placeholder="Buscar" aria-label="Search">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0"><i
-                            class="fas fa-search"></i></button>
-                    <button class="btn btn-outline-success my-2 my-sm-0"><i (click)="buscadorClick()"
-                            data-toggle="modal" data-target="#modalHeader"><i
-                                class="fas fa-search-plus"></i></i></button>
-                </form>
+        <li [routerLink]="['/pruebas']">PRUEBAS</li>
+        <li *ngIf=" false" class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+      <div class="buscadorHeader">
+        <form #formulario="ngForm" class=" form-inline my-2 my-lg-0" (ngSubmit)="buscadorSimple()">
+          <input [(ngModel)]="busquedaSimple" name="busqueda" class="form-control mr-sm-2" type="search"
+            placeholder="Buscar" aria-label="Search">
+          <button type="submit" class="btn btn-outline-success my-2 my-sm-0"><i class="fas fa-search"></i></button>
+          <button class="btn btn-outline-success my-2 my-sm-0"><i (click)="buscadorClick()" data-toggle="modal"
+              data-target="#modalHeader"><i class="fas fa-search-plus"></i></i></button>
+        </form>
 
-            </div>
-        </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </div>
 
 <div class="modal fade myContainer" id="modalHeader" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div cdkDrag id="arrastrable" class="modal-content">
-            <div class="modal-header container-fluid">
-                <h5 class="modal-title row ml-5" id="exampleModalLongTitle">
-                    <span *ngIf="app.modal.insertComentario">Añadir Comentario</span>
-                    <span *ngIf="app.modal.Buscador">Buscar</span>
-                    <span *ngIf="!app.modal.insertComentario  && !app.modal.Buscador"> <span *ngIf="!app.logueado"
-                            id="modal0" class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 0}"
-                            (click)="loginClick()">Login</span>
-                        <span id="modal1" class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 1}"
-                            (click)="registerClick()">Registro</span>
-                        <!-- <span id="modal2" class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 2}"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div cdkDrag id="arrastrable" class="modal-content">
+      <div class="modal-header container-fluid">
+        <h5 class="modal-title row ml-5" id="exampleModalLongTitle">
+          <span *ngIf="app.modal.insertComentario">Añadir Comentario</span>
+          <span *ngIf="app.modal.Buscador">Buscar</span>
+          <span *ngIf="!app.modal.insertComentario  && !app.modal.Buscador"> <span *ngIf="!app.logueado" id="modal0"
+              class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 0}"
+              (click)="loginClick()">Login</span>
+            <span id="modal1" class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 1}"
+              (click)="registerClick()">Registro</span>
+            <!-- <span id="modal2" class="enlace textoModal col-4" [ngClass]="{modalActivo : modalActivo == 2}"
                             (click)="buscadorClick()">Buscar</span> -->
-                    </span>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- <app-insert-comentario *ngIf="modal"></app-insert-comentario> -->
+          </span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <app-insert-comentario *ngIf="modal"></app-insert-comentario> -->
 
-                <app-login *ngIf="app.modal.Login"></app-login>
-                <app-logout *ngIf="app.modal.Logout"></app-logout>
-                <app-registrar *ngIf="app.modal.Register"></app-registrar>
-                <app-buscador *ngIf="app.modal.Buscador"></app-buscador>
-                <app-insert-comentario *ngIf="app.modal.insertComentario" (comentarioExitoso)="comentarioExitoso()">
-                </app-insert-comentario>
+        <app-login *ngIf="app.modal.Login"></app-login>
+        <app-logout *ngIf="app.modal.Logout"></app-logout>
+        <app-registrar *ngIf="app.modal.Register"></app-registrar>
+        <app-buscador *ngIf="app.modal.Buscador"></app-buscador>
+        <app-insert-comentario *ngIf="app.modal.insertComentario" (comentarioExitoso)="comentarioExitoso()">
+        </app-insert-comentario>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
     </div>
+  </div>
 </div>

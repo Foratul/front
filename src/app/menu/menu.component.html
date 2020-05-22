@@ -1,9 +1,9 @@
 <div class="folio">
-    <span class="cerrar"> <span><i (click)="cerrarMenu()" class="fas fa-times"></i> </span></span>
-    <div [ngSwitch]="app.paginaDesplegable">
-        <app-listar-comentarios *ngSwitchCase="'listarComentarios'"></app-listar-comentarios>
-        <app-detalle-evento *ngSwitchCase="'detalleEvento'"></app-detalle-evento>
-    </div>
+  <span class="cerrar"> <span><i (click)="cerrarMenu()" class="fas fa-times"></i> </span></span>
+  <div [ngSwitch]="app.paginaDesplegable">
+    <app-listar-comentarios *ngSwitchCase="'listarComentarios'"></app-listar-comentarios>
+    <app-detalle-evento *ngSwitchCase="'detalleEvento'"></app-detalle-evento>
+  </div>
 
 </div>
 
@@ -30,26 +30,26 @@
 </div> -->
 
 <div class="modal fade myContainer" id="exampleModalCenterMenu" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Agregar opinón</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <span *ngIf="modal">
-                    <app-insert-comentario (comentarioExitoso)="comentarioExitoso()"></app-insert-comentario>
-                </span>
-                <!-- <app-login *ngIf="modal?.loginScreen"></app-login> -->
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Agregar opinón</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span *ngIf="modal">
+          <app-insert-comentario (comentarioExitoso)="comentarioExitoso()"></app-insert-comentario>
+        </span>
+        <!-- <app-login *ngIf="modal?.loginScreen"></app-login> -->
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
     </div>
+  </div>
 </div>

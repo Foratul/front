@@ -172,5 +172,8 @@ export class DetalleEventoComponent implements OnInit {
 
 
   mostrarGlobales(evento) { }
+  mostrarCercanos(evento) { }
+  onMarkerInit($event) { }
+
 
 }

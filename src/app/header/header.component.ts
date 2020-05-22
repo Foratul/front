@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit {
 
     )
   }
-
+  comentarioExitoso() { }
 
   loginClick() {
     this.modalActivo = 0;
