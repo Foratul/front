@@ -1,0 +1,96 @@
+<div class="eventos container no-padding mt-1 no-gutters">
+
+    <div *ngIf="arrayEventosVisibles && arrayEventos.length>0" class="cabecera">
+        <div class="roboto fondoGrey anchoVisible">
+            <p>Mostrando eventos {{1+ (paginaActual-1)*porPagina}} al {{paginaActual*porPagina}} de
+                {{arrayEventos.length}}
+            </p>
+            <button class="redondo50 enlace" (click)="botonPagina(-1)">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            {{paginaActual}}
+            <button class="redondo50 enlace" (click)="botonPagina(+1)">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <p>Resultados por página</p>
+
+            <select name="porPagina" id="paginar" [(ngModel)]="porPagina" (change)="actualizarEventosVisibles()">
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="48">48</option>
+                <option value="96">96</option>
+            </select>
+            <select name="ordenarPor" id="ordenar" [(ngModel)]="ordenar" (change)="ordenarPor()">
+                <option value="ABC">Alfabéticamente</option>
+                <option value="SCORE">Puntuación</option>
+                <option value="VIEWS">Visitas en la página</option>
+                <option value="RANDOM">Aleatorio</option>
+            </select>
+            <button (click)="ascendenteOrden()" [innerHTML]=iconoAscendente></button>
+            <button (click)="toggleCercanos()">{{criterioCercania}}</button>
+        </div>
+
+
+        <div class="listado ml-2">
+            <h3 *ngIf="!arrayEventosVisibles ||  !arrayEventos.length>0">No hay eventos seleccionados</h3>
+            <span *ngIf="arrayEventosVisibles">
+                <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
+                    <div cdkDrag *ngFor="let evento of arrayEventosVisibles"
+                        class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="recuadro">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title texto">{{evento.nombre}}
+                                        <a (click)="detalleEvento(evento)"><i
+                                                class="enlace fas fa-info-circle"></i></a><a *ngIf="evento.link"
+                                            title="enlace oficial" target="_blank" href={{evento.link}}><i
+                                                class="fas fa-external-link-alt"></i></a>
+                                        <a *ngIf="!evento.link && evento.relation" title="enlace oficial"
+                                            target="_blank" href={{evento.relation}}><i
+                                                class="fas fa-external-link-alt"></i></a>
+                                    </h5>
+                                    <span *ngIf="!evento.valoraciones">
+                                        <p><small class="text-muted">Se el primero en valorarlo </small></p>
+                                    </span>
+                                    <span data-toggle="tooltip" tooltip="Añadir Comentario" attr.data-placement="bottom"
+                                        title="Comentar"><button (click)="addComentario(evento)" type="button"
+                                            class="redondo comentar btn btn-primary" data-toggle="modal"
+                                            data-target="#modalHeader">
+                                            <i class="fas fa-comment-dots"></i> </button>
+                                    </span>
+                                    <span class="valoraciones">
+                                        <div *ngIf="evento.valoraciones" (click)="verComentarios(evento.ID)">Ver
+                                            {{evento.votantes}} comentario<span *ngIf="evento.votantes>1">s</span>
+                                        </div>
+                                    </span>
+                                    <span class="orange" *ngIf="evento.valoraciones" [innerHTML]="evento.valoraciones">
+                                    </span>
+                                    <img src="{{evento.imagen}}" class="card-img" alt="...">
+                                    <div class="cuadro">
+                                        <p *ngIf="evento.descripcion" class="card-text">
+                                            {{evento.descripcion | limiteTexto : 255}}
+                                        </p>
+                                        <p *ngIf="!evento.descripcion && evento.descripcionScrap != 'null'">
+                                            {{evento.descripcionScrap | limiteTexto : 255}}
+                                        </p>
+                                        <p class="card-text"><small class="text-muted"></small>
+                                        </p>
+                                    </div>
+                                    <div>
+
+                                        <div cdkDragHandle class="esquina"><i class="fas fa-arrows-alt"></i></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            <!--  -->
+
+
+                            <!-- <app-modal *ngIf="app.modal" [modal]="{'insertComentario' : true}"></app-modal> -->

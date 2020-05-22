@@ -1,0 +1,32 @@
+<div class="container no-gutters no-padding">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="buscador ml-5">
+                <form [formGroup]="formulario" (ngSubmit)="onSubmit()" novalidate class="form-group">
+                    <label for="nombre">NOMBRE
+                        <input type="search" class="form-control" formControlName="nombre">
+                    </label>
+                    <label for="number" maxlength="5">CODIGO POSTAL
+                        <input type="search" class="form-control" formControlName="codigoPostal">
+                    </label>
+                    <button class="btn btn-light" type="button" (click)="toggleBuscarPorDistrito()">Buscar por
+                        distrito</button>
+                    <select class="form-control col-4" name="distrito" *ngIf="buscarPorDistrito"
+                        formControlName="distrito">
+                        <option *ngFor="let distrito of arrayDistritos" [value]="distrito">
+                            {{distrito}}
+                        </option>
+                    </select>
+                    <label for="ENVIAR"><input type="submit" title="Buscar" class=" form-control btn btn-primary"
+                            value="Buscar">
+                    </label>
+                </form>
+            </div>
+            <span *ngIf="results.existen">
+                Se han encontrado {{results.contenido.length}} resultados, va a ser redirigido al listado
+            </span>
+
+        </div>
+    </div>
+</div>

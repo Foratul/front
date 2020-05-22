@@ -1,0 +1,31 @@
+<div class="alert alert-warning alert-dismissible fade show col-12" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{alerta}}
+</div>
+<div>
+    <h3>{{evento.nombre}}</h3>
+    <div class="formulario form-group col-12">
+        <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario.value)">
+            <input type="hidden" name="eventoID" value="3" [(ngModel)]=evento.ID>
+            <input type="hidden" name="usuarioID" value="3" [(ngModel)]=app.user.ID>
+
+
+            <label>Resumen de la opinión</label>
+            <input type="text" class="form-control" name="titulo" ngModel>
+            <label>¿Qué te ha parecido?</label>
+            <textarea class="form-control  md-textarea" rows="4" name="comentario" ngModel></textarea>
+            <label>Valoracion</label>
+            <i *ngFor="let estrella of arrayEstrellas , let i =index" [ngClass]="{'active' : estrella.active}"
+                (mouseover)="estrellaClicada(i)" (click)="estrellaClicada(i)" class={{estrella.icono}}></i>
+            <span>¿Recomendarías esto?</span> <i class="enlace fas fa-thumbs-up" (click)="thumbsClick()"
+                [ngClass]="{'clicado' : recomendable}"></i>
+            <div class="text-center">
+                <input type="submit" value="enviar" class="col-4 col-xs-12 col-sm-10 btn btn-block btn-primary">
+            </div>
+
+        </form>
+
+    </div>
+</div>

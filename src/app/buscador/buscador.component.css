@@ -1,0 +1,11 @@
+
+.buscador{
+position:absolute;
+display:inline-block;
+z-index:3;
+
+}
+
+.resultados {
+    margin-top:100px;
+    position:relative}

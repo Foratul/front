@@ -1,0 +1,29 @@
+<div class="alert alert-warning alert-dismissible fade show col-12" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{alerta}}
+    <div class="enlace" *ngIf="unactive" (click)="reenviarActivacion()">Haz click para volver a recibir el mensaje de
+        activación</div>
+</div>
+<div class="form-group col-12 formulario">
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario.value)">
+        <div class="form-group">
+            <label>
+                <strong>Email</strong>
+            </label>
+            <input type="text" class="form-control col-10" name="email" ngModel>
+            <label>
+                <strong>Password</strong>
+            </label>
+            <div class="input-group" id="show_hide_password">
+                <input class="form-control" type="password" name="password" ngModel>
+                <div class="input-group-addon">
+                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Entrar" class="float-right btn btn-primary">
+
+    </form>
+</div>

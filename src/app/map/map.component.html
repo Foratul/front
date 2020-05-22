@@ -1,0 +1,44 @@
+<div class="envoltorioMapa">
+
+
+    <!-- <div class="mapcontainer">
+        <div class="busy cargando" *ngIf="app.cargando" [ngClass]="{'visible': app.cargando}">
+            <div class="spinner-border" role="status">
+            </div>
+        </div> -->
+    <div class="map-container">
+        <div class="botonera">
+            <app-botonera *ngIf="app.map"></app-botonera>
+        </div>
+        <!-- [ngClass]="{'cargando': app.cargando}"> -->
+        <div class="map-frame">
+            <div *ngIf="!mapaIniciado" id="mapZero"></div>
+            <!-- <div id="mapObjeto"></div> -->
+            <!-- <div id="distance">
+                </div> -->
+
+        </div>
+    </div>
+
+</div>
+
+<!-- //ESTO LO HUBIERA GENERADO DINAMICAMENTE; PERO LUEGO NO HAY DIOS DE BINDEAR EVENTO A FUNCION -->
+<!-- UN NG IF FUNSIONA MAL; TIENE DELAY-->
+<div id="menuContextual" class="inBisible">
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            {{nombreMenu}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a *ngIf="app.map  &&app.map.mostrarBarrios" (click)="eventosDistrito()" class="enlace dropdown-item">Puntos
+                de interés en {{app.map.lastBarrio}}</a>
+            <a (click)="eventosGlobales()" class="enlace dropdown-item">Buscar
+                sin restricción de distrito</a>
+            <a (click)="generarRuta()" class="enlace dropdown-item">Trazar ruta hasta aquí</a>
+            <a (click)="setMyPosition()" class="enlace dropdown-item">Establecer como mi
+                posición</a>
+        </div>
+    </div>
+</div>

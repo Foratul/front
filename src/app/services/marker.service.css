@@ -1,0 +1,12 @@
+.expandido{
+    height:500px;
+    transition-duration:1s;
+}
+
+.PopUp{background-color:red;
+color:green;}
+
+.leaflet-popup-content-wrapper{background-color:red !important}
+
+.leaflet-routing-collapse-btn:after {
+    content: "A" !important;}

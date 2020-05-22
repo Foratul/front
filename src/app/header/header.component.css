@@ -1,0 +1,49 @@
+.wrapper{
+    
+     border:2px solid black;
+   width:100%;
+ 
+background-color:lightgray;}
+
+
+.navbar-collapse{transition-duration:2s;}
+/* .menu{
+  position:fixed;
+  clear:both;
+top:0px;
+width:200vw;
+height:100%;
+right:99%;
+background-color:black;
+transition:1.2s;
+z-index:19999;
+
+} */
+
+.textoModal{color:grey;}
+
+.modalActivo{color:black;transform: scale(1.2);}
+
+
+.login a {background: url("https://s.libertaddigital.com/images/svg/usuario.svg") no-repeat center;
+  
+  overflow:hidden;
+  width: .9em;
+text-indent:300%}
+
+
+.buscadorHeader.active{
+position:absolute;
+top:0;
+left:0;
+right:0;
+  width:100vw;
+  transition-delay: 0.5;
+  z-index:200;
+}
+
+li {margin-left:10px;
+  border : 0;
+  outline : none;}
+
+li img{width:30px}

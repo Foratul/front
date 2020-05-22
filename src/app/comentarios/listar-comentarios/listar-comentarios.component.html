@@ -1,0 +1,30 @@
+<ul cdkDropList (cdkDropListDropped)="drop($event)">
+
+    <li cdkDrag class="cuadro" *ngFor="let comentario of arrayComentarios">
+        <div class="row">
+            <div class="col-md-10">
+                <h2> <span *ngIf="comentario.tipoEvento">Comentario del {{comentario.tipoEvento}}</span>
+                    {{comentario.eventoNombre}}</h2>
+                <div class="row">
+                    <div class="col-8">
+                        <h3>{{comentario.titulo}}</h3>
+                    </div>
+                    <div class="col-4"><span class="orange" innerHTML={{comentario.estrellas}}></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-12">{{comentario.comentario}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-12"><small> Publicado por
+                            <span *ngIf="comentario.autor">{{comentario.autor}}</span>
+                            {{comentario.fecha | date: 'dd/MM/yyyy'}}}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 avatar  .d-none .d-md-block ">
+                <img class="card-img .img-responsive .img-rounded"
+                    src="https://cdn3.iconfinder.com/data/icons/fillies-small/64/id-card-512.png">
+            </div>
+        </div>
+    </li>
+</ul>

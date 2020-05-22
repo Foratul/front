@@ -1,0 +1,63 @@
+*{padding:10px;}
+
+
+html {
+  scrollbar-face-color: #646464;
+  scrollbar-base-color: #646464;
+  scrollbar-3dlight-color: #646464;
+  scrollbar-highlight-color: #646464;
+  scrollbar-track-color: #000;
+  scrollbar-arrow-color: #000;
+  scrollbar-shadow-color: #646464;
+  scrollbar-dark-shadow-color: #646464;
+}
+
+::-webkit-scrollbar { width: 12px; height: 3px;}
+::-webkit-scrollbar-button {  background-color: #666; }
+::-webkit-scrollbar-track {  background-color: #646464;}
+::-webkit-scrollbar-track-piece { background-color: #000;}
+::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #646464; }
+::-webkit-resizer { background-color: #666;}
+
+ul{margin:0 , auto}
+
+li {
+    font-size:20px;
+color:white;
+
+
+
+}
+
+
+.folio{position:absolute; 
+  transform: translateX(0);
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+background-color: #F8F8F8;
+overflow:auto;}
+
+.cerrar{position:fixed;
+  width:50px;
+  height:50px;
+top:10 x;
+right:10px;
+margin-left: 90%;
+
+transition-duration:400ms;}
+
+
+.fas.fa-times:hover{transform:rotate(180DEG);
+  transition-duration:400ms;}
+
+
+#listado{
+  /* max-width:300px; */
+  height:80%;
+  overflow:auto;}
+
+  body {background: #333; height: 1500px;}
+

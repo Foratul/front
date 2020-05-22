@@ -1,0 +1,82 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+:root{
+
+    --fuentePrimaria : 'Montserrat', sans-serif;
+    --fuenteSecundaria : 'Roboto', sans-serif;
+
+}
+
+html, body {
+    box-sizing:border-box;
+    margin:0 auto;
+
+}
+
+.RAJOY{color:red !important;
+    background-color:yellow;}
+ 
+
+.anchoVisible{width:100vw;}
+
+.orange{color:orange}
+
+.enlace {cursor: pointer;}
+
+.redondo50 {border-radius:50%;}
+
+.borroso {filter:blur(1px)}
+
+.fondoGrey{background-color:lightslategray}
+ 
+.enlace:hover{transform:scale(1.1);}
+button:focus { outline: none; }
+
+button .enlace{outline:none}
+.roboto { font-family: 'Roboto', sans-serif; }
+.courier {    font-family: courier;    }
+.popup-tip {
+    opacity:0.9;
+background-color:#D3D3D3;}
+
+
+.recuadro{  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+ .inBisible{
+
+        position:absolute;
+        top:-200%;
+    
+    }
+
+.displayNone{display:none;} 
+
+
+
+.awesome-marker svg {
+    color: #333;
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 14px;
+  }
+
+
+.big {font-size:3em}
+
+
+    .modal .modal-dialog.modal-fs {
+        width: 100%;
+        margin: 0 auto;
+         height: 80%;
+      }
+      .modal .modal-dialog.modal-fs .modal-content {
+        
+        height: 80%;
+      }
+
+      .leaflet-routing-collapse-btn:after {
+         color:black;
+    } 

@@ -1,0 +1,34 @@
+<div id="main">
+    <div *ngIf="app.cargando" class="cargando">
+        <div class="spinner-border" role="status">
+        </div>
+    </div>
+    <div class="col-12 no-gutters nopadding header">
+        <app-header></app-header>
+    </div>
+
+    <div class="container anchoVisible animada aplicacion col-12 no-gutters nopadding "
+        [ngClass]="{'inBisible' : !app.mostrarAplicacion}">
+        <div>
+            <div class="menu col-12" (mouseenter)="app.menu_desplegado=true"
+                [ngClass]="{'desplegado' : app.menu_desplegado}">
+                <app-menu></app-menu>
+            </div>
+
+            <app-map [mapID]="'mapZero'" class="mobile" *ngIf="datosCargados"
+                [ngClass]="{'inBisible' : !app.mostrarMapa  ,  'borroso' : app.menu_desplegado} "></app-map>
+            <router-outlet></router-outlet>
+
+            <div [ngSwitch]="app.paginaMain" [ngClass]="{'borroso' : app.menu_desplegado}">
+                <app-listar-eventos (comentarioExitoso)="comentarioExitoso()" *ngSwitchCase="'listarEventos'">
+                </app-listar-eventos>
+                <app-home *ngSwitchCase="'HOME'"></app-home>
+                <app-buscador *ngSwitchCase="'buscador'"></app-buscador>
+
+                <!-- <app-map *ngSwitchCase="'MAP'" [mapID]="'mapObjeto'"></app-map> -->
+
+
+            </div>
+        </div>
+
+    </div>

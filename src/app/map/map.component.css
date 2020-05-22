@@ -1,0 +1,75 @@
+ 
+ .expandido{
+  height:500px !important;
+  transition-duration:1s;
+}
+
+.envoltorioMapa{margin:0 auto;
+/* border: 2px solid red; */
+height:100%;
+width:100%;
+;}
+
+
+.busy.cargando{
+   display:none;
+  opacity:0.5;
+  position:absolute;
+  top:45%;
+  left:55%;
+  z-index:10000;
+ 
+ }
+
+ /* .busy.cargando.visible{display:block;} */
+
+.map-container {
+       position: relative;   
+ width:100%;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+     height: 90vh;; 
+   }
+ 
+
+  .map-class .cargando{filter:blur(2px)}
+  
+  .map-frame {
+    width:100%;
+    border: 2px solid black;
+    height: 100%;
+    /* margin:0 auto; */
+
+  }
+  .leaflet-pane {z-index:150 !important;}
+  
+  #mapObjeto{height:100%; z-index:100}
+
+  #mapZero{height:100%;
+  width:99vw}
+
+ 
+  .loading{position:relative;
+  top:50%;
+left:50%;}
+
+/* #map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div{} */
+ 
+/* #generate{z-index:9999;} */
+
+
+
+.RAJOY{color:red !important;
+  background-color:yellow;}
+
+
+  .invisible div{
+    
+    /* position:absolute;
+  top:-100% */
+display:none;
+
+}
+

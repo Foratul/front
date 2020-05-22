@@ -1,0 +1,12 @@
+.enlace:hover{text-decoration: underline;
+    text-decoration-color: black;}
+
+  
+
+    #street-view {
+        height: 100%;
+      }
+
+      #sv {width: 50%; height: 300px} 
+      
+      ngui-map {width: 50%; float: left}
