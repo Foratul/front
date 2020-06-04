@@ -34,6 +34,7 @@
     "angular": "^1.7.9",
     "bootstrap": "^4.5.0",
     "cities.json": "^1.1.5",
+    "firebase": "^7.14.6",
     "firebase-cli": "^1.2.0",
     "g": "^2.0.1",
     "graphhopper-js-api-client": "^0.13.0",

@@ -16,7 +16,7 @@ import { BuscadorComponent } from './buscador/buscador.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: "home", component: HomeComponent },
   { path: "pruebas", component: PruebasComponent, canActivate: [GuardiaGuard] },
   { path: "comentar", component: InsertComentarioComponent, canActivate: [GuardiaGuard], canLoad: [GuardiaGuard] },

@@ -21,7 +21,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="!app.extenderHeader">
       <ul class="navbar-nav ml-auto">
 
-        <li class="enlace text-dark" (click)="navegarAMapa()" [routerLink]="['/home']"> Mapa</li>
+        <li class="enlace text-dark" (click)="navegarAMapa()" [routerLink]="['/']"> Mapa</li>
         <li data-toggle="modal" data-target="#modalHeader" class="enlace" *ngIf="!app.logueado"
           (click)="registerClick()">Registrarse </li>
         <li *ngIf="!app.logueado" class="enlace">Login <i class="text-dark enlace redondo fas fa-sign-in-alt"

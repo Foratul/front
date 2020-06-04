@@ -92,10 +92,10 @@ export class AppStateService {
   getHistorial() { return this.app.historial[this.app.historial.length - 2] }
 
   getMostrarMapa() { return this.app.mostrarMapa }
-  setMostrarMapa(s) {
-    console.log("han llamado a mostrarMapa", s)
+  setMostrarMapa(showMap : boolean) {
+    console.log("han llamado a mostrarMapa", showMap)
     let self = this
-    setTimeout(() => { self.app.mostrarMapa = s }, 1) // esta hecho asi para evitar "expression has changed after it was checked" , regula directivas estructurales y no funcionaba en ninguna parte del ciclo de vida de los  xInit
+    setTimeout(() => { self.app.mostrarMapa = showMap }, 1) // esta hecho asi para evitar "expression has changed after it was checked" , regula directivas estructurales y no funcionaba en ninguna parte del ciclo de vida de los  xInit
   }
   getMostrarAplicacion() { return this.app.mostrarAplicacion }
   setMostrarAplicacion(p) { this.app.mostrarAplicacion = p; }
