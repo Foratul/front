@@ -26,6 +26,8 @@ html, body {
 
 .enlace {cursor: pointer;}
 
+.subrayado {text-decoration:underline;}
+
 .redondo50 {border-radius:50%;}
 
 .borroso {filter:blur(1px)}

@@ -7,13 +7,21 @@ import { AppStateService } from '../services/appstate.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-   showBox : Boolean = true;
-    
+  showBox: Boolean = true;
+  app: any;
 
-  constructor(private appStateService : AppStateService) { }
+
+  constructor(private appStateService: AppStateService) { }
 
   ngOnInit() {
     this.appStateService.setMostrarMapa(false);
+  }
+
+  navegarAMapa() {
+    this.app = this.appStateService.getAppState();
+    this.app.mostrarAplicacion = true;
+    this.app.mostrarMapa = true;
+    this.app.extenderHeader = false;
   }
 
 }

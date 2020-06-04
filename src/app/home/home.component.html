@@ -1,5 +1,5 @@
-<div cdkDrag  *ngIf="showBox" class="box col-6 alert alert-primary text-center" role="alert">
-<div id="boxClose" (click)="showBox=false">X</div>
+<div cdkDrag *ngIf="showBox" class="box col-6 alert alert-primary text-center" role="alert">
+    <div id="boxClose" (click)="showBox=false">X</div>
 
     <p>De mapas por Madrid es una aplicación end-to-end en versión alpha desarrollada como proyecto final del Bootcamp
         Neoland y que pretende hacer uso la muy potente pero desperdigada información del open data de madrid.es</p>
@@ -7,11 +7,14 @@
     <p>En su estado actual, hace una recopilación de actividades , eventos y lugares gratutitos la ciudad de Madrid
 
 
-        Puedes ver todos actualmente disponibles los pulsando eventos
-        Aceder al <a href="mapa">mapa</a> , en el que podrás configurar diversas opciones
+    <p> Puedes ver todos actualmente disponibles los pulsando eventos</p>
+    <p> Aceder al <span class="enlace" (click)="navegarAMapa()">MAPA</span> , en el que podrás configurar diversas
+        opciones
+    <p>
     </p>
 
-    <p> Realizado con Angular 8 , Express y MySQL y con la ayuda de Bootstrap, JQuery para la maquetación y las librerías Cheerio y
+    <p> Realizado con Angular 8 , Express y MySQL y con la ayuda de Bootstrap, JQuery para la maquetación y las
+        librerías Cheerio y
         Leaflet.js para el scrapeo web y el trazado de mapas</p>
 
 </div>
