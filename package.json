@@ -42,7 +42,7 @@
     "heroku": "^7.41.1",
     "heroku-cli": "^7.0.9",
     "jquery": "^3.5.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "leaflet": "^1.6.0",
     "leaflet-control-geocoder": "^1.13.0",
     "leaflet-geosearch": "^2.7.0",
